@@ -3,11 +3,12 @@
 <project name="hum" basedir="." default="dist">
   <property file="build.properties"/>
   <path id="master-classpath">
-    <fileset dir="${lib.dir}" includes="**/*.jar"/>
     <!--<fileset dir="${tomcat.home}/lib" includes="jsp-api.jar, servlet-api.jar"/>-->
     <fileset dir="${gwt.sdk}" includes="gwt-servlet.jar"/>
     <fileset dir="${gwt.compile.time}"/>
     <fileset dir="${lib.dir}"/>
+    <fileset dir="${ae.user.lib.dir}"/>
+    <fileset dir="${ae.shared.lib.dir}"/>
   </path>
 
   <target name="usage">
@@ -49,9 +50,12 @@
         <include name="**/*.properties"/>
       </fileset>
     </copy>
-    <move todir="war/WEB-INF">
-      <fileset dir="${war.dir}/WEB-INF" includes="*"/>
-    </move>
+    <copy todir="${war.dir}/WEB-INF" preservelastmodified="true">
+      <fileset dir="web/WEB-INF" includes="*"/>
+    </copy>
+    <copy todir="${war.dir}/WEB-INF/lib" preservelastmodified="true">
+      <fileset dir="${lib.dir}" includes="*"/>
+    </copy>
   </target>
 
   <path id="devmode.path">

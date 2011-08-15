@@ -7,7 +7,6 @@
   <inherits name="com.google.gwt.ajaxloader.AjaxLoader"/>
   <inherits name='com.google.gwt.maps.Maps'/>
   <inherits name='com.google.gwt.query.Query'/>
-  <inherits name="com.allen_sauer.gwt.log.gwt-log-INFO"/>
   <inherits name="com.google.gwt.inject.Inject"/>
   <set-configuration-property name="UiBinder.useSafeHtmlTemplates" value="true"/>
 
