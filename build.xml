@@ -23,8 +23,8 @@
     <echo message=""/>
   </target>
 
-  <target name="clean" description="Clean output dirs (build, dist)">
-    <delete dir="${build.dir}"/>
+  <target name="clean" description="Clean output dirs (war, dist)">
+    <delete dir="${war.dir}"/>
     <delete dir="${dist.dir}"/>
     <delete dir="${generated.dir}"/>
   </target>
@@ -50,11 +50,19 @@
         <include name="**/*.properties"/>
       </fileset>
     </copy>
-    <copy todir="${war.dir}/WEB-INF" preservelastmodified="true">
-      <fileset dir="web/WEB-INF" includes="*"/>
+    <copy todir="${war.dir}" preservelastmodified="true">
+      <fileset dir="web" includes="**/*"/>
     </copy>
     <copy todir="${war.dir}/WEB-INF/lib" preservelastmodified="true">
       <fileset dir="${lib.dir}" includes="*"/>
+    </copy>
+    <!--
+        <copy todir="${war.dir}/WEB-INF/lib" preservelastmodified="true">
+          <fileset dir="${ae.sdk}/lib/user" includes="*.jar"/>
+        </copy>
+    -->
+    <copy todir="${war.dir}/WEB-INF/lib" preservelastmodified="true">
+      <fileset dir="${gwt.sdk}" includes="gwt-servlet.jar"/>
     </copy>
   </target>
 
@@ -206,5 +214,30 @@
 
   <target name="dist" depends="clean, production_hum"
           description="create application distributive"/>
+
+  <import file="${ae.sdk}/config/user/ant-macros.xml"/>
+
+  <target name="runserver" description="Starts the development server.">
+    <dev_appserver war="${war.dir}" port="8228">
+      <options>
+        <arg value="--jvm_flag=-Xdebug"/>
+        <arg value="--jvm_flag=-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5225"/>
+      </options>
+    </dev_appserver>
+  </target>
+
+  <target name="update"
+          description="Uploads the application to App Engine.">
+    <appcfg action="update" war="${war.dir}"/>
+  </target>
+
+  <target name="update_indexes"
+          description="Uploads just the datastore index configuration to App Engine.">
+    <appcfg action="update_indexes" war="${war.dir}"/>
+  </target>
+
+  <target name="rollback" description="Rolls back an interrupted application update.">
+    <appcfg action="rollback" war="${war.dir}"/>
+  </target>
 
 </project>
