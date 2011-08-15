@@ -19,7 +19,6 @@
       <g:HTMLPanel>
         <h1>Windsor Hum</h1>
         <h2>Do you hear rumbling again?</h2>
-        <g:Anchor text="Report!" ui:field="headerButton"/>
         <div ui:field='errorMessage' class='{style.errorMessage}'/>
       </g:HTMLPanel>
     </g:north>
@@ -33,11 +32,16 @@
             <h2>About</h2>
             The goal of the project is to find out and track the source of rumbling noise bothering
             citizens of Windsor and Essex counties. Here is what
-            <a href="http://www.windsorstar.com/Rumblings+prompt+lawsuit/5209300/story. html" target="_blank">local
+            <a href="http://www.windsorstar.com/Rumblings+prompt+lawsuit/5209300/story.html" target="_blank">local
               press says
             </a>. We believe to gather enough statistical data to figure out geographical location of the hum source and
             what time it would appear next. We need your help to collect data. Please report rumbling here
             when you hear it.
+
+            <a class="rpxnow" onclick="return false;"
+               href="https://windsorhum.rpxnow.com/openid/v2/signin?token_url=http%3A%2F%2Fwindsorhum.appspot.com%2Fjanrain">
+              Report!
+            </a>
           </g:HTML>
         </g:west>
       </g:SplitLayoutPanel>

@@ -32,11 +32,11 @@ public class Main implements Runnable {
                 mapsLoaded();
             }
         }, options);
-        configureJanrain(true, "en");
-        loadJanrain();
         RootLayoutPanel rp = RootLayoutPanel.get();
         root.init();
         rp.add(root);
+        loadJanrain();
+        configureJanrain(true, "en");
     }
 
     private void mapsLoaded() {
@@ -54,9 +54,10 @@ public class Main implements Runnable {
                 ? new StringBuilder("https://")
                 : new StringBuilder("http://static.");
         rpxJsHost.append("rpxnow.com/js/lib/rpx.js");
-        ScriptElement script = Document.get().createScriptElement(rpxJsHost.toString());
+        ScriptElement script = Document.get().createScriptElement();
+        script.setSrc(rpxJsHost.toString());
         script.setType("text/javascript");
-        Document.get().appendChild(script);
+        Document.get().getBody().appendChild(script);
     }
 
 }
