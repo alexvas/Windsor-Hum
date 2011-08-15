@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="hum" basedir="." default="dist">
+  <property file="build.properties"/>
+  <path id="master-classpath">
+    <fileset dir="${lib.dir}" includes="**/*.jar"/>
+    <!--<fileset dir="${tomcat.home}/lib" includes="jsp-api.jar, servlet-api.jar"/>-->
+    <fileset dir="${gwt.sdk}" includes="gwt-servlet.jar"/>
+    <fileset dir="${gwt.compile.time}"/>
+    <fileset dir="${lib.dir}"/>
+  </path>
+
+  <target name="usage">
+    <echo message=""/>
+    <echo message="hum build file"/>
+    <echo message="------------------------------------------------------"/>
+    <echo message=""/>
+    <echo message="Available targets are:"/>
+    <echo message=""/>
+    <echo message="clean        --> Clean output dirs"/>
+    <echo message="build        --> Compile main Java sources and copy libraries"/>
+    <echo message=""/>
+  </target>
+
+  <target name="clean" description="Clean output dirs (build, dist)">
+    <delete dir="${build.dir}"/>
+    <delete dir="${dist.dir}"/>
+    <delete dir="${generated.dir}"/>
+  </target>
+
+  <target name="build" description="Compile main source tree java files into class files, generate jar files">
+    <mkdir dir="${build.dir}"/>
+    <javac encoding="utf-8"
+           destdir="${build.dir}"
+           source="1.6"
+           target="1.6"
+           debug="true"
+           deprecation="false"
+           optimize="true"
+           failonerror="true"
+           srcdir="${src.dir}"
+           excludes="controllers/**,models/**,vd/**,views/**"
+           classpathref="master-classpath"
+           includeantruntime="false"
+        />
+
+    <copy todir="${build.dir}" preservelastmodified="true">
+      <fileset dir="${src.dir}">
+        <include name="**/*.properties"/>
+      </fileset>
+    </copy>
+    <move todir="war/WEB-INF">
+      <fileset dir="${war.dir}/WEB-INF" includes="*"/>
+    </move>
+  </target>
+
+  <path id="devmode.path">
+    <pathelement location="${src.dir}"/>
+    <fileset dir="${gwt.sdk}"
+             includes="gwt-dev.jar,gwt-user.jar,validation-api-1.0.0.GA.jar,validation-api-1.0.0.GA-sources.jar"/>
+    <fileset dir="${gwt.compile.time}"/>
+    <pathelement location="${build.dir}"/>
+    <fileset dir="${lib.dir}"/>
+  </path>
+
+  <macrodef name="__gwtc">
+    <attribute name="module"/>
+    <!--Script output style: OBF[USCATED], PRETTY, or DETAILED-->
+    <attribute name="style" default="OBF"/>
+    <sequential>
+      <java failonerror="true" fork="true" classname="com.google.gwt.dev.Compiler">
+        <classpath refid="devmode.path"/>
+        <jvmarg value="-Xms${devmode.ms}m"/>
+        <jvmarg value="-Xmx${devmode.mx}m"/>
+        <jvmarg value="-XX:NewSize=${devmode.NewSize}m"/>
+        <jvmarg value="-XX:MaxNewSize=${devmode.MaxNewSize}m"/>
+        <jvmarg value="-XX:PermSize=${devmode.PermSize}m"/>
+        <jvmarg value="-XX:MaxPermSize=${devmode.MaxPermSize}m"/>
+        <!--<jvmarg value="-agentlib:jdwp=transport=dt_socket,address=${gwt.compile.debug.port},server=y,suspend=n"/>-->
+        <arg value="-war"/>
+        <arg value="${war.dir}"/>
+        <arg value="-style"/>
+        <arg value="@{style}"/>
+        <arg value="-gen"/>
+        <arg value="${generated.dir}"/>
+        <arg value="-logLevel"/>
+        <arg value="${gwt.compiler.logLevel}"/>
+        <arg value="-localWorkers"/>
+        <arg value="${gwt.compile.localWorkers}"/>
+        <arg value="-XdisableCastChecking"/>
+        <arg value="-XdisableClassMetadata"/>
+        <arg value="@{module}"/>
+      </java>
+    </sequential>
+  </macrodef>
+
+  <macrodef name="__draft">
+    <attribute name="module"/>
+    <!--Script output style: OBF[USCATED], PRETTY, or DETAILED-->
+    <attribute name="style" default="PRETTY"/>
+    <sequential>
+      <java failonerror="true" fork="true" classname="com.google.gwt.dev.Compiler">
+        <classpath refid="devmode.path"/>
+        <jvmarg value="-Xms${devmode.ms}m"/>
+        <jvmarg value="-Xmx${devmode.mx}m"/>
+        <jvmarg value="-XX:NewSize=${devmode.NewSize}m"/>
+        <jvmarg value="-XX:MaxNewSize=${devmode.MaxNewSize}m"/>
+        <jvmarg value="-XX:PermSize=${devmode.PermSize}m"/>
+        <jvmarg value="-XX:MaxPermSize=${devmode.MaxPermSize}m"/>
+        <!--<jvmarg value="-agentlib:jdwp=transport=dt_socket,address=${gwt.compile.debug.port},server=y,suspend=n"/>-->
+        <arg value="-war"/>
+        <arg value="${war.dir}"/>
+        <arg value="-style"/>
+        <arg value="@{style}"/>
+        <arg value="-gen"/>
+        <arg value="${generated.dir}"/>
+        <arg value="-logLevel"/>
+        <arg value="${gwt.compiler.logLevel}"/>
+        <arg value="-localWorkers"/>
+        <arg value="${gwt.compile.localWorkers}"/>
+        <arg value="-XdisableCastChecking"/>
+        <arg value="-XdisableClassMetadata"/>
+        <arg value="-draftCompile"/>
+        <arg value="@{module}"/>
+      </java>
+    </sequential>
+  </macrodef>
+
+  <macrodef name="__validate">
+    <attribute name="module"/>
+    <sequential>
+      <!--<echo message="${toString:devmode.path}"/>-->
+      <java failonerror="true" fork="true" classname="com.google.gwt.dev.Compiler">
+        <classpath refid="devmode.path"/>
+        <jvmarg value="-Xms${devmode.ms}m"/>
+        <jvmarg value="-Xmx${devmode.mx}m"/>
+        <jvmarg value="-XX:NewSize=${devmode.NewSize}m"/>
+        <jvmarg value="-XX:MaxNewSize=${devmode.MaxNewSize}m"/>
+        <jvmarg value="-XX:PermSize=${devmode.PermSize}m"/>
+        <jvmarg value="-XX:MaxPermSize=${devmode.MaxPermSize}m"/>
+        <!--<jvmarg value="-agentlib:jdwp=transport=dt_socket,address=${gwt.compile.debug.port},server=y,suspend=n"/>-->
+        <arg value="-war"/>
+        <arg value="${war.dir}"/>
+        <arg value="-gen"/>
+        <arg value="${generated.dir}"/>
+        <arg value="-logLevel"/>
+        <arg value="${gwt.compiler.logLevel}"/>
+        <arg value="-validateOnly"/>
+        <arg value="@{module}"/>
+      </java>
+    </sequential>
+  </macrodef>
+
+  <macrodef name="__devmode">
+    <attribute name="path" default=""/>
+    <attribute name="module"/>
+    <sequential>
+      <java failonerror="true" fork="true" classname="com.google.gwt.dev.DevMode">
+        <classpath refid="devmode.path"/>
+        <jvmarg value="-Xms${devmode.ms}m"/>
+        <jvmarg value="-Xmx${devmode.mx}m"/>
+        <jvmarg value="-XX:NewSize=${devmode.NewSize}m"/>
+        <jvmarg value="-XX:MaxNewSize=${devmode.MaxNewSize}m"/>
+        <jvmarg value="-XX:PermSize=${devmode.PermSize}m"/>
+        <jvmarg value="-XX:MaxPermSize=${devmode.MaxPermSize}m"/>
+        <jvmarg value="-agentlib:jdwp=transport=dt_socket,address=${gwt.debug.port},server=y,suspend=n"/>
+        <arg value="-gen"/>
+        <arg value="${generated.dir}"/>
+        <arg value="-noserver"/>
+        <arg value="-startupUrl"/>
+        <arg value="${development.server}/@{path}"/>
+        <arg value="-bindAddress"/>
+        <arg value="0.0.0.0"/>
+        <arg value="-war"/>
+        <arg value="${war.dir}"/>
+        <arg value="@{module}"/>
+      </java>
+    </sequential>
+  </macrodef>
+
+  <target name="devmode_hum" depends="build" description="Run development mode for Wide module">
+    <__devmode module="hum.HumDevelopment" path="hum"/>
+  </target>
+
+  <target name="production_hum" depends="build" description="production GWT compile of Wide module">
+    <__gwtc module="hum.HumProduction"/>
+  </target>
+
+  <target name="development_hum" depends="build" description="fast GWT compile of Wide module">
+    <__draft module="hum.HumDevelopment"/>
+  </target>
+
+  <target name="_validate_hum">
+    <__validate module="hum.HumDevelopment"/>
+  </target>
+
+  <target name="validate" depends="clean, build, _validate_hum"
+          description="validate the project, but do not compile"/>
+
+  <target name="development" depends="clean, development_hum"
+          description="create debugging application distributive"/>
+
+  <target name="dist" depends="clean, production_hum"
+          description="create application distributive"/>
+
+</project>
