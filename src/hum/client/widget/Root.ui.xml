@@ -3,7 +3,16 @@
              xmlns:g='urn:import:com.google.gwt.user.client.ui'
     >
   <ui:style>
-    /* put css styles here */
+
+    .header {
+      padding-left: 20px;
+    }
+
+    .content {
+      padding: 20px;
+      line-height: 1.6;
+    }
+
     .errorMessage {
       background-color: #fff;
       width: 98%;
@@ -13,12 +22,46 @@
       margin-left: 15px;
     }
 
+    .btn {
+      float: left;
+      clear: both;
+      background: url(/images/btn_left.png) no-repeat;
+      padding: 0 0 0 10px;
+      margin: 5px 0;
+    }
+
+    .btn a {
+      float: left;
+      height: 40px;
+      background: url(/images/btn_stretch.png) repeat-x left top;
+      line-height: 40px;
+      padding: 0 10px;
+      color: #fff;
+      font-size: 1em;
+      text-decoration: none;
+    }
+
+    .btn span {
+      background: url(images/btn_right.png) no-repeat;
+      float: left;
+      width: 10px;
+      height: 40px;
+    }
+
+    .btnReport {
+      background-color: red;
+      clear: both;
+      margin-top: 30px;
+      font-size: larger;
+      font-weight: bold;
+    }
+
   </ui:style>
   <g:DockLayoutPanel unit='PX'>
     <g:north size='112'>
-      <g:HTMLPanel>
+      <g:HTMLPanel styleName="{style.header}">
         <h1>Windsor Hum</h1>
-        <h2>Do you hear rumbling again?</h2>
+        <p>Do you hear rumbling again?</p>
         <div ui:field='errorMessage' class='{style.errorMessage}'/>
       </g:HTMLPanel>
     </g:north>
@@ -28,20 +71,22 @@
           <g:HTML ui:field='mapPlace'/>
         </g:center>
         <g:west size='360'>
-          <g:HTML ui:field="content">
+          <g:HTML ui:field="content" styleName="{style.content}">
             <h2>About</h2>
             The goal of the project is to find out and track the source of rumbling noise bothering
             citizens of Windsor and Essex counties. Here is what
             <a href="http://www.windsorstar.com/Rumblings+prompt+lawsuit/5209300/story.html" target="_blank">local
-              press says
-            </a>. We believe to gather enough statistical data to figure out geographical location of the hum source and
-            what time it would appear next. We need your help to collect data. Please report rumbling here
-            when you hear it.
-
-            <a class="rpxnow" onclick="return false;"
-               href="https://windsorhum.rpxnow.com/openid/v2/signin?token_url=http%3A%2F%2Flocalhost%3A8228%2Fjanrain">
-              Report!
-            </a>
+              press says</a>. We are going to gather enough statistical data to figure out geographical location of the
+            hum source and what time it would appear next. We need your help to collect data. Please report rumbling
+            here when you hear it.
+            <div class="{style.btn} {style.btnReport}">
+              <a class="rpxnow" onclick="return false;"
+                 href="https://windsorhum.rpxnow.com/openid/v2/signin?token_url=http%3A%2F%2Flocalhost%3A8228%2Fjanrain">
+                Report!
+              </a>
+              <span/>
+            </div>
+            <div class="clear"/>
           </g:HTML>
         </g:west>
       </g:SplitLayoutPanel>
