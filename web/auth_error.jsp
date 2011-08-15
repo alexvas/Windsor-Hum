@@ -3,11 +3,15 @@
 <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Windsor Hum Privacy Policy</title>
+    <title>Windsor Hum landing page</title>
     <link rel="icon" href="/favicon.ico" type="image/x-icon"/>
 </head>
 <body>
-<h1>Privacy Policy</h1>
-All data put here explicitly or implicitly is public for the benefit of community.
+<h2>An error occurred during authentication</h2>
+
+<p><%= request.getAttribute("error") %>
+</p>
+
+<p>Please <a href='<%= request.getAttribute("back_url") %>'>return to the Windsor Hum</a></p>
 </body>
 </html>
