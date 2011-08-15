@@ -5,6 +5,7 @@ import hum.client.widget.Root;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.ajaxloader.client.AjaxLoader;
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.ScriptElement;
 import com.google.gwt.user.client.Window;
@@ -36,7 +37,25 @@ public class Main implements Runnable {
         root.init();
         rp.add(root);
         loadJanrain();
-        configureJanrain(true, "en");
+        scheduleJanrainInit();
+    }
+
+    private void scheduleJanrainInit() {
+        Scheduler.get().scheduleFixedPeriod(
+                new Scheduler.RepeatingCommand() {
+                    @Override
+                    public boolean execute() {
+                        if (isJanrainLoaded()) {
+                            Log.debug("janrain is loaded");
+                            configureJanrain(true, "en", "ldpdafgpolkpoliepgbe");
+                            return false;
+                        }
+                        Log.debug("waiting for janrain");
+                        return true;
+                    }
+                },
+                200
+        );
     }
 
     private void mapsLoaded() {
@@ -44,9 +63,14 @@ public class Main implements Runnable {
         mapper.initMap(root.getMapPlace());
     }
 
-    private native void configureJanrain(boolean overlay, String lang) /*-{
+    private native boolean isJanrainLoaded() /*-{
+        return $wnd.RPXNOW != null;
+    }-*/;
+
+    private native void configureJanrain(boolean overlay, String lang, String appId) /*-{
         $wnd.RPXNOW.overlay = overlay;
         $wnd.RPXNOW.language_preference = lang;
+//        $wnd.RPXNOW.init({appId: appId, xdReceiver: '/rpx_xdcomm.html'});
     }-*/;
 
     private void loadJanrain() {

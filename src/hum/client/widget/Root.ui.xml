@@ -39,7 +39,7 @@
             when you hear it.
 
             <a class="rpxnow" onclick="return false;"
-               href="https://windsorhum.rpxnow.com/openid/v2/signin?token_url=http%3A%2F%2Fwindsorhum.appspot.com%2Fjanrain">
+               href="https://windsorhum.rpxnow.com/openid/v2/signin?token_url=http%3A%2F%2Flocalhost%3A8228%2Fjanrain">
               Report!
             </a>
           </g:HTML>

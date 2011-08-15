@@ -6,4 +6,9 @@
   <system-properties>
     <property name="java.util.logging.config.file" value="WEB-INF/logging.properties"/>
   </system-properties>
+
+  <static-files>
+    <include path="**.nocache.*" expiration="1s"/>
+    <include path="**.cache.*" expiration="30d"/>
+  </static-files>
 </appengine-web-app>
