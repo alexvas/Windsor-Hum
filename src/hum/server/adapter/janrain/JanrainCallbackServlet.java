@@ -38,7 +38,7 @@ public class JanrainCallbackServlet extends HttpServlet {
     private Provider<CurrentUser> currentUserProvider;
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String path = req.getRequestURI();
         int pos = path.indexOf(JANRAIN_CALLBACK);
         if (pos < 1) {

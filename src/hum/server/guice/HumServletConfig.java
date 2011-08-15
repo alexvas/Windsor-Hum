@@ -27,7 +27,6 @@ public class HumServletConfig extends GuiceServletContextListener {
         protected void configureServlets() {
             // bind
             bind(RemoteLoggerServlet.class).in(Singleton.class);
-            bind(JanrainCallbackServlet.class).in(Singleton.class);
 
             bind(EventService.class).to(EventServiceImpl.class).in(Singleton.class);
             bind(UserService.class).to(UserServiceImpl.class).in(Singleton.class);
