@@ -1,5 +1,6 @@
 package hum.server.guice;
 
+import hum.client.adapter.JanrainWrapper;
 import hum.server.adapter.janrain.JanrainCallbackServlet;
 import hum.server.services.EventService;
 import hum.server.services.EventServiceImpl;
@@ -33,7 +34,7 @@ public class HumServletConfig extends GuiceServletContextListener {
 
             // configure URLs
             serve("*/gwt-log").with(RemoteLoggerServlet.class);
-            serve("*/" + JanrainCallbackServlet.JANRAIN_CALLBACK).with(JanrainCallbackServlet.class);
+            serve("*" + JanrainWrapper.JANRAIN_CALLBACK).with(JanrainCallbackServlet.class);
         }
     }
 }

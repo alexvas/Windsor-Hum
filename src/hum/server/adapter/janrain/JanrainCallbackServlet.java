@@ -1,8 +1,10 @@
 package hum.server.adapter.janrain;
 
+import hum.client.adapter.JanrainWrapper;
 import hum.server.CurrentUser;
 import static hum.server.ServerUtils.SERVER_UTILS;
 import hum.server.adapter.janrain.json.AuthInfoResponse;
+import hum.server.services.UserService;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -27,7 +29,6 @@ import com.google.inject.Singleton;
 public class JanrainCallbackServlet extends HttpServlet {
     public static final String JANRAIN_API_URL = "https://rpxnow.com/api/v2/auth_info";
     public static final String JANRAIN_API_KEY = "01e9cac0599a6d3edbfe25d702228fbb350db608";
-    public static final String JANRAIN_CALLBACK = "janrain";
 
     private static final Logger log = Logger.getLogger(JanrainCallbackServlet.class.getName());
 
@@ -37,20 +38,23 @@ public class JanrainCallbackServlet extends HttpServlet {
     @Inject
     private Provider<CurrentUser> currentUserProvider;
 
+    @Inject
+    private UserService userService;
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String path = req.getRequestURI();
-        int pos = path.indexOf(JANRAIN_CALLBACK);
+        int pos = path.indexOf(JanrainWrapper.JANRAIN_CALLBACK);
         if (pos < 1) {
             String logMessage = "illegal servlet invocation";
             authError(req, resp, logMessage, null, logMessage);
             return;
         } else {
-            path = path.substring(0, pos).replace("//", "/");
+            path = path.substring(0, pos + 1).replace("//", "/");
         }
 
         String token = req.getParameter("token");
-        String mapPrUrl = SERVER_UTILS.getUrl(req, path, null, token);
+        String mapPrUrl = SERVER_UTILS.getUrl(req, path, null, null);
 
         log.info("got janrain token: " + token);
 
@@ -79,6 +83,7 @@ public class JanrainCallbackServlet extends HttpServlet {
             return;
         }
 
+        currentUserProvider.get().userId =  userService.save(response.profile).id;
 
         resp.sendRedirect(mapPrUrl);
     }

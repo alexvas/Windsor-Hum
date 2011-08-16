@@ -71,7 +71,7 @@
           <g:HTML ui:field='mapPlace'/>
         </g:center>
         <g:west size='360'>
-          <g:HTML ui:field="content" styleName="{style.content}">
+          <g:HTMLPanel ui:field="content" styleName="{style.content}">
             <h2>About</h2>
             The goal of the project is to find out and track the source of rumbling noise bothering
             citizens of Windsor and Essex counties. Here is what
@@ -80,14 +80,11 @@
             hum source and what time it would appear next. We need your help to collect data. Please report rumbling
             here when you hear it.
             <div class="{style.btn} {style.btnReport}">
-              <a class="rpxnow" onclick="return false;"
-                 href="https://windsorhum.rpxnow.com/openid/v2/signin?token_url=http%3A%2F%2Flocalhost%3A8228%2Fjanrain">
-                Report!
-              </a>
+              <g:Anchor text="Report!" ui:field="report" href="javascript:"/>
               <span/>
             </div>
             <div class="clear"/>
-          </g:HTML>
+          </g:HTMLPanel>
         </g:west>
       </g:SplitLayoutPanel>
     </g:center>
