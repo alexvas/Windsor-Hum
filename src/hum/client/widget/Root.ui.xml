@@ -1,6 +1,7 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
              xmlns:g='urn:import:com.google.gwt.user.client.ui'
+             xmlns:h='urn:import:hum.client.widget'
     >
   <ui:style>
 
@@ -24,35 +25,10 @@
       margin-left: 20px;
     }
 
-    .content {
+    .about {
       padding: 20px;
       line-height: 1.6;
-    }
-
-    .btn {
-      float: left;
-      clear: both;
-      background: url(/images/btn_left.png) no-repeat;
-      padding: 0 0 0 10px;
-      margin: 5px 0;
-    }
-
-    .btn a {
-      float: left;
-      height: 40px;
-      background: url(/images/btn_stretch.png) repeat-x left top;
-      line-height: 40px;
-      padding: 0 10px;
-      color: #fff;
-      font-size: 1em;
-      text-decoration: none;
-    }
-
-    .btn span {
-      background: url(images/btn_right.png) no-repeat;
-      float: left;
-      width: 10px;
-      height: 40px;
+      overflow: hidden;
     }
 
     .btnReport {
@@ -128,16 +104,20 @@
           <g:HTML ui:field='mapPlace'/>
         </g:center>
         <g:west size='360'>
-          <g:HTMLPanel ui:field="content" styleName="{style.content}">
-            <h2>About</h2>
-            The goal of the project is to find out and track the source of rumbling noise bothering
-            citizens of Windsor and Essex counties. Here is what
-            <a href="http://www.windsorstar.com/Rumblings+prompt+lawsuit/5209300/story.html" target="_blank">local
-              press says</a>. We are going to gather enough statistical data to figure out geographical location of the
-            hum source and what time it would appear next. We need your help to collect data. Please report rumbling
-            here when you hear it.
-            <g:Button text="Report!" ui:field="report" styleName="{style.btnReport}"/>
-          </g:HTMLPanel>
+          <g:DeckLayoutPanel ui:field="deck">
+            <g:HTMLPanel ui:field="about" styleName="{style.about}">
+              <h2>About</h2>
+              The goal of the project is to find out and track the source of rumbling noise bothering
+              citizens of Windsor and Essex counties. Here is what
+              <a href="http://www.windsorstar.com/Rumblings+prompt+lawsuit/5209300/story.html" target="_blank">local
+                press says</a>. We are going to gather enough statistical data to figure out geographical location of
+              the
+              hum source and what time it would appear next. We need your help to collect data. Please report rumbling
+              here when you hear it.
+              <g:Button text="Report!" ui:field="report" styleName="{style.btnReport}"/>
+            </g:HTMLPanel>
+            <h:HumInstanceEditor ui:field="humInstanceEditor"/>
+          </g:DeckLayoutPanel>
         </g:west>
       </g:SplitLayoutPanel>
     </g:center>

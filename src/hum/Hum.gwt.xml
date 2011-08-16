@@ -9,6 +9,7 @@
   <inherits name='com.google.gwt.maps.Maps'/>
   <inherits name='com.google.gwt.query.Query'/>
   <inherits name="com.google.gwt.inject.Inject"/>
+  <inherits name="com.summatech.gwt.GwtTimepicker"/>
   <set-configuration-property name="UiBinder.useSafeHtmlTemplates" value="true"/>
 
   <entry-point class='hum.client.HumEntry'/>

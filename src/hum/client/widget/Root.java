@@ -19,6 +19,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.DeckLayoutPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -48,7 +49,7 @@ public class Root extends Composite implements MeEventHandler {
     HTML mapPlace;
 
     @UiField
-    HTMLPanel content;
+    HTMLPanel about;
 
     @UiField
     Button report;
@@ -65,6 +66,13 @@ public class Root extends Composite implements MeEventHandler {
     @UiField
     Anchor signOut;
 
+    @UiField
+    DeckLayoutPanel deck;
+
+    @Inject
+    @UiField(provided = true)
+    HumInstanceEditor humInstanceEditor;
+
     boolean initialized = false;
 
     public void init() {
@@ -72,6 +80,7 @@ public class Root extends Composite implements MeEventHandler {
             return;
         }
         initialized = true;
+        humInstanceEditor.init();
         initWidget(binder.createAndBindUi(this));
         bus.addHandler(MeEvent.TYPE, this);
     }
@@ -99,6 +108,7 @@ public class Root extends Composite implements MeEventHandler {
             avatar.setSrc(null);
             avatar.setAlt(null);
             report.setVisible(true);
+            deck.showWidget(0);
             return;
         }
         InfoProxy info = meEvent.user.getInfo().get(0);
@@ -108,6 +118,7 @@ public class Root extends Composite implements MeEventHandler {
         avatar.setHeight(72);
         report.setVisible(false);
         signOutWrapper.getStyle().setDisplay(Style.Display.INLINE);
+        deck.showWidget(1);
     }
 
     @SuppressWarnings({"UnusedParameters"})
@@ -118,6 +129,7 @@ public class Root extends Composite implements MeEventHandler {
             public void onSuccess(Void response) {
 //                janrainWrapper.signOut();
                 dispatch(null);
+                deck.showWidget(0);
             }
         });
     }
