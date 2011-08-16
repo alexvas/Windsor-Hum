@@ -8,10 +8,10 @@ import javax.persistence.Version;
 
 public class DataObject {
    @Id
-   public Long id;
+   private Long id;
 
    @Version
-   public Integer version = 0;
+   private Integer version = 0;
 
    public Date created = new Date();
 
@@ -22,4 +22,16 @@ public class DataObject {
        version++;
        updated = new Date();
    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
 }

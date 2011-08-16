@@ -1,13 +1,14 @@
 package hum.client.model;
 
 import hum.server.model.Event;
+import hum.server.services.ObjectifyLocator;
 
 import java.util.Date;
 
 import com.google.web.bindery.requestfactory.shared.EntityProxy;
 import com.google.web.bindery.requestfactory.shared.ProxyFor;
 
-@ProxyFor(Event.class)
+@ProxyFor(value = Event.class, locator = ObjectifyLocator.class)
 public interface EventProxy extends EntityProxy {
     enum Level {LOW, MEDIUM, HIGH}
 
