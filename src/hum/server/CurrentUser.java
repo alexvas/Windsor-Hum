@@ -20,4 +20,8 @@ public class CurrentUser implements Serializable {
     public void setUserId(Long id) {
         userKey = new Key<User>(User.class, id);
     }
+
+    public void removeKey() {
+        userKey = null;
+    }
 }

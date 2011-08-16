@@ -34,4 +34,7 @@ public class JanrainWrapper {
         $wnd.RPXNOW.show(callback, domain);
     }-*/;
 
+    public native void signOut() /*-{
+        $wnd.RPXNOW.Social.clearSocialCookies();
+    }-*/;
 }

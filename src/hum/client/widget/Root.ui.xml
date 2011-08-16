@@ -62,12 +62,28 @@
       font-size: larger;
       font-weight: bold;
     }
+
+    .userName {
+      overflow: hidden;
+      float: right;
+    }
+
+    .signOutWrapper {
+      float: right;
+      clear: right;
+    }
+
   </ui:style>
   <g:DockLayoutPanel unit='PX'>
     <g:north size='112'>
       <g:HTMLPanel styleName="{style.header}">
         <h1>Windsor Hum</h1>
-        <h2 ui:field="userName"/>
+        <div class="{style.userName}">
+          <h2 ui:field="userName"/>
+          <span ui:field="signOutWrapper" class="{style.signOutWrapper}" style="display: none;">Not you?
+            <g:Anchor ui:field="signOut" href="javascript:" text="Sign Out"/>
+          </span>
+        </div>
         <img ui:field="avatar"/>
         <p>Do you hear rumbling again?</p>
       </g:HTMLPanel>

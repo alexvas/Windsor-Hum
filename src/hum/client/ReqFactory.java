@@ -8,7 +8,6 @@ import hum.server.services.UserService;
 
 import java.util.List;
 
-import com.google.web.bindery.requestfactory.shared.InstanceRequest;
 import com.google.web.bindery.requestfactory.shared.Request;
 import com.google.web.bindery.requestfactory.shared.RequestContext;
 import com.google.web.bindery.requestfactory.shared.RequestFactory;
@@ -27,11 +26,13 @@ public interface ReqFactory extends RequestFactory {
 
         Request<HumProxy> latest();
 
-        InstanceRequest<HumProxy, Void> save();
+        Request<Void> save(HumProxy hum);
     }
 
     @Service(value = UserService.class, locator = InjectingServiceLocator.class)
     interface UserRequest extends RequestContext {
         Request<UserProxy> me();
+
+        Request<Void> signOut();
     }
 }

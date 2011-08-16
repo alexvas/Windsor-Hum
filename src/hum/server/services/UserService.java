@@ -6,5 +6,7 @@ import hum.server.model.User;
 public interface UserService {
     User me();
 
+    void signOut();
+
     User save(Profile profile);
 }

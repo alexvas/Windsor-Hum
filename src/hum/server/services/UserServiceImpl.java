@@ -35,6 +35,11 @@ public class UserServiceImpl extends DAOBase implements UserService {
     }
 
     @Override
+    public void signOut() {
+        currentUser.get().removeKey();
+    }
+
+    @Override
     public User save(final Profile profile) {
         User user = me();
         if (user == null) {
