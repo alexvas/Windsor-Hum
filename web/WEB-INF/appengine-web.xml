@@ -11,4 +11,6 @@
     <include path="**.nocache.*" expiration="1s"/>
     <include path="**.cache.*" expiration="30d"/>
   </static-files>
+
+  <sessions-enabled>true</sessions-enabled>
 </appengine-web-app>

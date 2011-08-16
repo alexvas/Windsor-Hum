@@ -1,18 +1,20 @@
 package hum.server.model;
 
-import siena.Model;
-import siena.Query;
+import hum.client.model.EventProxy;
 
 import java.util.Date;
 
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
 import javax.persistence.Version;
 
-public class Event extends Model {
+import com.googlecode.objectify.Key;
+
+public class Event {
     @Id
     private Long id;
 
-    public Long user;
+    public Key<User> owner;
 
     public double lat;
     public double lng;
@@ -23,7 +25,7 @@ public class Event extends Model {
 
     public String address;
 
-    public String level;
+    public EventProxy.Level level;
 
     public Date start;
     public Date end;
@@ -37,16 +39,12 @@ public class Event extends Model {
     @Version
     private Integer version;
 
-    public static Query<Event> all() {
-        return Model.all(Event.class);
-    }
-
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder();
         sb.append("Event");
         sb.append("{id=").append(id);
-        sb.append(", user='").append(user).append('\'');
+        sb.append(", user='").append(owner).append('\'');
         sb.append(", lat=").append(lat);
         sb.append(", lng=").append(lng);
         sb.append(", postcode='").append(postcode).append('\'');
@@ -56,5 +54,10 @@ public class Event extends Model {
         sb.append(", created=").append(created);
         sb.append('}');
         return sb.toString();
+    }
+
+    @PrePersist
+    void updateTimestamp() {
+        updated = new Date();
     }
 }

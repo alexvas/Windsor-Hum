@@ -1,6 +1,5 @@
 package hum.server.adapter.janrain;
 
-import hum.client.adapter.JanrainWrapper;
 import hum.server.CurrentUser;
 import static hum.server.ServerUtils.SERVER_UTILS;
 import hum.server.adapter.janrain.json.AuthInfoResponse;
@@ -43,19 +42,7 @@ public class JanrainCallbackServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String path = req.getRequestURI();
-        int pos = path.indexOf(JanrainWrapper.JANRAIN_CALLBACK);
-        if (pos < 1) {
-            String logMessage = "illegal servlet invocation";
-            authError(req, resp, logMessage, null, logMessage);
-            return;
-        } else {
-            path = path.substring(0, pos + 1).replace("//", "/");
-        }
-
         String token = req.getParameter("token");
-        String mapPrUrl = SERVER_UTILS.getUrl(req, path, null, null);
-
         log.info("got janrain token: " + token);
 
         StringBuilder url = new StringBuilder(JANRAIN_API_URL)
@@ -65,9 +52,10 @@ public class JanrainCallbackServlet extends HttpServlet {
 
         String payload = fetchContent(url.toString());
 
+        String humBackUrl = SERVER_UTILS.getUrl(req, "/", null, null);
         if (payload == null || payload.isEmpty()) {
             String logMessage = "Connection to JanRain failed";
-            authError(req, resp, logMessage, mapPrUrl, logMessage);
+            authError(req, resp, logMessage, humBackUrl, logMessage);
             return;
         }
 
@@ -79,13 +67,13 @@ public class JanrainCallbackServlet extends HttpServlet {
                     .append(": ")
                     .append(response.err.msg)
                     .toString();
-            authError(req, resp, logMessage, mapPrUrl, logMessage);
+            authError(req, resp, logMessage, humBackUrl, logMessage);
             return;
         }
 
-        currentUserProvider.get().userId =  userService.save(response.profile).id;
+        currentUserProvider.get().setUserId(userService.save(response.profile).id);
 
-        resp.sendRedirect(mapPrUrl);
+        resp.sendRedirect(humBackUrl);
     }
 
     private void authError(

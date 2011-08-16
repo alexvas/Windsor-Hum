@@ -2,12 +2,10 @@ package hum.server.services;
 
 import hum.server.model.Event;
 
-import java.util.List;
-
 public interface EventService {
-    List<Event> my();
+    Iterable<Event> my();
 
-    List<Event> all();
+    Iterable<Event> all();
 
     Event latest();
 

@@ -1,27 +1,24 @@
 package hum.server.model;
 
-import siena.Model;
-import siena.Query;
-
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+import javax.persistence.Embedded;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
 import javax.persistence.Version;
 
-public class User extends Model {
+import com.googlecode.objectify.annotation.Cached;
+import com.googlecode.objectify.annotation.Unindexed;
+
+ @Cached(expirationSeconds=600)
+ public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long id;
 
-    public String identifier;
-
-    public String providerName;
-
-    public String displayName;
-
-    public String photo;
+    @Embedded
+    public List<Info> info = new ArrayList<Info>();
 
     @Version
     private Integer version;
@@ -30,11 +27,20 @@ public class User extends Model {
 
     public Date updated;
 
-    public static Query<User> all() {
-        return Model.all(User.class);
+    public static class Info {
+        public String identifier;
+
+        public String providerName;
+
+        @Unindexed
+        public String displayName;
+
+        @Unindexed
+        public String photo;
     }
 
-    public static User get(Long id) {
-        return Model.getByKey(User.class, id);
+    @PrePersist
+    void updateTimestamp() {
+        updated = new Date();
     }
 }

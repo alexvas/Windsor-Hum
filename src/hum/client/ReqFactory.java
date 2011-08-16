@@ -6,8 +6,6 @@ import hum.server.guice.InjectingServiceLocator;
 import hum.server.services.EventService;
 import hum.server.services.UserService;
 
-import java.util.List;
-
 import com.google.web.bindery.requestfactory.shared.InstanceRequest;
 import com.google.web.bindery.requestfactory.shared.RequestContext;
 import com.google.web.bindery.requestfactory.shared.RequestFactory;
@@ -20,9 +18,9 @@ public interface ReqFactory extends RequestFactory {
 
     @Service(value = EventService.class, locator = InjectingServiceLocator.class)
     interface EventRequest extends RequestContext {
-        List<EventProxy> my();
+        Iterable<EventProxy> my();
 
-        List<EventProxy> all();
+        Iterable<EventProxy> all();
 
         EventProxy latest();
 

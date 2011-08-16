@@ -9,6 +9,8 @@ import com.google.web.bindery.requestfactory.shared.ProxyFor;
 
 @ProxyFor(Event.class)
 public interface EventProxy extends EntityProxy {
+    enum Level {LOW, MEDIUM, HIGH}
+
     double getLat();
 
     double getLng();
@@ -21,7 +23,7 @@ public interface EventProxy extends EntityProxy {
 
     void setAddress(String address);
 
-    void setLevel(String level);
+    void setLevel(Level level);
 
     void setStart(Date start);
 

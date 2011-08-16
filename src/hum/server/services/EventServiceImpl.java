@@ -4,36 +4,50 @@ import hum.server.CurrentUser;
 import hum.server.model.Event;
 
 import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.logging.Logger;
 
 import com.google.inject.Inject;
+import com.google.inject.Provider;
+import com.googlecode.objectify.ObjectifyService;
+import com.googlecode.objectify.util.DAOBase;
 
-public class EventServiceImpl implements EventService {
+public class EventServiceImpl extends DAOBase implements EventService {
+    private static final Logger log = Logger.getLogger(UserService.class.getName());
+
+    static {
+        ObjectifyService.register(Event.class);
+    }
+
+    @Inject
+    private Provider<Saver<Event>> saver;
 
     @Inject
     private CurrentUser currentUser;
 
     @Override
-    public List<Event> my() {
-        return currentUser.userId == null
+    public Iterable<Event> my() {
+        return currentUser.getUserKey() == null
                 ? Collections.<Event>emptyList()
-                : Event.all().filter("user", currentUser.userId).order("-start").fetch();
+                : ObjectifyService.begin().query(Event.class).filter("owner", currentUser.getUserKey()).order("-start").fetch();
     }
 
     @Override
-    public List<Event> all() {
-        return Event.all().order("-start").fetch();
+    public Iterable<Event> all() {
+        return ObjectifyService.begin().query(Event.class).order("-start").fetch();
     }
 
     @Override
     public Event latest() {
-        return Event.all().order("-start").get();
+        return ObjectifyService.begin().query(Event.class).order("-start").get();
     }
 
     @Override
     public void save(Event event) {
-        event.updated = new Date();
-        event.save();
+        if (currentUser.getUserKey() == null) {
+            log.warning("unknown user is saving event");
+            return;
+        }
+        event.owner = currentUser.getUserKey();
+        saver.get().save(event);
     }
 }
