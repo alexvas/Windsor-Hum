@@ -47,12 +47,12 @@ public class UserServiceImpl extends DAOBase implements UserService {
             user = new User();
             User.Info info = new User.Info();
             updateInfo(info, profile);
-            user.info.add(info);
+            user.getInfo().add(info);
             ofy().put(user);
             return user;
         }
         User.Info info = null;
-        for (User.Info i : user.info) {
+        for (User.Info i : user.getInfo()) {
             if (profile.identifier.equals(i.identifier) && profile.providerName.equals(i.providerName)) {
                 info = i;
                 break;
@@ -73,12 +73,12 @@ public class UserServiceImpl extends DAOBase implements UserService {
         in.identifier = profile.identifier;
         in.providerName = profile.providerName;
         boolean changed = false;
-        if (!equalsNullable(in.displayName, profile.displayName)) {
-            in.displayName = profile.displayName;
+        if (!equalsNullable(in.getDisplayName(), profile.displayName)) {
+            in.setDisplayName(profile.displayName);
             changed = true;
         }
-        if (!equalsNullable(in.photo, profile.photo)) {
-            in.photo = profile.photo;
+        if (!equalsNullable(in.getPhoto(), profile.photo)) {
+            in.setPhoto(profile.photo);
             changed = true;
         }
         return changed;

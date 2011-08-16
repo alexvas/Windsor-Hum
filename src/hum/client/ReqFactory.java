@@ -1,34 +1,37 @@
 package hum.client;
 
-import hum.client.model.EventProxy;
+import hum.client.model.HumProxy;
 import hum.client.model.UserProxy;
 import hum.server.guice.InjectingServiceLocator;
-import hum.server.services.EventService;
+import hum.server.services.HumService;
 import hum.server.services.UserService;
 
+import java.util.List;
+
 import com.google.web.bindery.requestfactory.shared.InstanceRequest;
+import com.google.web.bindery.requestfactory.shared.Request;
 import com.google.web.bindery.requestfactory.shared.RequestContext;
 import com.google.web.bindery.requestfactory.shared.RequestFactory;
 import com.google.web.bindery.requestfactory.shared.Service;
 
 public interface ReqFactory extends RequestFactory {
-    EventRequest eventRequest();
+    HumRequest humRequest();
 
     UserRequest userRequest();
 
-    @Service(value = EventService.class, locator = InjectingServiceLocator.class)
-    interface EventRequest extends RequestContext {
-        Iterable<EventProxy> my();
+    @Service(value = HumService.class, locator = InjectingServiceLocator.class)
+    interface HumRequest extends RequestContext {
+        Request<List<HumProxy>> my();
 
-        Iterable<EventProxy> all();
+        Request<List<HumProxy>> all();
 
-        EventProxy latest();
+        Request<HumProxy> latest();
 
-        InstanceRequest<EventProxy, Void> save();
+        InstanceRequest<HumProxy, Void> save();
     }
 
     @Service(value = UserService.class, locator = InjectingServiceLocator.class)
     interface UserRequest extends RequestContext {
-        UserProxy me();
+        Request<UserProxy> me();
     }
 }

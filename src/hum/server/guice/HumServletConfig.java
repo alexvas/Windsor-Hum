@@ -2,8 +2,8 @@ package hum.server.guice;
 
 import hum.client.adapter.JanrainWrapper;
 import hum.server.adapter.janrain.JanrainCallbackServlet;
-import hum.server.services.EventService;
-import hum.server.services.EventServiceImpl;
+import hum.server.services.HumService;
+import hum.server.services.HumServiceImpl;
 import hum.server.services.UserService;
 import hum.server.services.UserServiceImpl;
 
@@ -29,7 +29,7 @@ public class HumServletConfig extends GuiceServletContextListener {
             // bind
             bind(RemoteLoggerServlet.class).in(Singleton.class);
 
-            bind(EventService.class).to(EventServiceImpl.class).in(Singleton.class);
+            bind(HumService.class).to(HumServiceImpl.class).in(Singleton.class);
             bind(UserService.class).to(UserServiceImpl.class).in(Singleton.class);
 
             // configure URLs

@@ -71,7 +71,7 @@ public class JanrainCallbackServlet extends HttpServlet {
             return;
         }
 
-        currentUserProvider.get().setUserId(userService.save(response.profile).id);
+        currentUserProvider.get().setUserId(userService.save(response.profile).getId());
 
         resp.sendRedirect(humBackUrl);
     }
