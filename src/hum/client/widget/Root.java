@@ -17,6 +17,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
@@ -50,7 +51,7 @@ public class Root extends Composite implements MeEventHandler {
     HTMLPanel content;
 
     @UiField
-    Anchor report;
+    Button report;
 
     @UiField
     HeadingElement userName;
@@ -97,6 +98,7 @@ public class Root extends Composite implements MeEventHandler {
             signOutWrapper.getStyle().setDisplay(Style.Display.NONE);
             avatar.setSrc(null);
             avatar.setAlt(null);
+            report.setVisible(true);
             return;
         }
         InfoProxy info = meEvent.user.getInfo().get(0);

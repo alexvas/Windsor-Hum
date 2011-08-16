@@ -56,11 +56,45 @@
     }
 
     .btnReport {
-      background-color: red;
+    }
+
+    .btnReport {
+      -moz-border-bottom-colors: none;
+      -moz-border-image: none;
+      -moz-border-left-colors: none;
+      -moz-border-right-colors: none;
+      -moz-border-top-colors: none;
+      background: url("images/btn_stretch.png") repeat-x red;
+      border-color: transparent;
+      border-radius: 5px 5px 5px 5px;
+      border-style: solid;
+      border-width: 1px;
+      cursor: pointer;
+      margin: 0;
+      padding: 9px 16px;
+      text-decoration: none;
       clear: both;
       margin-top: 30px;
       font-size: larger;
       font-weight: bold;
+      color: white;
+    }
+
+    .btnReport:active {
+      border: 1px inset #CCCCCC;
+    }
+
+    .btnReport:hover {
+      border-color: #939393;
+    }
+
+    .btnReport[disabled] {
+      color: #888888;
+      cursor: default;
+    }
+
+    .btnReport[disabled]:hover {
+      border: 1px outset #CCCCCC;
     }
 
     .userName {
@@ -102,11 +136,7 @@
               press says</a>. We are going to gather enough statistical data to figure out geographical location of the
             hum source and what time it would appear next. We need your help to collect data. Please report rumbling
             here when you hear it.
-            <div class="{style.btn} {style.btnReport}">
-              <g:Anchor text="Report!" ui:field="report" href="javascript:"/>
-              <span/>
-            </div>
-            <div class="clear"/>
+            <g:Button text="Report!" ui:field="report" styleName="{style.btnReport}"/>
           </g:HTMLPanel>
         </g:west>
       </g:SplitLayoutPanel>
