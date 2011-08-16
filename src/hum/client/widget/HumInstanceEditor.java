@@ -8,6 +8,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.StackLayoutPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.datepicker.client.DatePicker;
@@ -51,7 +52,7 @@ public class HumInstanceEditor extends Composite {
     TextBox zip;
 
     @UiField(provided = true)
-    HourMinutePicker hourMinutePicker = new HourMinutePicker(HourMinutePicker.PickerFormat._12_HOUR, 0, 23, 6);
+    HourMinutePicker hourMinutePicker;
 
     @UiField
     ListBox level;
@@ -59,11 +60,16 @@ public class HumInstanceEditor extends Composite {
     @UiField
     DatePicker datePicker;
 
+    @UiField
+    StackLayoutPanel stack;
+
     public void init() {
         if (initialized) {
             return;
         }
         initialized = true;
+        hourMinutePicker = new HourMinutePicker(HourMinutePicker.PickerFormat._12_HOUR, 0, 23, 6);
         initWidget(binder.createAndBindUi(this));
+        hourMinutePicker.setTime("am", 11, 0);
     }
 }

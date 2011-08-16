@@ -14,56 +14,62 @@
       display: block;
     }
   </ui:style>
-  <g:HTMLPanel styleName="{style.root}">
-    <ul>
-      <li>Address:
-        <span ui:field="address"/>
-      </li>
-      <li>Latitude:
-        <span ui:field="lat"/>
-      </li>
-      <li>Longitude:
-        <span ui:field="lng"/>
-      </li>
-      <li>Date and time:
-        <span ui:field="time"/>
-      </li>
-      <li>Level:
-        <span ui:field="summaryLevel"/>
-      </li>
-    </ul>
-    <g:StackLayoutPanel unit='PX' height="400PX">
-      <g:stack>
-        <g:header size='30'>Where</g:header>
-        <g:HTMLPanel styleName="{style.where}">
-          Click the map at the place you heard the hum.
-          or enter address below
-          <g:TextBox ui:field="zip" styleName="{style.zip}"/>
-          (postcode will do)
-        </g:HTMLPanel>
-      </g:stack>
+  <g:DockLayoutPanel>
+    <g:north size="150">
+      <g:HTMLPanel>
+        <ul>
+          <li>Address:
+            <span ui:field="address"/>
+          </li>
+          <li>Latitude:
+            <span ui:field="lat"/>
+          </li>
+          <li>Longitude:
+            <span ui:field="lng"/>
+          </li>
+          <li>Date and time:
+            <span ui:field="time"/>
+          </li>
+          <li>Level:
+            <span ui:field="summaryLevel"/>
+          </li>
+        </ul>
+      </g:HTMLPanel>
+    </g:north>
+    <g:center>
+      <g:StackLayoutPanel unit='PX' ui:field="stack">
+        <g:stack>
+          <g:header size='30'>Where</g:header>
+          <g:HTMLPanel styleName="{style.where}">
+            Click the map at the place you heard the hum.
+            or enter address below
+            <g:TextBox ui:field="zip" styleName="{style.zip}"/>
+            (postcode will do)
+          </g:HTMLPanel>
+        </g:stack>
 
-      <g:stack>
-        <g:header size='30'>When</g:header>
-        <g:HTMLPanel styleName="{style.when}">
-          When did the hum started?
-          <d:DatePicker ui:field="datePicker"/>
-          <s:HourMinutePicker ui:field="hourMinutePicker"/>
-        </g:HTMLPanel>
-      </g:stack>
+        <g:stack>
+          <g:header size='30'>When</g:header>
+          <g:HTMLPanel styleName="{style.when}">
+            When did the hum started?
+            <d:DatePicker ui:field="datePicker"/>
+            <s:HourMinutePicker ui:field="hourMinutePicker"/>
+          </g:HTMLPanel>
+        </g:stack>
 
-      <g:stack>
-        <g:header size='30'>How Strong</g:header>
-        <g:HTMLPanel styleName="{style.howStrong}">
-          Please select the hum level below:
-          <g:ListBox ui:field="level" addStyleNames="{style.level}"/>
-          <ul>
-            <li>Low (barely hear)</li>
-            <li>Medium (hard to ignore)</li>
-            <li>High (window rattle)</li>
-          </ul>
-        </g:HTMLPanel>
-      </g:stack>
-    </g:StackLayoutPanel>
-  </g:HTMLPanel>
+        <g:stack>
+          <g:header size='30'>How Strong</g:header>
+          <g:HTMLPanel styleName="{style.howStrong}">
+            Please select the hum level below:
+            <g:ListBox ui:field="level" addStyleNames="{style.level}"/>
+            <ul>
+              <li>Low (barely hear)</li>
+              <li>Medium (hard to ignore)</li>
+              <li>High (window rattle)</li>
+            </ul>
+          </g:HTMLPanel>
+        </g:stack>
+      </g:StackLayoutPanel>
+    </g:center>
+  </g:DockLayoutPanel>
 </ui:UiBinder>
