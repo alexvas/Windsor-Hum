@@ -51,7 +51,7 @@ public class Main implements Runnable {
     }
 
     private void howAmI() {
-        reqFactory.userRequest().me().fire(new Receiver<UserProxy>() {
+        reqFactory.userRequest().me().with("info").fire(new Receiver<UserProxy>() {
             @Override
             public void onSuccess(UserProxy user) {
                 reqFactory.getEventBus().fireEvent(new MeEvent(user));

@@ -5,21 +5,28 @@
   <ui:style>
 
     .header {
-      padding-left: 20px;
+      padding: 20px 20px;
+    }
+
+    .header h1, .header p {
+      float: left;
+      clear: left;
+      margin-bottom: 0;
+    }
+
+    .header h1, .header h2 {
+      margin-top: 0;
+    }
+
+    .header h2, .header img {
+      display: block;
+      float: right;
+      margin-left: 20px;
     }
 
     .content {
       padding: 20px;
       line-height: 1.6;
-    }
-
-    .errorMessage {
-      background-color: #fff;
-      width: 98%;
-      color: #000;
-      font-size: 9px;
-      height: 24px;
-      margin-left: 15px;
     }
 
     .btn {
@@ -55,14 +62,14 @@
       font-size: larger;
       font-weight: bold;
     }
-
   </ui:style>
   <g:DockLayoutPanel unit='PX'>
     <g:north size='112'>
       <g:HTMLPanel styleName="{style.header}">
         <h1>Windsor Hum</h1>
+        <h2 ui:field="userName"/>
+        <img ui:field="avatar"/>
         <p>Do you hear rumbling again?</p>
-        <div ui:field='errorMessage' class='{style.errorMessage}'/>
       </g:HTMLPanel>
     </g:north>
     <g:center>

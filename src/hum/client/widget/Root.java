@@ -3,10 +3,11 @@ package hum.client.widget;
 import hum.client.adapter.JanrainWrapper;
 import hum.client.events.MeEvent;
 import hum.client.events.MeEventHandler;
+import hum.client.model.InfoProxy;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.DivElement;
-import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.HeadingElement;
+import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -42,10 +43,12 @@ public class Root extends Composite implements MeEventHandler {
     HTMLPanel content;
 
     @UiField
-    DivElement errorMessage;
+    Anchor report;
 
     @UiField
-    Anchor report;
+    HeadingElement userName;
+    @UiField
+    ImageElement avatar;
 
     boolean initialized = false;
 
@@ -56,10 +59,6 @@ public class Root extends Composite implements MeEventHandler {
         initialized = true;
         initWidget(binder.createAndBindUi(this));
         bus.addHandler(MeEvent.TYPE, this);
-    }
-
-    public Element getErrorMessage() {
-        return errorMessage;
     }
 
     public com.google.gwt.user.client.Element getMapPlace() {
@@ -81,6 +80,11 @@ public class Root extends Composite implements MeEventHandler {
     @Override
     public void dispatch(MeEvent meEvent) {
         if (meEvent.user != null) {
+            InfoProxy info = meEvent.user.getInfo().get(0);
+            userName.setInnerText("Welcome, " + info.getDisplayName() + "!");
+            avatar.setAlt(info.getDisplayName());
+            avatar.setSrc(info.getPhoto());
+            avatar.setHeight(72);
             report.setVisible(false);
         }
     }
