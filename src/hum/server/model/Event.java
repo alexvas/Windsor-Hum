@@ -4,16 +4,9 @@ import hum.client.model.EventProxy;
 
 import java.util.Date;
 
-import javax.persistence.Id;
-import javax.persistence.PrePersist;
-import javax.persistence.Version;
-
 import com.googlecode.objectify.Key;
 
-public class Event {
-    @Id
-    private Long id;
-
+public class Event extends DataObject{
     public Key<User> owner;
 
     public double lat;
@@ -32,13 +25,6 @@ public class Event {
 
     public String comment;
 
-    private Date created = new Date();
-
-    public Date updated;
-
-    @Version
-    private Integer version;
-
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder();
@@ -54,10 +40,5 @@ public class Event {
         sb.append(", created=").append(created);
         sb.append('}');
         return sb.toString();
-    }
-
-    @PrePersist
-    void updateTimestamp() {
-        updated = new Date();
     }
 }
