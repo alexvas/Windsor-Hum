@@ -19,6 +19,7 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.google.web.bindery.event.shared.EventBus;
 
 @Singleton
 public class Root extends Composite implements MeEventHandler {
@@ -30,6 +31,9 @@ public class Root extends Composite implements MeEventHandler {
 
     @Inject
     private JanrainWrapper janrainWrapper;
+
+    @Inject
+    private EventBus bus;
 
     @UiField
     HTML mapPlace;
@@ -51,6 +55,7 @@ public class Root extends Composite implements MeEventHandler {
         }
         initialized = true;
         initWidget(binder.createAndBindUi(this));
+        bus.addHandler(MeEvent.TYPE, this);
     }
 
     public Element getErrorMessage() {
@@ -75,7 +80,7 @@ public class Root extends Composite implements MeEventHandler {
 
     @Override
     public void dispatch(MeEvent meEvent) {
-        if (meEvent != null) {
+        if (meEvent.user != null) {
             report.setVisible(false);
         }
     }
