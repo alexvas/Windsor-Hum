@@ -17,6 +17,10 @@
       text-indent: -1em;
     }
 
+    .howStrong li {
+      cursor: pointer;
+    }
+
     .zip {
       display: block;
       float: left;

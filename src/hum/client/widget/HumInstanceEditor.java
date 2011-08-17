@@ -14,6 +14,7 @@ import java.util.Date;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.ImageElement;
+import com.google.gwt.dom.client.InputElement;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -22,6 +23,7 @@ import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.i18n.client.NumberFormat;
+import com.google.gwt.query.client.Function;
 import com.google.gwt.query.client.GQuery;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -214,9 +216,15 @@ public class HumInstanceEditor extends Composite implements StartedEventHandler,
     }
 
     private void setLiIcon(RadioButton button, HumProxy.Level level) {
-        ImageElement i = GQuery.$(button).parent("li").find("img").get(0).cast();
-        i.setSrc(levelHelper.icon(level).getIcon().url());
+        final GQuery li = GQuery.$(button).parent("li");
+        li.find("img").get(0).<ImageElement>cast().setSrc(levelHelper.icon(level).getIcon().url());
+        li.focus(new Function() {
+            @Override
+            public void f() {
+                InputElement in = li.find("input").get(0).cast();
+                in.setChecked(true);
+                in.focus();
+            }
+        });
     }
-
-
 }
