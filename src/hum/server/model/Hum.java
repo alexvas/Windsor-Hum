@@ -43,24 +43,48 @@ public class Hum extends DataObject{
         return point;
     }
 
+    public void setPoint(Point point) {
+        this.point = point;
+    }
+
     public Address getAddress() {
         return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
     }
 
     public HumProxy.Level getLevel() {
         return level;
     }
 
+    public void setLevel(HumProxy.Level level) {
+        this.level = level;
+    }
+
     public Date getStart() {
         return start;
+    }
+
+    public void setStart(Date start) {
+        this.start = start;
     }
 
     public Date getEnd() {
         return end;
     }
 
+    public void setEnd(Date end) {
+        this.end = end;
+    }
+
     public String getComment() {
         return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     public static class Point {

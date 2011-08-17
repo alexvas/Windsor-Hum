@@ -66,13 +66,16 @@ public class Summary extends Composite implements StartedEventHandler,
 
     private HumProxy hum;
 
+    private ReqFactory.HumRequest humRequest;
+
     public void init() {
         if (initialized) {
             return;
         }
         initialized = true;
         initWidget(binder.createAndBindUi(this));
-        hum = reqFactory.humRequest().create(HumProxy.class);
+        humRequest = reqFactory.humRequest();
+        hum = humRequest.create(HumProxy.class);
         bus.addHandler(StartedEvent.TYPE, this);
         bus.addHandler(LevelEvent.TYPE, this);
         bus.addHandler(PositionEvent.TYPE, this);
@@ -88,12 +91,14 @@ public class Summary extends Composite implements StartedEventHandler,
                         .getFormat(DateTimeFormat.PredefinedFormat.DATE_TIME_LONG)
                         .format(meEvent.started)
         );
+        sendHum();
     }
 
     @Override
     public void dispatch(LevelEvent event) {
         hum.setLevel(event.level);
         level.setInnerText(CLIENT_UTILS.capitalize(event.level.name()));
+        sendHum();
     }
 
     private static final NumberFormat COORD_FORMAT = NumberFormat.getFormat("###.######");
@@ -108,6 +113,7 @@ public class Summary extends Composite implements StartedEventHandler,
             lat.setInnerText(COORD_FORMAT.format(event.point.getLat()));
             lng.setInnerText(COORD_FORMAT.format(event.point.getLng()));
         }
+        sendHum();
     }
 
     @Override
@@ -123,6 +129,7 @@ public class Summary extends Composite implements StartedEventHandler,
                         event.address.getPostcode(),
                         event.address.getAddressLine()
                 ));
+        sendHum();
     }
 
     @Override
@@ -143,7 +150,7 @@ public class Summary extends Composite implements StartedEventHandler,
     }
 
     private void sendHum() {
-        reqFactory.humRequest().save(hum).fire(new Receiver<Void>() {
+        humRequest.save(hum).fire(new Receiver<Void>() {
             @Override
             public void onSuccess(Void response) {
                 bus.fireEvent(new ModeEvent(Mode.LAST));
