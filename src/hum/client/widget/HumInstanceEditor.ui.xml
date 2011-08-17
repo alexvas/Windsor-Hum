@@ -71,10 +71,10 @@
 
     .datePicker, .timePicker {
       margin-left: 20px;
-      border: 1px solid black;
     }
 
     .timePicker {
+      margin-top: 20px;
       font-size: larger;
     }
 

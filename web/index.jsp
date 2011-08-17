@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <title>Windsor Hum</title>
     <link rel="icon" href="/favicon.ico" type="image/x-icon"/>
+    <link rel="stylesheet" type="text/css" href="/css/gwt-timepicker.css"/>
 </head>
 <body>
 <script type="text/javascript" language="javascript" src="/hum/hum.nocache.js"></script>

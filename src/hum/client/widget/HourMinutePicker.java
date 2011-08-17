@@ -13,10 +13,10 @@ import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.i18n.client.NumberFormat;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.InlineHTML;
 import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -52,7 +52,7 @@ public class HourMinutePicker extends Composite {
 	private String workingSuffix = "";
 
 	private FlowPanel pnlMain = new FlowPanel();
-	private InlineLabel lblInput = new InlineLabel();
+	private InlineHTML lblInput = new InlineHTML();
 	private FocusPanel pnlFocus = new FocusPanel();
 	private FlowPanel pnlPopup = new FlowPanel();
 
@@ -288,6 +288,7 @@ public class HourMinutePicker extends Composite {
 						+ ":";
 				timeText += NumberFormat.getFormat("00").format(
 						workingMinute * (60 / timeSlices));
+				timeText += "&nbsp;";
 				timeText += workingSuffix;
 			} else {
 				timeText += NumberFormat.getFormat("00").format(workingHour)
@@ -297,7 +298,7 @@ public class HourMinutePicker extends Composite {
 			}
 		}
 
-		lblInput.setText(timeText);
+		lblInput.setHTML(timeText);
 	}
 
 	/**
@@ -332,6 +333,7 @@ public class HourMinutePicker extends Composite {
 				clearLabel.addStyleName("state-hover");
 			}
 		}
+/*
 		DOM.setStyleAttribute(
 				pnlHoursAM.getElement(),
 				"left",
@@ -346,6 +348,7 @@ public class HourMinutePicker extends Composite {
 				pmSuffixLabel.getElement().getOffsetLeft()
 						+ (pmSuffixLabel.getOffsetWidth() / 2)
 						- (pnlHoursPM.getOffsetWidth() / 2) + "px");
+*/
 
 		if (this.workingHour != hour) {
 			this.workingHour = hour;
@@ -363,13 +366,16 @@ public class HourMinutePicker extends Composite {
 		if (workingHour != -1) {
 			InlineLabel hourLabel = hourLabels
 					.get(this.workingHour - startHour);
+/*
 			DOM.setStyleAttribute(
 					pnlMinutes.getElement(),
 					"left",
 					hourLabel.getAbsoluteLeft() - lblInput.getAbsoluteLeft()
 							- (pnlMinutes.getOffsetWidth() / 2)
 							+ (hourLabel.getOffsetWidth() / 2) + "px");
+*/
 		} else {
+/*
 			DOM.setStyleAttribute(
 					pnlMinutes.getElement(),
 					"left",
@@ -377,6 +383,7 @@ public class HourMinutePicker extends Composite {
 							- (pnlMinutes.getOffsetWidth() % 2)
 							+ (amSuffixLabel.getOffsetWidth() / 2)
 							+ (amSuffixLabel.getOffsetWidth() % 2) + "px");
+*/
 		}
 		if (this.workingMinute != minute) {
 			this.workingMinute = minute;
