@@ -1,6 +1,8 @@
 package hum.client.widget;
 
 import static hum.client.ClientUtils.CLIENT_UTILS;
+import hum.client.events.LevelEvent;
+import hum.client.events.LevelEventHandler;
 import hum.client.events.StartedEvent;
 import hum.client.events.StartedEventHandler;
 import hum.client.model.HumProxy;
@@ -9,6 +11,8 @@ import java.util.Date;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.SpanElement;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -29,7 +33,7 @@ import com.google.inject.Singleton;
 import com.google.web.bindery.event.shared.EventBus;
 
 @Singleton
-public class HumInstanceEditor extends Composite implements StartedEventHandler {
+public class HumInstanceEditor extends Composite implements StartedEventHandler, LevelEventHandler {
 
     interface Binder extends UiBinder<Widget, HumInstanceEditor> {
     }
@@ -103,7 +107,20 @@ public class HumInstanceEditor extends Composite implements StartedEventHandler 
                 fireStarted();
             }
         });
+        level.addChangeHandler(new ChangeHandler() {
+            @Override
+            public void onChange(ChangeEvent event) {
+                try {
+                    bus.fireEvent(new LevelEvent(HumProxy.Level.valueOf(
+                            level.getValue(level.getSelectedIndex())
+                    )));
+                } catch (IllegalArgumentException ignored) {
+                    // do nothing
+                }
+            }
+        });
         bus.addHandler(StartedEvent.TYPE, this);
+        bus.addHandler(LevelEvent.TYPE, this);
     }
 
     private void fireStarted() {
@@ -143,4 +160,14 @@ public class HumInstanceEditor extends Composite implements StartedEventHandler 
         );
     }
 
+    @Override
+    public void dispatch(LevelEvent event) {
+        for (int i = 0; i < level.getItemCount(); ++i) {
+            if (event.level.name().equals(level.getItemText(i))) {
+                level.setSelectedIndex(i);
+                break;
+            }
+        }
+        summaryLevel.setInnerText(CLIENT_UTILS.capitalize(event.level.name()));
+    }
 }
