@@ -20,7 +20,7 @@ public class GeocoderService {
     @Inject
     private EventBus bus;
 
-    public void direct(String address, final boolean propagateResolvedAddress) {
+    public void direct(String address) {
         Log.debug("geocoding address '" + address + "', country 'ca'");
         if (geocoder == null) {
             geocoder = Geocoder.newInstance();
@@ -40,8 +40,7 @@ public class GeocoderService {
                             "OK".equals(status)
                                     ? results.get(0)
                                     : null,
-                            true,
-                            propagateResolvedAddress
+                            true
                     );
                 }
             });
@@ -70,8 +69,7 @@ public class GeocoderService {
                             "OK".equals(status)
                                     ? results.get(0)
                                     : null,
-                            false,
-                            true
+                            false
                     );
                 }
             });
@@ -83,8 +81,7 @@ public class GeocoderService {
 
     private void onResponse(
             GeocoderResult result,
-            boolean propagateResolvedLocation,
-            boolean propagateResolvedAddress
+            boolean propagateResolvedLocation
     ) {
         if (propagateResolvedLocation) {
             bus.fireEvent(new PositionEvent(
@@ -92,10 +89,6 @@ public class GeocoderService {
                             ? null
                             : PointProxy.LatLngWrapper.from(result.geometry().location())
             ));
-        }
-
-        if (!propagateResolvedAddress) {
-            return;
         }
 
         final AddressProxy.AddressWrapper address;

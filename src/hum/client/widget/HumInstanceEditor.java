@@ -9,6 +9,7 @@ import hum.client.events.PositionEvent;
 import hum.client.events.PositionEventHandler;
 import hum.client.events.StartedEvent;
 import hum.client.events.StartedEventHandler;
+import hum.client.maps.geocoder.GeocoderService;
 import hum.client.model.HumProxy;
 
 import java.util.Date;
@@ -49,6 +50,9 @@ public class HumInstanceEditor extends Composite implements StartedEventHandler,
 
     @Inject
     private EventBus bus;
+
+    @Inject
+    private GeocoderService geocoder;
 
     boolean initialized = false;
 
@@ -91,6 +95,9 @@ public class HumInstanceEditor extends Composite implements StartedEventHandler,
     @UiField
     Button startedNow;
 
+    @UiField
+    Button go;
+
     public void init() {
         if (initialized) {
             return;
@@ -124,6 +131,12 @@ public class HumInstanceEditor extends Composite implements StartedEventHandler,
                 } catch (IllegalArgumentException ignored) {
                     // do nothing
                 }
+            }
+        });
+        zip.addChangeHandler(new ChangeHandler() {
+            @Override
+            public void onChange(ChangeEvent event) {
+                geocode();
             }
         });
         bus.addHandler(StartedEvent.TYPE, this);
@@ -201,9 +214,19 @@ public class HumInstanceEditor extends Composite implements StartedEventHandler,
                         : CLIENT_UTILS.join(
                         ", ",
                         event.address.getCountry(),
-                        event.address.getPostcode(),
                         event.address.getRegion(),
+                        event.address.getPostcode(),
                         event.address.getAddressLine()
                 ));
+    }
+
+    @SuppressWarnings({"UnusedParameters"})
+    @UiHandler("go")
+    void go(ClickEvent go) {
+        geocode();
+    }
+
+    private void geocode() {
+        geocoder.direct(zip.getText());
     }
 }

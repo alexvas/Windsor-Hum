@@ -10,8 +10,13 @@
       overflow: hidden;
     }
 
-    .zip, .level {
+    .level {
       display: block;
+    }
+
+    .zip {
+      display: block;
+      float: left;
     }
 
     .summary {
@@ -85,6 +90,19 @@
       margin-top: 20px;
       margin-left: 20px;
     }
+
+    .go {
+      display: block;
+      float: left;
+      padding: 3px 3px;
+      margin-top: -1px;
+      margin-left: 2px;
+    }
+
+    .hint {
+      display: block;
+      float: left;
+    }
   </ui:style>
   <g:DockLayoutPanel>
     <g:north size="150">
@@ -115,7 +133,8 @@
           <g:HTMLPanel styleName="{style.where}">
             <p>Click the map at the place you heard the hum or enter an address below</p>
             <g:TextBox ui:field="zip" styleName="{style.zip}"/>
-            (just a postcode will do)
+            <g:Button ui:field="go" styleName="{style.go}" text="Go!"/>
+            <span class="{style.hint}">(just a postcode will do)</span>
           </g:HTMLPanel>
         </g:stack>
 
