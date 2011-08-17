@@ -1,6 +1,7 @@
 package hum.client;
 
 import hum.client.adapter.JanrainWrapper;
+import hum.client.events.MapsLoadedEvent;
 import hum.client.events.MeEvent;
 import hum.client.model.UserProxy;
 import hum.client.widget.Mapper;
@@ -10,6 +11,7 @@ import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.ajaxloader.client.AjaxLoader;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.inject.Inject;
+import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.requestfactory.shared.Receiver;
 
 public class Main implements Runnable {
@@ -25,6 +27,9 @@ public class Main implements Runnable {
 
     @Inject
     private ReqFactory reqFactory;
+
+    @Inject
+    private EventBus bus;
 
     @Override
     public void run() {
@@ -48,6 +53,7 @@ public class Main implements Runnable {
     private void mapsLoaded() {
         Log.debug("maps v3 loaded");
         mapper.initMap(root.getMapPlace());
+        bus.fireEvent(new MapsLoadedEvent());
     }
 
     private void howAmI() {

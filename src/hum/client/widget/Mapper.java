@@ -1,14 +1,15 @@
 package hum.client.widget;
 
 import hum.client.Back;
+import hum.client.LevelHelper;
 import hum.client.events.PositionEvent;
 import hum.client.events.PositionEventHandler;
 import hum.client.maps.Animation;
-import hum.client.maps.IconBuilder;
 import hum.client.maps.MapOptions;
 import hum.client.maps.Marker;
 import hum.client.maps.MarkerOptions;
 import hum.client.maps.geocoder.GeocoderService;
+import hum.client.model.HumProxy;
 import hum.client.model.PointProxy;
 
 import com.google.gwt.maps.client.Map;
@@ -30,12 +31,12 @@ public class Mapper implements PositionEventHandler {
     @Inject
     private GeocoderService geocoderService;
 
-    private final IconBuilder yellow = new IconBuilder().primaryColor("00ffff");
-    private final IconBuilder green = new IconBuilder().primaryColor("00ff00");
-    private final IconBuilder red = new IconBuilder().primaryColor("ff0000");
+    @Inject
+    private LevelHelper levelHelper;
 
     protected Map map;
     private PointProxy pendingPoint = null;
+    private HumProxy.Level pendingLevel = null;
 
     private Marker currentHum = null;
     boolean currentHumDetached = true;
@@ -112,9 +113,16 @@ public class Mapper implements PositionEventHandler {
     }
 
     private Marker buildMarkerForCurrentHum(PointProxy point) {
+        final HumProxy.Level level;
+        if (pendingLevel == null) {
+            level = HumProxy.Level.HIGH;
+        } else {
+            level = pendingLevel;
+            pendingLevel = null;
+        }
         MarkerOptions opts = new MarkerOptions.Builder(LatLng.newInstance(point.getLat(), point.getLng()))
-                .icon(red.getIcon())
-                .shadow(red.getShadow())
+                .icon(levelHelper.icon(level).getIcon())
+                .shadow(levelHelper.icon(level).getShadow())
 //                .shape(red.getShape())
                 .animation(Animation.DROP)
                 .draggable(true)

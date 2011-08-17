@@ -47,8 +47,8 @@ public final class MarkerImage extends JavaScriptObject {
         return new $wnd.google.maps.MarkerImage(url, size, origin, anchor);
     }-*/;
 
-    private static native MarkerImage newInstance(String url, Size size, Point origin, Point anchor, Size scaledSize) /*-{
-        return new $wnd.google.maps.MarkerImage(url, size, origin, anchor, scaledSize);
+    public native String url() /*-{
+        return this.url;
     }-*/;
 
 }

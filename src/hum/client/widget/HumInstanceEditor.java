@@ -1,10 +1,13 @@
 package hum.client.widget;
 
 import static hum.client.ClientUtils.CLIENT_UTILS;
+import hum.client.LevelHelper;
 import hum.client.events.AddressEvent;
 import hum.client.events.AddressEventHandler;
 import hum.client.events.LevelEvent;
 import hum.client.events.LevelEventHandler;
+import hum.client.events.MapsLoadedEvent;
+import hum.client.events.MapsLoadedEventHandler;
 import hum.client.events.PositionEvent;
 import hum.client.events.PositionEventHandler;
 import hum.client.events.StartedEvent;
@@ -15,20 +18,24 @@ import hum.client.model.HumProxy;
 import java.util.Date;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.FocusEvent;
+import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.NumberFormat;
+import com.google.gwt.query.client.GQuery;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.StackLayoutPanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
@@ -41,7 +48,7 @@ import com.google.web.bindery.event.shared.EventBus;
 @SuppressWarnings({"deprecation"})
 @Singleton
 public class HumInstanceEditor extends Composite implements StartedEventHandler,
-        LevelEventHandler, PositionEventHandler, AddressEventHandler {
+        LevelEventHandler, PositionEventHandler, AddressEventHandler, MapsLoadedEventHandler {
 
     interface Binder extends UiBinder<Widget, HumInstanceEditor> {
     }
@@ -53,6 +60,9 @@ public class HumInstanceEditor extends Composite implements StartedEventHandler,
 
     @Inject
     private GeocoderService geocoder;
+
+    @Inject
+    private LevelHelper levelHelper;
 
     boolean initialized = false;
 
@@ -78,9 +88,6 @@ public class HumInstanceEditor extends Composite implements StartedEventHandler,
     HourMinutePicker startedTime;
 
     @UiField
-    ListBox level;
-
-    @UiField
     DatePicker startedDate;
 
     @UiField
@@ -98,6 +105,15 @@ public class HumInstanceEditor extends Composite implements StartedEventHandler,
     @UiField
     Button go;
 
+    @UiField
+    RadioButton levelLow;
+
+    @UiField
+    RadioButton levelMedium;
+
+    @UiField
+    RadioButton levelHigh;
+
     public void init() {
         if (initialized) {
             return;
@@ -105,10 +121,6 @@ public class HumInstanceEditor extends Composite implements StartedEventHandler,
         initialized = true;
         startedTime = new HourMinutePicker(HourMinutePicker.PickerFormat._12_HOUR, 0, 23, 6);
         initWidget(binder.createAndBindUi(this));
-        level.addItem("Please select... ", "");
-        for (HumProxy.Level le : HumProxy.Level.values()) {
-            level.addItem(CLIENT_UTILS.capitalize(le.name()), le.name());
-        }
         startedDate.addValueChangeHandler(new ValueChangeHandler<Date>() {
             @Override
             public void onValueChange(ValueChangeEvent<Date> dateValueChangeEvent) {
@@ -121,18 +133,28 @@ public class HumInstanceEditor extends Composite implements StartedEventHandler,
                 fireStarted();
             }
         });
-        level.addChangeHandler(new ChangeHandler() {
+
+        levelHigh.addFocusHandler(new FocusHandler() {
             @Override
-            public void onChange(ChangeEvent event) {
-                try {
-                    bus.fireEvent(new LevelEvent(HumProxy.Level.valueOf(
-                            level.getValue(level.getSelectedIndex())
-                    )));
-                } catch (IllegalArgumentException ignored) {
-                    // do nothing
-                }
+            public void onFocus(FocusEvent event) {
+                bus.fireEvent(new LevelEvent(HumProxy.Level.HIGH));
             }
         });
+
+        levelMedium.addFocusHandler(new FocusHandler() {
+            @Override
+            public void onFocus(FocusEvent event) {
+                bus.fireEvent(new LevelEvent(HumProxy.Level.MEDIUM));
+            }
+        });
+
+        levelLow.addFocusHandler(new FocusHandler() {
+            @Override
+            public void onFocus(FocusEvent event) {
+                bus.fireEvent(new LevelEvent(HumProxy.Level.LOW));
+            }
+        });
+
         zip.addChangeHandler(new ChangeHandler() {
             @Override
             public void onChange(ChangeEvent event) {
@@ -143,6 +165,7 @@ public class HumInstanceEditor extends Composite implements StartedEventHandler,
         bus.addHandler(LevelEvent.TYPE, this);
         bus.addHandler(PositionEvent.TYPE, this);
         bus.addHandler(AddressEvent.TYPE, this);
+        bus.addHandler(MapsLoadedEvent.TYPE, this);
     }
 
     private void fireStarted() {
@@ -184,11 +207,18 @@ public class HumInstanceEditor extends Composite implements StartedEventHandler,
 
     @Override
     public void dispatch(LevelEvent event) {
-        for (int i = 0; i < level.getItemCount(); ++i) {
-            if (event.level.name().equals(level.getItemText(i))) {
-                level.setSelectedIndex(i);
+        switch (event.level) {
+            case LOW:
+                levelLow.setFocus(true);
                 break;
-            }
+            case MEDIUM:
+                levelMedium.setFocus(true);
+                break;
+            case HIGH:
+                levelHigh.setFocus(true);
+                break;
+            default:
+                throw new RuntimeException("level " + event.level + " is not supported");
         }
         summaryLevel.setInnerText(CLIENT_UTILS.capitalize(event.level.name()));
     }
@@ -220,6 +250,14 @@ public class HumInstanceEditor extends Composite implements StartedEventHandler,
                 ));
     }
 
+    @Override
+    public void dispatch(MapsLoadedEvent event) {
+        init();
+        setLiIcon(levelHigh, HumProxy.Level.HIGH);
+        setLiIcon(levelMedium, HumProxy.Level.MEDIUM);
+        setLiIcon(levelLow, HumProxy.Level.LOW);
+    }
+
     @SuppressWarnings({"UnusedParameters"})
     @UiHandler("go")
     void go(ClickEvent go) {
@@ -229,4 +267,11 @@ public class HumInstanceEditor extends Composite implements StartedEventHandler,
     private void geocode() {
         geocoder.direct(zip.getText());
     }
+
+    private void setLiIcon(RadioButton button, HumProxy.Level level) {
+        ImageElement i = GQuery.$(button).parent("li").find("img").get(0).cast();
+        i.setSrc(levelHelper.icon(level).getIcon().url());
+    }
+
+
 }

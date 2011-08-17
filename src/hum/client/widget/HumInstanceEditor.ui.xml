@@ -10,6 +10,13 @@
       overflow: hidden;
     }
 
+    .howStrong ul {
+      list-style: none;
+      margin-left: 0;
+      padding-left: 1em;
+      text-indent: -1em;
+    }
+
     .level {
       display: block;
     }
@@ -151,12 +158,23 @@
         <g:stack>
           <g:header size='30'>How Strong</g:header>
           <g:HTMLPanel styleName="{style.howStrong}">
-            <p>How strong do you think the hum level is?</p>
-            <g:ListBox ui:field="level" addStyleNames="{style.level}"/>
+            <p>How strong do you think the hum level is? Please select:</p>
             <ul>
-              <li>Low (barely hear)</li>
-              <li>Medium (hard to ignore)</li>
-              <li>High (window rattle)</li>
+              <li>
+                <img alt="" src=""/>
+                <g:RadioButton name="level" ui:field="levelLow"/>
+                Low (barely hear)
+              </li>
+              <li>
+                <img alt="" src=""/>
+                <g:RadioButton name="level" ui:field="levelMedium"/>
+                Medium (hard to ignore)
+              </li>
+              <li>
+                <img alt="" src=""/>
+                <g:RadioButton name="level" ui:field="levelHigh"/>
+                High (window rattle)
+              </li>
             </ul>
           </g:HTMLPanel>
         </g:stack>
