@@ -1,11 +1,10 @@
 package hum.client.maps;
 
 import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.maps.client.base.Point;
 import com.google.gwt.maps.client.base.Size;
 
-public final class Icon extends JavaScriptObject {
-    protected Icon() {
+public final class MarkerImage extends JavaScriptObject {
+    protected MarkerImage() {
     }
 
     public static class Builder {
@@ -39,12 +38,16 @@ public final class Icon extends JavaScriptObject {
             return this;
         }
 
-        public Icon build() {
-            return Icon.newInstance(url, size, origin, anchor, scaledSize);
+        public MarkerImage build() {
+            return MarkerImage.newInstance(url, size, origin, anchor);
         }
     }
 
-    private static native Icon newInstance(String url, Size size, Point origin, Point anchor, Size scaledSize) /*-{
+    private static native MarkerImage newInstance(String url, Size size, Point origin, Point anchor) /*-{
+        return new $wnd.google.maps.MarkerImage(url, size, origin, anchor);
+    }-*/;
+
+    private static native MarkerImage newInstance(String url, Size size, Point origin, Point anchor, Size scaledSize) /*-{
         return new $wnd.google.maps.MarkerImage(url, size, origin, anchor, scaledSize);
     }-*/;
 

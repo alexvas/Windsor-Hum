@@ -141,7 +141,7 @@ public class Marker extends JavaScriptObject {
         this.setFlat(flat);
     }-*/;
 
-    public final native void setIcon(Icon image) /*-{
+    public final native void setIcon(MarkerImage image) /*-{
         this.setIcon(image);
     }-*/;
 

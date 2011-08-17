@@ -3,6 +3,7 @@ package hum.client.widget;
 import hum.client.Back;
 import hum.client.events.PositionEvent;
 import hum.client.events.PositionEventHandler;
+import hum.client.maps.Animation;
 import hum.client.maps.IconBuilder;
 import hum.client.maps.MapOptions;
 import hum.client.maps.Marker;
@@ -104,11 +105,10 @@ public class Mapper implements PositionEventHandler {
 
     private Marker buildMarkerForCurrentHum(PointProxy point) {
         MarkerOptions opts = new MarkerOptions.Builder(LatLng.newInstance(point.getLat(), point.getLng()))
-//                .icon(red.getIcon())
-//                .shadow(red.getShadow())
+                .icon(red.getIcon())
+                .shadow(red.getShadow())
 //                .shape(red.getShape())
-//                .animation(Animation.DROP)
-//                .clickable(true)
+                .animation(Animation.DROP)
                 .draggable(true)
 //                .flat(false)
 //                .visible(true)

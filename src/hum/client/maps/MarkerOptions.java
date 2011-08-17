@@ -20,7 +20,7 @@ public final class MarkerOptions extends JavaScriptObject {
 
         private String iconStr;
 
-        private Icon icon;
+        private MarkerImage markerImage;
 
         private Map map;
 
@@ -30,7 +30,7 @@ public final class MarkerOptions extends JavaScriptObject {
 
         private String shadowStr;
 
-        private Icon shadow;
+        private MarkerImage shadow;
 
         private MarkerShape shape;
 
@@ -74,8 +74,8 @@ public final class MarkerOptions extends JavaScriptObject {
             return this;
         }
 
-        public Builder icon(Icon icon) {
-            this.icon = icon;
+        public Builder icon(MarkerImage markerImage) {
+            this.markerImage = markerImage;
             return this;
         }
 
@@ -99,7 +99,7 @@ public final class MarkerOptions extends JavaScriptObject {
             return this;
         }
 
-        public Builder shadow(Icon shadow) {
+        public Builder shadow(MarkerImage shadow) {
             this.shadow = shadow;
             return this;
         }
@@ -152,8 +152,8 @@ public final class MarkerOptions extends JavaScriptObject {
                 opts.iconStr(iconStr);
             }
 
-            if (icon != null) {
-                opts.icon(icon);
+            if (markerImage != null) {
+                opts.icon(markerImage);
             }
 
             if (map != null) {
@@ -227,7 +227,7 @@ public final class MarkerOptions extends JavaScriptObject {
         this.iconStr = val
     }-*/;
 
-    private native void icon(Icon val) /*-{
+    private native void icon(MarkerImage val) /*-{
         this.icon = val
     }-*/;
 
@@ -247,7 +247,7 @@ public final class MarkerOptions extends JavaScriptObject {
         this.shadowStr = val
     }-*/;
 
-    private native void shadow(Icon val) /*-{
+    private native void shadow(MarkerImage val) /*-{
         this.shadow = val
     }-*/;
 

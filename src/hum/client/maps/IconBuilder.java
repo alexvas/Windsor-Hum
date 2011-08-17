@@ -1,6 +1,5 @@
 package hum.client.maps;
 
-import com.google.gwt.maps.client.base.Point;
 import com.google.gwt.maps.client.base.Size;
 
 public class IconBuilder {
@@ -38,20 +37,20 @@ public class IconBuilder {
         return this;
     }
 
-    public Icon getIcon() {
+    public MarkerImage getIcon() {
         String iconBase = BASE_URL + "&chs=" + width + "x" + height + "&chco="
                 + cornerColor + "," + primaryColor + "," + strokeColor;
         String iconUrl = iconBase + "&ext=.png";
-        return new Icon.Builder(iconUrl)
+        return new MarkerImage.Builder(iconUrl)
                 .size(Size.newInstance(width, height))
                 .anchor(Point.newInstance(width / 2, height))
                 .build();
     }
 
-    public Icon getShadow() {
-        Icon.Builder shadowBuilder = new Icon.Builder(SHADOW_URL)
+    public MarkerImage getShadow() {
+        MarkerImage.Builder shadowBuilder = new MarkerImage.Builder(SHADOW_URL)
                 .size(Size.newInstance(40, 37))
-                .anchor(Point.newInstance(3, 4));
+                .anchor(Point.newInstance(13, 37));
 /*
 
         if (Math.abs(width / 32.0 - 1.0) > 0.05) {
