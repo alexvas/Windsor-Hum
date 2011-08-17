@@ -1,15 +1,21 @@
 package hum.client.widget;
 
 import static hum.client.ClientUtils.CLIENT_UTILS;
-import hum.client.ReqFactory;
+import hum.client.events.StartedEvent;
+import hum.client.events.StartedEventHandler;
 import hum.client.model.HumProxy;
 
 import java.util.Date;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.SpanElement;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.ListBox;
@@ -23,7 +29,7 @@ import com.google.inject.Singleton;
 import com.google.web.bindery.event.shared.EventBus;
 
 @Singleton
-public class HumInstanceEditor extends Composite {
+public class HumInstanceEditor extends Composite implements StartedEventHandler {
 
     interface Binder extends UiBinder<Widget, HumInstanceEditor> {
     }
@@ -32,9 +38,6 @@ public class HumInstanceEditor extends Composite {
 
     @Inject
     private EventBus bus;
-
-    @Inject
-    private ReqFactory reqFactory;
 
     boolean initialized = false;
 
@@ -48,7 +51,7 @@ public class HumInstanceEditor extends Composite {
     SpanElement lng;
 
     @UiField
-    SpanElement time;
+    SpanElement summaryStarted;
 
     @UiField
     SpanElement summaryLevel;
@@ -57,13 +60,13 @@ public class HumInstanceEditor extends Composite {
     TextBox zip;
 
     @UiField(provided = true)
-    HourMinutePicker hourMinutePicker;
+    HourMinutePicker startedTime;
 
     @UiField
     ListBox level;
 
     @UiField
-    DatePicker datePicker;
+    DatePicker startedDate;
 
     @UiField
     StackLayoutPanel stack;
@@ -82,15 +85,46 @@ public class HumInstanceEditor extends Composite {
             return;
         }
         initialized = true;
-        hourMinutePicker = new HourMinutePicker(HourMinutePicker.PickerFormat._12_HOUR, 0, 23, 6);
+        startedTime = new HourMinutePicker(HourMinutePicker.PickerFormat._12_HOUR, 0, 23, 6);
         initWidget(binder.createAndBindUi(this));
-        Date now = new Date();
-
-
-        hourMinutePicker.setTime("", now.getHours(), now.getMinutes());
         level.addItem("Please select... ", "");
         for (HumProxy.Level le : HumProxy.Level.values()) {
             level.addItem(CLIENT_UTILS.capitalize(le.name()), le.name());
         }
+        startedDate.addValueChangeHandler(new ValueChangeHandler<Date>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<Date> dateValueChangeEvent) {
+                Date started = dateValueChangeEvent.getValue();
+                if (startedTime.getMinutes() != null) {
+                    started.setHours(startedTime.getHour());
+                    started.setMinutes(startedTime.getMinute());
+                }
+                fireStarted(started);
+            }
+        });
+        bus.addHandler(StartedEvent.TYPE, this);
     }
+
+
+    @SuppressWarnings({"UnusedParameters"})
+    @UiHandler("startedNow")
+    void startedNow(ClickEvent startedNow) {
+        fireStarted(new Date());
+    }
+
+    private void fireStarted(Date date) {
+        bus.fireEvent(new StartedEvent(date));
+    }
+
+    @Override
+    public void dispatch(StartedEvent meEvent) {
+        startedDate.setValue(meEvent.started);
+        startedTime.setTime("", meEvent.started.getHours(), meEvent.started.getMinutes());
+        summaryStarted.setInnerText(
+                DateTimeFormat
+                        .getFormat(DateTimeFormat.PredefinedFormat.DATE_TIME_LONG)
+                        .format(meEvent.started)
+        );
+    }
+
 }

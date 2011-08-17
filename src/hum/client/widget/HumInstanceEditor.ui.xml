@@ -101,7 +101,7 @@
             <span ui:field="lng"/>
           </li>
           <li>Date and time:
-            <span ui:field="time"/>
+            <span ui:field="summaryStarted"/>
           </li>
           <li>Level:
             <span ui:field="summaryLevel"/>
@@ -125,8 +125,8 @@
           <g:header size='30'>When</g:header>
           <g:HTMLPanel styleName="{style.when}">
             <p>When did the hum started?</p>
-            <d:DatePicker ui:field="datePicker" addStyleNames="{style.datePicker}"/>
-            <h:HourMinutePicker ui:field="hourMinutePicker" addStyleNames="{style.timePicker}"/>
+            <d:DatePicker ui:field="startedDate" addStyleNames="{style.datePicker}"/>
+            <h:HourMinutePicker ui:field="startedTime" addStyleNames="{style.timePicker}"/>
             <g:Button text="Rumbling Has Just Started" ui:field="startedNow" addStyleNames="{style.startedNow}"/>
           </g:HTMLPanel>
         </g:stack>
