@@ -94,17 +94,33 @@ public class HumInstanceEditor extends Composite implements StartedEventHandler 
         startedDate.addValueChangeHandler(new ValueChangeHandler<Date>() {
             @Override
             public void onValueChange(ValueChangeEvent<Date> dateValueChangeEvent) {
-                Date started = dateValueChangeEvent.getValue();
-                if (startedTime.getMinutes() != null) {
-                    started.setHours(startedTime.getHour());
-                    started.setMinutes(startedTime.getMinute());
-                }
-                fireStarted(started);
+                fireStarted();
+            }
+        });
+        startedTime.addValueChangeHandler(new ValueChangeHandler<Integer>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<Integer> integerValueChangeEvent) {
+                fireStarted();
             }
         });
         bus.addHandler(StartedEvent.TYPE, this);
     }
 
+    private void fireStarted() {
+        Date started = startedDate.getValue();
+        if (started == null) {
+            started = new Date();
+        }
+        if (startedTime.getMinutes() == null) {
+            started.setHours(0);
+            started.setMinutes(0);
+        } else {
+            started.setHours(startedTime.getHour());
+            started.setMinutes(startedTime.getMinute());
+        }
+        started.setSeconds(0);
+        fireStarted(started);
+    }
 
     @SuppressWarnings({"UnusedParameters"})
     @UiHandler("startedNow")
