@@ -1,15 +1,10 @@
 package hum.client.widget;
 
-import static hum.client.ClientUtils.CLIENT_UTILS;
 import hum.client.LevelHelper;
-import hum.client.events.AddressEvent;
-import hum.client.events.AddressEventHandler;
 import hum.client.events.LevelEvent;
 import hum.client.events.LevelEventHandler;
 import hum.client.events.MapsLoadedEvent;
 import hum.client.events.MapsLoadedEventHandler;
-import hum.client.events.PositionEvent;
-import hum.client.events.PositionEventHandler;
 import hum.client.events.StartedEvent;
 import hum.client.events.StartedEventHandler;
 import hum.client.maps.geocoder.GeocoderService;
@@ -19,7 +14,6 @@ import java.util.Date;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.ImageElement;
-import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -27,7 +21,6 @@ import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.query.client.GQuery;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -47,8 +40,8 @@ import com.google.web.bindery.event.shared.EventBus;
 
 @SuppressWarnings({"deprecation"})
 @Singleton
-public class HumInstanceEditor extends Composite implements StartedEventHandler,
-        LevelEventHandler, PositionEventHandler, AddressEventHandler, MapsLoadedEventHandler {
+public class HumInstanceEditor extends Composite implements StartedEventHandler, LevelEventHandler,
+        MapsLoadedEventHandler {
 
     interface Binder extends UiBinder<Widget, HumInstanceEditor> {
     }
@@ -65,21 +58,6 @@ public class HumInstanceEditor extends Composite implements StartedEventHandler,
     private LevelHelper levelHelper;
 
     boolean initialized = false;
-
-    @UiField
-    SpanElement address;
-
-    @UiField
-    SpanElement lat;
-
-    @UiField
-    SpanElement lng;
-
-    @UiField
-    SpanElement summaryStarted;
-
-    @UiField
-    SpanElement summaryLevel;
 
     @UiField
     TextBox zip;
@@ -163,8 +141,6 @@ public class HumInstanceEditor extends Composite implements StartedEventHandler,
         });
         bus.addHandler(StartedEvent.TYPE, this);
         bus.addHandler(LevelEvent.TYPE, this);
-        bus.addHandler(PositionEvent.TYPE, this);
-        bus.addHandler(AddressEvent.TYPE, this);
         bus.addHandler(MapsLoadedEvent.TYPE, this);
     }
 
@@ -198,11 +174,6 @@ public class HumInstanceEditor extends Composite implements StartedEventHandler,
     public void dispatch(StartedEvent meEvent) {
         startedDate.setValue(meEvent.started);
         startedTime.setTime("", meEvent.started.getHours(), meEvent.started.getMinutes());
-        summaryStarted.setInnerText(
-                DateTimeFormat
-                        .getFormat(DateTimeFormat.PredefinedFormat.DATE_TIME_LONG)
-                        .format(meEvent.started)
-        );
     }
 
     @Override
@@ -220,35 +191,9 @@ public class HumInstanceEditor extends Composite implements StartedEventHandler,
             default:
                 throw new RuntimeException("level " + event.level + " is not supported");
         }
-        summaryLevel.setInnerText(CLIENT_UTILS.capitalize(event.level.name()));
     }
 
     private static final NumberFormat COORD_FORMAT = NumberFormat.getFormat("###.######");
-
-    @Override
-    public void dispatch(PositionEvent event) {
-        if (event.point == null) {
-            lat.setInnerText(null);
-            lng.setInnerText(null);
-        } else {
-            lat.setInnerText(COORD_FORMAT.format(event.point.getLat()));
-            lng.setInnerText(COORD_FORMAT.format(event.point.getLng()));
-        }
-    }
-
-    @Override
-    public void dispatch(AddressEvent event) {
-        address.setInnerText(
-                event.address == null
-                        ? null
-                        : CLIENT_UTILS.join(
-                        ", ",
-                        event.address.getCountry(),
-                        event.address.getRegion(),
-                        event.address.getPostcode(),
-                        event.address.getAddressLine()
-                ));
-    }
 
     @Override
     public void dispatch(MapsLoadedEvent event) {

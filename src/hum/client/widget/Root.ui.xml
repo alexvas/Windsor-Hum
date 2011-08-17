@@ -113,7 +113,14 @@
               here when you hear it.
               <g:Button text="Report!" ui:field="report" styleName="{style.btnReport}"/>
             </g:HTMLPanel>
-            <h:HumInstanceEditor ui:field="humInstanceEditor"/>
+            <g:DockLayoutPanel>
+              <g:north size="150">
+                <h:Summary ui:field="summary"/>
+              </g:north>
+              <g:center>
+                <h:HumInstanceEditor ui:field="humInstanceEditor"/>
+              </g:center>
+            </g:DockLayoutPanel>
           </g:DeckLayoutPanel>
         </g:west>
       </g:SplitLayoutPanel>

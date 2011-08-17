@@ -17,25 +17,13 @@
       text-indent: -1em;
     }
 
-    .level {
-      display: block;
-    }
-
     .zip {
       display: block;
       float: left;
     }
 
-    .summary {
-      overflow: auto;
-    }
-
     .commentText {
       display: block;
-    }
-
-    .commentLegend {
-
     }
 
     .share {
@@ -111,29 +99,6 @@
       float: left;
     }
   </ui:style>
-  <g:DockLayoutPanel>
-    <g:north size="150">
-      <g:HTMLPanel styleName="{style.summary}">
-        <ul>
-          <li>Address:
-            <span ui:field="address"/>
-          </li>
-          <li>Latitude:
-            <span ui:field="lat"/>
-          </li>
-          <li>Longitude:
-            <span ui:field="lng"/>
-          </li>
-          <li>Date and time:
-            <span ui:field="summaryStarted"/>
-          </li>
-          <li>Level:
-            <span ui:field="summaryLevel"/>
-          </li>
-        </ul>
-      </g:HTMLPanel>
-    </g:north>
-    <g:center>
       <g:StackLayoutPanel unit='PX' ui:field="stack">
         <g:stack>
           <g:header size='30'>Where</g:header>
@@ -188,6 +153,4 @@
           </g:HTMLPanel>
         </g:stack>
       </g:StackLayoutPanel>
-    </g:center>
-  </g:DockLayoutPanel>
 </ui:UiBinder>

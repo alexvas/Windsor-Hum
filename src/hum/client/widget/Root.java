@@ -73,6 +73,10 @@ public class Root extends Composite implements MeEventHandler {
     @UiField(provided = true)
     HumInstanceEditor humInstanceEditor;
 
+    @Inject
+    @UiField(provided = true)
+    Summary summary;
+
     boolean initialized = false;
 
     public void init() {
@@ -81,6 +85,7 @@ public class Root extends Composite implements MeEventHandler {
         }
         initialized = true;
         humInstanceEditor.init();
+        summary.init();
         initWidget(binder.createAndBindUi(this));
         bus.addHandler(MeEvent.TYPE, this);
     }
