@@ -1,6 +1,8 @@
 package hum.client.widget;
 
 import static hum.client.ClientUtils.CLIENT_UTILS;
+import hum.client.events.AddressEvent;
+import hum.client.events.AddressEventHandler;
 import hum.client.events.LevelEvent;
 import hum.client.events.LevelEventHandler;
 import hum.client.events.PositionEvent;
@@ -37,7 +39,8 @@ import com.google.web.bindery.event.shared.EventBus;
 
 @SuppressWarnings({"deprecation"})
 @Singleton
-public class HumInstanceEditor extends Composite implements StartedEventHandler, LevelEventHandler, PositionEventHandler {
+public class HumInstanceEditor extends Composite implements StartedEventHandler,
+        LevelEventHandler, PositionEventHandler, AddressEventHandler {
 
     interface Binder extends UiBinder<Widget, HumInstanceEditor> {
     }
@@ -126,6 +129,7 @@ public class HumInstanceEditor extends Composite implements StartedEventHandler,
         bus.addHandler(StartedEvent.TYPE, this);
         bus.addHandler(LevelEvent.TYPE, this);
         bus.addHandler(PositionEvent.TYPE, this);
+        bus.addHandler(AddressEvent.TYPE, this);
     }
 
     private void fireStarted() {
@@ -182,5 +186,16 @@ public class HumInstanceEditor extends Composite implements StartedEventHandler,
     public void dispatch(PositionEvent event) {
         lat.setInnerText(COORD_FORMAT.format(event.point.getLat()));
         lng.setInnerText(COORD_FORMAT.format(event.point.getLng()));
+    }
+
+    @Override
+    public void dispatch(AddressEvent event) {
+        address.setInnerText(CLIENT_UTILS.join(
+                ", ",
+                event.address.getCountry(),
+                event.address.getPostcode(),
+                event.address.getRegion(),
+                event.address.getAddressLine()
+        ));
     }
 }

@@ -1,6 +1,7 @@
 package hum.client;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -39,6 +40,10 @@ public enum ClientUtils {
         }
 
     }-*/;
+
+    public <T> String join(final String delimiter, T... objs) {
+        return join(delimiter, Arrays.asList(objs));
+    }
 
     public <T> String join(final String delimiter, final Iterable<T> objs) {
         Iterator<T> iter = objs.iterator();

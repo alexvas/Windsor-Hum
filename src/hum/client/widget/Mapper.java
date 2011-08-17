@@ -8,6 +8,7 @@ import hum.client.maps.IconBuilder;
 import hum.client.maps.MapOptions;
 import hum.client.maps.Marker;
 import hum.client.maps.MarkerOptions;
+import hum.client.maps.geocoder.GeocoderService;
 import hum.client.model.PointProxy;
 
 import com.google.gwt.maps.client.Map;
@@ -25,6 +26,9 @@ public class Mapper implements PositionEventHandler {
 
     @Inject
     private EventBus bus;
+
+    @Inject
+    private GeocoderService geocoderService;
 
     private final IconBuilder yellow = new IconBuilder().primaryColor("00ffff");
     private final IconBuilder green = new IconBuilder().primaryColor("00ff00");
@@ -67,7 +71,8 @@ public class Mapper implements PositionEventHandler {
     }
 
     private void firePositionChange(LatLng latLng) {
-        bus.fireEvent(new PositionEvent(ImplPoint.from(latLng)));
+        geocoderService.reverse(latLng);
+        bus.fireEvent(new PositionEvent(PointProxy.LatLngWrapper.from(latLng)));
     }
 
     private native void addClickListener(Map map, Back<LatLng> back) /*-{
@@ -115,38 +120,4 @@ public class Mapper implements PositionEventHandler {
         addDragendListener(marker, firePositionChange);
         return marker;
     }
-
-    private static class ImplPoint implements PointProxy {
-        private double lat;
-        private double lng;
-
-        @Override
-        public double getLat() {
-            return lat;
-        }
-
-        @Override
-        public void setLat(double lat) {
-            this.lat = lat;
-        }
-
-        @Override
-        public double getLng() {
-            return lng;
-        }
-
-        @Override
-        public void setLng(double lng) {
-            this.lng = lng;
-        }
-
-        private static PointProxy from(LatLng latLng) {
-            ImplPoint point = new ImplPoint();
-            point.setLat(latLng.getLatitude());
-            point.setLng(latLng.getLongitude());
-            return point;
-        }
-    }
-
-
 }
