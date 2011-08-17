@@ -67,12 +67,18 @@ public class IconBuilder {
     public MarkerShape getShape() {
         return new MarkerShape.Builder()
                 .setCoords(
-                        new int[]{width / 2, height, 7 * width / 16,
-                                5 * height / 8, 5 * width / 16, 7 * height / 16,
-                                7 * width / 32, 5 * height / 16, 5 * width / 16, height / 8,
-                                width / 2, 0, 11 * width / 16, height / 8, 25 * width / 32,
-                                5 * height / 16, 11 * width / 16, 7 * height / 16,
-                                9 * width / 16, 5 * height / 8}
+                        new int[]{
+                                width / 2, height,
+                                7 * width / 16, 5 * height / 8,
+                                5 * width / 16, 7 * height / 16,
+                                7 * width / 32, 5 * height / 16,
+                                5 * width / 16, height / 8,
+                                width / 2, 0,
+                                11 * width / 16, height / 8,
+                                25 * width / 32, 5 * height / 16,
+                                11 * width / 16, 7 * height / 16,
+                                9 * width / 16, 5 * height / 8
+                        }
                 )
                 .setType(MarkerShape.Type.poly)
                 .build();

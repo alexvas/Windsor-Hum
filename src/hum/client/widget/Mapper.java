@@ -110,8 +110,6 @@ public class Mapper implements PositionEventHandler {
 //                .shape(red.getShape())
                 .animation(Animation.DROP)
                 .draggable(true)
-//                .flat(false)
-//                .visible(true)
                 .build();
         Marker marker = Marker.newInstance(opts);
         addDragendListener(marker, firePositionChange);
