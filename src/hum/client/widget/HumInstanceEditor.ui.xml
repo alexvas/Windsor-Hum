@@ -85,7 +85,6 @@
       margin-top: 20px;
       margin-left: 20px;
     }
-
   </ui:style>
   <g:DockLayoutPanel>
     <g:north size="150">
@@ -114,10 +113,9 @@
         <g:stack>
           <g:header size='30'>Where</g:header>
           <g:HTMLPanel styleName="{style.where}">
-            Click the map at the place you heard the hum.
-            or enter address below
+            <p>Click the map at the place you heard the hum or enter an address below</p>
             <g:TextBox ui:field="zip" styleName="{style.zip}"/>
-            (postcode will do)
+            (just a postcode will do)
           </g:HTMLPanel>
         </g:stack>
 
