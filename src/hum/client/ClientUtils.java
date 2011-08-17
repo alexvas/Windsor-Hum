@@ -90,4 +90,8 @@ public enum ClientUtils {
         return in.substring(0, 1).toUpperCase() + in.substring(1).toLowerCase();
     }
 
+    public int round(double val) {
+        return (int) Math.round(val);
+    }
+
 }
