@@ -28,6 +28,10 @@ import com.google.web.bindery.event.shared.EventBus;
 public class Summary extends Composite implements StartedEventHandler,
         LevelEventHandler, PositionEventHandler, AddressEventHandler {
 
+    public enum Mode {NEW, LAST, LIST}
+
+    public Mode mode = Mode.NEW;
+
     interface Binder extends UiBinder<Widget, Summary> {
     }
 

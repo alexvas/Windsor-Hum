@@ -26,10 +26,6 @@ import com.google.web.bindery.event.shared.EventBus;
 @Singleton
 public class Mapper implements PositionEventHandler, LevelEventHandler, MapsLoadedEventHandler {
 
-    public enum Mode {EDIT, LIST}
-
-    public Mode mode = Mode.EDIT;
-
     private EventBus bus;
 
     @Inject
@@ -37,6 +33,9 @@ public class Mapper implements PositionEventHandler, LevelEventHandler, MapsLoad
 
     @Inject
     private LevelHelper levelHelper;
+
+    @Inject
+    private Summary summary;
 
     protected Map map;
     private PointProxy pendingPoint = null;
@@ -56,10 +55,16 @@ public class Mapper implements PositionEventHandler, LevelEventHandler, MapsLoad
     private final BackLatLng firePositionChange = new BackLatLng() {
         @Override
         public void call(LatLng latLng) {
-            if (mode != Mode.EDIT) {
-                return;
+            switch (summary.mode) {
+                case NEW: // fall through
+                case LAST:
+                    firePositionChange(latLng);
+                    break;
+                case LIST:
+                    break;
+                default:
+                    throw new RuntimeException("mode not supported: " + summary.mode);
             }
-            firePositionChange(latLng);
         }
     };
 
@@ -138,7 +143,7 @@ public class Mapper implements PositionEventHandler, LevelEventHandler, MapsLoad
 
     @Override
     public void dispatch(LevelEvent event) {
-        if (mapsLoaded && ! currentHumDetached) {
+        if (mapsLoaded && !currentHumDetached) {
             currentHum.setIcon(levelHelper.icon(event.level).getIcon());
         } else {
             pendingLevel = event.level;
