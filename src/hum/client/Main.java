@@ -43,20 +43,19 @@ public class Main implements Runnable {
                 mapsLoaded();
             }
         }, options);
-        RootLayoutPanel rp = RootLayoutPanel.get();
-        root.init();
-        rp.add(root);
+        whoAmI();
         janrainWrapper.loadJanrain();
-        howAmI();
+        root.init();
+        RootLayoutPanel.get().add(root);
+        mapper.initMap(root.getMapPlace());
     }
 
     private void mapsLoaded() {
         Log.debug("maps v3 loaded");
-        mapper.initMap(root.getMapPlace());
         bus.fireEvent(new MapsLoadedEvent());
     }
 
-    private void howAmI() {
+    private void whoAmI() {
         reqFactory.userRequest().me().with("info").fire(new Receiver<UserProxy>() {
             @Override
             public void onSuccess(UserProxy user) {

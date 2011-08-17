@@ -2,6 +2,10 @@ package hum.client.widget;
 
 import hum.client.Back;
 import hum.client.LevelHelper;
+import hum.client.events.LevelEvent;
+import hum.client.events.LevelEventHandler;
+import hum.client.events.MapsLoadedEvent;
+import hum.client.events.MapsLoadedEventHandler;
 import hum.client.events.PositionEvent;
 import hum.client.events.PositionEventHandler;
 import hum.client.maps.Animation;
@@ -20,12 +24,12 @@ import com.google.inject.Singleton;
 import com.google.web.bindery.event.shared.EventBus;
 
 @Singleton
-public class Mapper implements PositionEventHandler {
+public class Mapper implements PositionEventHandler, LevelEventHandler, MapsLoadedEventHandler {
+
     public enum Mode {EDIT, LIST}
 
     public Mode mode = Mode.EDIT;
 
-    @Inject
     private EventBus bus;
 
     @Inject
@@ -40,6 +44,9 @@ public class Mapper implements PositionEventHandler {
 
     private Marker currentHum = null;
     boolean currentHumDetached = true;
+
+    private Element mapPlace;
+    boolean mapsLoaded = false;
 
     private static interface BackLatLng extends Back<LatLng> {
         @Override
@@ -56,19 +63,16 @@ public class Mapper implements PositionEventHandler {
         }
     };
 
-    public void initMap(Element mapPlace) {
-        MapOptions mapOptions = MapOptions.newInstance();
-        mapOptions.center(LatLng.newInstance(42.163403, -82.900772));
-        mapOptions.zoom(11);
-        mapOptions.roadmap();
-        map = Map.newInstance(mapPlace, mapOptions);
-
-        addClickListener(map, firePositionChange);
-        if (pendingPoint != null) {
-            putPin(pendingPoint);
-            pendingPoint = null;
-        }
+    @Inject
+    Mapper(EventBus bus) {
+        this.bus = bus;
         bus.addHandler(PositionEvent.TYPE, this);
+        bus.addHandler(LevelEvent.TYPE, this);
+        bus.addHandler(MapsLoadedEvent.TYPE, this);
+    }
+
+    public void initMap(Element mapPlace) {
+        this.mapPlace = mapPlace;
     }
 
     private void firePositionChange(LatLng latLng) {
@@ -130,5 +134,30 @@ public class Mapper implements PositionEventHandler {
         Marker marker = Marker.newInstance(opts);
         addDragendListener(marker, firePositionChange);
         return marker;
+    }
+
+    @Override
+    public void dispatch(LevelEvent event) {
+        if (mapsLoaded && ! currentHumDetached) {
+            currentHum.setIcon(levelHelper.icon(event.level).getIcon());
+        } else {
+            pendingLevel = event.level;
+        }
+    }
+
+    @Override
+    public void dispatch(MapsLoadedEvent event) {
+        mapsLoaded = true;
+        MapOptions mapOptions = MapOptions.newInstance();
+        mapOptions.center(LatLng.newInstance(42.163403, -82.900772));
+        mapOptions.zoom(11);
+        mapOptions.roadmap();
+        map = Map.newInstance(mapPlace, mapOptions);
+
+        addClickListener(map, firePositionChange);
+        if (pendingPoint != null) {
+            putPin(pendingPoint);
+            pendingPoint = null;
+        }
     }
 }
