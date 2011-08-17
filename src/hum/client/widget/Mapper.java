@@ -44,7 +44,7 @@ public class Mapper implements PositionEventHandler {
     private final BackLatLng firePositionChange = new BackLatLng() {
         @Override
         public void call(LatLng latLng) {
-            if (mode != Mode.EDIT || currentHum != null) {
+            if (mode != Mode.EDIT) {
                 return;
             }
             firePositionChange(latLng);

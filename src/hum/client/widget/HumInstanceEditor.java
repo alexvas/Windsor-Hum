@@ -3,6 +3,8 @@ package hum.client.widget;
 import static hum.client.ClientUtils.CLIENT_UTILS;
 import hum.client.events.LevelEvent;
 import hum.client.events.LevelEventHandler;
+import hum.client.events.PositionEvent;
+import hum.client.events.PositionEventHandler;
 import hum.client.events.StartedEvent;
 import hum.client.events.StartedEventHandler;
 import hum.client.model.HumProxy;
@@ -17,6 +19,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -34,7 +37,7 @@ import com.google.web.bindery.event.shared.EventBus;
 
 @SuppressWarnings({"deprecation"})
 @Singleton
-public class HumInstanceEditor extends Composite implements StartedEventHandler, LevelEventHandler {
+public class HumInstanceEditor extends Composite implements StartedEventHandler, LevelEventHandler, PositionEventHandler {
 
     interface Binder extends UiBinder<Widget, HumInstanceEditor> {
     }
@@ -122,6 +125,7 @@ public class HumInstanceEditor extends Composite implements StartedEventHandler,
         });
         bus.addHandler(StartedEvent.TYPE, this);
         bus.addHandler(LevelEvent.TYPE, this);
+        bus.addHandler(PositionEvent.TYPE, this);
     }
 
     private void fireStarted() {
@@ -170,5 +174,13 @@ public class HumInstanceEditor extends Composite implements StartedEventHandler,
             }
         }
         summaryLevel.setInnerText(CLIENT_UTILS.capitalize(event.level.name()));
+    }
+
+    private static final NumberFormat COORD_FORMAT = NumberFormat.getFormat("###.######");
+
+    @Override
+    public void dispatch(PositionEvent event) {
+        lat.setInnerText(COORD_FORMAT.format(event.point.getLat()));
+        lng.setInnerText(COORD_FORMAT.format(event.point.getLng()));
     }
 }
