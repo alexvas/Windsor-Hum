@@ -89,13 +89,13 @@ public class GeocoderService {
             for (int j = 0; j < c.types().length(); ++j) {
                 String type = c.types().get(j);
                 if ("country".equals(type)) {
-                    address.setCountry(c.shortName().toLowerCase());
+                    address.setCountry(c.shortName());
                 } else if ("postal_code".equals(type)) {
-                    address.setPostcode(c.shortName().toLowerCase());
+                    address.setPostcode(c.shortName());
                 } else if ("administrative_area_level_1".equals(type)) {
-                    address.setRegion(c.shortName().toLowerCase());
-                } else if ("street_address".equals(type)) {
-                    address.setAddressLine(c.shortName().toLowerCase());
+                    address.setRegion(c.shortName());
+                } else if ("route".equals(type)) {
+                    address.setAddressLine(c.shortName());
                 }
             }
         }
