@@ -12,23 +12,23 @@ import com.google.web.bindery.requestfactory.shared.ProxyFor;
 public interface HumProxy extends EntityProxy {
     enum Level {LOW, MEDIUM, HIGH}
 
-    double getLat();
+    PointProxy getPoint();
 
-    double getLng();
+    AddressProxy getAddress();
 
-    void setCountry(String country);
-
-    void setRegion(String region);
-
-    void setPostcode(String postcode);
-
-    void setAddress(String address);
+    Level getLevel();
 
     void setLevel(Level level);
 
+    Date getStart();
+
     void setStart(Date start);
 
+    Date getEnd();
+
     void setEnd(Date end);
+
+    String getComment();
 
     void setComment(String comment);
 }

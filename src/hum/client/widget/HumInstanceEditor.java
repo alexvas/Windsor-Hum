@@ -32,6 +32,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.google.web.bindery.event.shared.EventBus;
 
+@SuppressWarnings({"deprecation"})
 @Singleton
 public class HumInstanceEditor extends Composite implements StartedEventHandler, LevelEventHandler {
 
