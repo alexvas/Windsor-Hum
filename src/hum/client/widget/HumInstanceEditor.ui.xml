@@ -2,7 +2,7 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
              xmlns:g='urn:import:com.google.gwt.user.client.ui'
              xmlns:d='urn:import:com.google.gwt.user.datepicker.client'
-             xmlns:s='urn:import:com.summatech.gwt.client'
+             xmlns:h='urn:import:hum.client.widget'
 
     >
   <ui:style>
@@ -69,6 +69,15 @@
       clear: both;
     }
 
+    .datePicker, .timePicker {
+      margin-left: 20px;
+      border: 1px solid black;
+    }
+
+    .timePicker {
+      font-size: larger;
+    }
+
   </ui:style>
   <g:DockLayoutPanel>
     <g:north size="150">
@@ -107,16 +116,16 @@
         <g:stack>
           <g:header size='30'>When</g:header>
           <g:HTMLPanel styleName="{style.when}">
-            When did the hum started?
-            <d:DatePicker ui:field="datePicker"/>
-            <s:HourMinutePicker ui:field="hourMinutePicker"/>
+            <p>When did the hum started?</p>
+            <d:DatePicker ui:field="datePicker" addStyleNames="{style.datePicker}"/>
+            <h:HourMinutePicker ui:field="hourMinutePicker" addStyleNames="{style.timePicker}"/>
           </g:HTMLPanel>
         </g:stack>
 
         <g:stack>
           <g:header size='30'>How Strong</g:header>
           <g:HTMLPanel styleName="{style.howStrong}">
-            Please select the hum level below:
+            <p>How strong do you think the hum level is?</p>
             <g:ListBox ui:field="level" addStyleNames="{style.level}"/>
             <ul>
               <li>Low (barely hear)</li>

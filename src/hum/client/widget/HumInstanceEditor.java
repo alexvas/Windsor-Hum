@@ -1,6 +1,8 @@
 package hum.client.widget;
 
+import static hum.client.ClientUtils.CLIENT_UTILS;
 import hum.client.ReqFactory;
+import hum.client.model.HumProxy;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.SpanElement;
@@ -17,7 +19,6 @@ import com.google.gwt.user.datepicker.client.DatePicker;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.google.web.bindery.event.shared.EventBus;
-import com.summatech.gwt.client.HourMinutePicker;
 
 @Singleton
 public class HumInstanceEditor extends Composite {
@@ -78,6 +79,10 @@ public class HumInstanceEditor extends Composite {
         initialized = true;
         hourMinutePicker = new HourMinutePicker(HourMinutePicker.PickerFormat._12_HOUR, 0, 23, 6);
         initWidget(binder.createAndBindUi(this));
-        hourMinutePicker.setTime("am", 11, 0);
+        hourMinutePicker.setTime(" am", 11, 0);
+        level.addItem("Please select... ", "");
+        for (HumProxy.Level le : HumProxy.Level.values()) {
+            level.addItem(CLIENT_UTILS.capitalize(le.name()), le.name());
+        }
     }
 }
