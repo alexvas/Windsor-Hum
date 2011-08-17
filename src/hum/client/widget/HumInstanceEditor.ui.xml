@@ -78,6 +78,14 @@
       font-size: larger;
     }
 
+    .startedNow {
+      display: block;
+      float: left;
+      clear: left;
+      margin-top: 20px;
+      margin-left: 20px;
+    }
+
   </ui:style>
   <g:DockLayoutPanel>
     <g:north size="150">
@@ -119,6 +127,7 @@
             <p>When did the hum started?</p>
             <d:DatePicker ui:field="datePicker" addStyleNames="{style.datePicker}"/>
             <h:HourMinutePicker ui:field="hourMinutePicker" addStyleNames="{style.timePicker}"/>
+            <g:Button text="Rumbling Has Just Started" ui:field="startedNow" addStyleNames="{style.startedNow}"/>
           </g:HTMLPanel>
         </g:stack>
 

@@ -4,6 +4,8 @@ import static hum.client.ClientUtils.CLIENT_UTILS;
 import hum.client.ReqFactory;
 import hum.client.model.HumProxy;
 
+import java.util.Date;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -72,6 +74,9 @@ public class HumInstanceEditor extends Composite {
     @UiField
     Button share;
 
+    @UiField
+    Button startedNow;
+
     public void init() {
         if (initialized) {
             return;
@@ -79,7 +84,10 @@ public class HumInstanceEditor extends Composite {
         initialized = true;
         hourMinutePicker = new HourMinutePicker(HourMinutePicker.PickerFormat._12_HOUR, 0, 23, 6);
         initWidget(binder.createAndBindUi(this));
-        hourMinutePicker.setTime(" am", 11, 0);
+        Date now = new Date();
+
+
+        hourMinutePicker.setTime("", now.getHours(), now.getMinutes());
         level.addItem("Please select... ", "");
         for (HumProxy.Level le : HumProxy.Level.values()) {
             level.addItem(CLIENT_UTILS.capitalize(le.name()), le.name());
