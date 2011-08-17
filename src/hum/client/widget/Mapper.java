@@ -3,7 +3,6 @@ package hum.client.widget;
 import hum.client.Back;
 import hum.client.events.PositionEvent;
 import hum.client.events.PositionEventHandler;
-import hum.client.maps.Animation;
 import hum.client.maps.IconBuilder;
 import hum.client.maps.MapOptions;
 import hum.client.maps.Marker;
@@ -36,7 +35,12 @@ public class Mapper implements PositionEventHandler {
     private Marker currentHum = null;
     boolean currentHumDetached = true;
 
-    private final Back<LatLng> firePositionChange = new Back<LatLng>() {
+    private static interface BackLatLng extends Back<LatLng> {
+        @Override
+        void call(LatLng latLng);
+    }
+
+    private final BackLatLng firePositionChange = new BackLatLng() {
         @Override
         public void call(LatLng latLng) {
             if (mode != Mode.EDIT || currentHum != null) {
@@ -53,13 +57,12 @@ public class Mapper implements PositionEventHandler {
         mapOptions.roadmap();
         map = Map.newInstance(mapPlace, mapOptions);
 
-        pendingPoint = ImplPoint.from(map.getCenter());
-
         addClickListener(map, firePositionChange);
         if (pendingPoint != null) {
             putPin(pendingPoint);
             pendingPoint = null;
         }
+        bus.addHandler(PositionEvent.TYPE, this);
     }
 
     private void firePositionChange(LatLng latLng) {
@@ -68,13 +71,13 @@ public class Mapper implements PositionEventHandler {
 
     private native void addClickListener(Map map, Back<LatLng> back) /*-{
         $wnd.google.maps.event.addListener(map, 'click', function(e) {
-            back.call(e.latLng);
+            back.@hum.client.widget.Mapper.BackLatLng::call(Lcom/google/gwt/maps/client/base/LatLng;)(e.latLng);
         });
     }-*/;
 
     private native void addDragendListener(Marker marker, Back<LatLng> back) /*-{
         $wnd.google.maps.event.addListener(marker, 'dragend', function(e) {
-            back.call(e.latLng);
+            back.@hum.client.widget.Mapper.BackLatLng::call(Lcom/google/gwt/maps/client/base/LatLng;)(e.latLng);
         });
     }-*/;
 
@@ -101,14 +104,14 @@ public class Mapper implements PositionEventHandler {
 
     private Marker buildMarkerForCurrentHum(PointProxy point) {
         MarkerOptions opts = new MarkerOptions.Builder(LatLng.newInstance(point.getLat(), point.getLng()))
-                .icon(red.getIcon())
-                .shadow(red.getShadow())
-                .shape(red.getShape())
-                .animation(Animation.DROP)
-                .clickable(true)
+//                .icon(red.getIcon())
+//                .shadow(red.getShadow())
+//                .shape(red.getShape())
+//                .animation(Animation.DROP)
+//                .clickable(true)
                 .draggable(true)
-                .flat(false)
-                .visible(true)
+//                .flat(false)
+//                .visible(true)
                 .build();
         Marker marker = Marker.newInstance(opts);
         addDragendListener(marker, firePositionChange);
