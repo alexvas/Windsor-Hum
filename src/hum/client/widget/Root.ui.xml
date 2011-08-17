@@ -32,9 +32,6 @@
     }
 
     .btnReport {
-    }
-
-    .btnReport {
       -moz-border-bottom-colors: none;
       -moz-border-image: none;
       -moz-border-left-colors: none;
@@ -94,7 +91,7 @@
             <g:Anchor ui:field="signOut" href="javascript:" text="Sign Out"/>
           </span>
         </div>
-        <img ui:field="avatar"/>
+        <img ui:field="avatar" alt="" src=""/>
         <p>Do you hear rumbling again?</p>
       </g:HTMLPanel>
     </g:north>
