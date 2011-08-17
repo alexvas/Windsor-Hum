@@ -184,18 +184,26 @@ public class HumInstanceEditor extends Composite implements StartedEventHandler,
 
     @Override
     public void dispatch(PositionEvent event) {
-        lat.setInnerText(COORD_FORMAT.format(event.point.getLat()));
-        lng.setInnerText(COORD_FORMAT.format(event.point.getLng()));
+        if (event.point == null) {
+            lat.setInnerText(null);
+            lng.setInnerText(null);
+        } else {
+            lat.setInnerText(COORD_FORMAT.format(event.point.getLat()));
+            lng.setInnerText(COORD_FORMAT.format(event.point.getLng()));
+        }
     }
 
     @Override
     public void dispatch(AddressEvent event) {
-        address.setInnerText(CLIENT_UTILS.join(
-                ", ",
-                event.address.getCountry(),
-                event.address.getPostcode(),
-                event.address.getRegion(),
-                event.address.getAddressLine()
-        ));
+        address.setInnerText(
+                event.address == null
+                        ? null
+                        : CLIENT_UTILS.join(
+                        ", ",
+                        event.address.getCountry(),
+                        event.address.getPostcode(),
+                        event.address.getRegion(),
+                        event.address.getAddressLine()
+                ));
     }
 }

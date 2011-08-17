@@ -97,6 +97,9 @@ public class Mapper implements PositionEventHandler {
     }
 
     private void putPin(PointProxy point) {
+        if (point == null) {
+            return;
+        }
         if (currentHum == null) {
             currentHum = buildMarkerForCurrentHum(point);
         } else {

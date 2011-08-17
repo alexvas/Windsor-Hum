@@ -36,7 +36,13 @@ public class GeocoderService {
                 @Override
                 public void back(JsArray<GeocoderResult> results, String status) {
                     Log.debug("geocoder status: " + status);
-                    onResponse(results.get(0), true, propagateResolvedAddress);
+                    onResponse(
+                            "OK".equals(status)
+                                    ? results.get(0)
+                                    : null,
+                            true,
+                            propagateResolvedAddress
+                    );
                 }
             });
         } catch (Exception e) {
@@ -60,7 +66,13 @@ public class GeocoderService {
                 @Override
                 public void back(JsArray<GeocoderResult> results, String status) {
                     Log.debug("geocoder status: " + status);
-                    onResponse(results.get(0), false, true);
+                    onResponse(
+                            "OK".equals(status)
+                                    ? results.get(0)
+                                    : null,
+                            false,
+                            true
+                    );
                 }
             });
         } catch (Exception e) {
@@ -75,27 +87,35 @@ public class GeocoderService {
             boolean propagateResolvedAddress
     ) {
         if (propagateResolvedLocation) {
-            LatLng point = result.geometry().location();
-            bus.fireEvent(new PositionEvent(PointProxy.LatLngWrapper.from(point)));
+            bus.fireEvent(new PositionEvent(
+                    result == null
+                            ? null
+                            : PointProxy.LatLngWrapper.from(result.geometry().location())
+            ));
         }
 
         if (!propagateResolvedAddress) {
             return;
         }
 
-        AddressProxy.AddressWrapper address = new AddressProxy.AddressWrapper();
-        for (int i = 0; i < result.addressComponents().length(); ++i) {
-            AddressComponent c = result.addressComponents().get(i);
-            for (int j = 0; j < c.types().length(); ++j) {
-                String type = c.types().get(j);
-                if ("country".equals(type)) {
-                    address.setCountry(c.shortName());
-                } else if ("postal_code".equals(type)) {
-                    address.setPostcode(c.shortName());
-                } else if ("administrative_area_level_1".equals(type)) {
-                    address.setRegion(c.shortName());
-                } else if ("route".equals(type)) {
-                    address.setAddressLine(c.shortName());
+        final AddressProxy.AddressWrapper address;
+        if (result == null) {
+            address = null;
+        } else {
+            address = new AddressProxy.AddressWrapper();
+            for (int i = 0; i < result.addressComponents().length(); ++i) {
+                AddressComponent c = result.addressComponents().get(i);
+                for (int j = 0; j < c.types().length(); ++j) {
+                    String type = c.types().get(j);
+                    if ("country".equals(type)) {
+                        address.setCountry(c.shortName());
+                    } else if ("postal_code".equals(type)) {
+                        address.setPostcode(c.shortName());
+                    } else if ("administrative_area_level_1".equals(type)) {
+                        address.setRegion(c.shortName());
+                    } else if ("route".equals(type)) {
+                        address.setAddressLine(c.shortName());
+                    }
                 }
             }
         }
