@@ -14,7 +14,11 @@ public interface HumProxy extends EntityProxy {
 
     PointProxy getPoint();
 
+    void setPoint(PointProxy point);
+
     AddressProxy getAddress();
+
+    void setAddress(AddressProxy address);
 
     Level getLevel();
 

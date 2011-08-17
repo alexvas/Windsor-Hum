@@ -3,8 +3,10 @@ package hum.client;
 import hum.client.adapter.JanrainWrapper;
 import hum.client.events.MapsLoadedEvent;
 import hum.client.events.MeEvent;
+import hum.client.events.ModeEvent;
 import hum.client.model.UserProxy;
 import hum.client.widget.Mapper;
+import hum.client.widget.Mode;
 import hum.client.widget.Root;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -48,6 +50,7 @@ public class Main implements Runnable {
         root.init();
         RootLayoutPanel.get().add(root);
         mapper.initMap(root.getMapPlace());
+        bus.fireEvent(new ModeEvent(Mode.NEW));
     }
 
     private void mapsLoaded() {

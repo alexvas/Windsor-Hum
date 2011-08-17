@@ -6,6 +6,8 @@ import hum.client.events.LevelEvent;
 import hum.client.events.LevelEventHandler;
 import hum.client.events.MapsLoadedEvent;
 import hum.client.events.MapsLoadedEventHandler;
+import hum.client.events.ModeEvent;
+import hum.client.events.ModeEventHandler;
 import hum.client.events.PositionEvent;
 import hum.client.events.PositionEventHandler;
 import hum.client.maps.Animation;
@@ -24,7 +26,7 @@ import com.google.inject.Singleton;
 import com.google.web.bindery.event.shared.EventBus;
 
 @Singleton
-public class Mapper implements PositionEventHandler, LevelEventHandler, MapsLoadedEventHandler {
+public class Mapper implements PositionEventHandler, LevelEventHandler, MapsLoadedEventHandler, ModeEventHandler {
 
     private EventBus bus;
 
@@ -34,8 +36,7 @@ public class Mapper implements PositionEventHandler, LevelEventHandler, MapsLoad
     @Inject
     private LevelHelper levelHelper;
 
-    @Inject
-    private Summary summary;
+    private Mode mode;
 
     protected Map map;
     private PointProxy pendingPoint = null;
@@ -55,7 +56,7 @@ public class Mapper implements PositionEventHandler, LevelEventHandler, MapsLoad
     private final BackLatLng firePositionChange = new BackLatLng() {
         @Override
         public void call(LatLng latLng) {
-            switch (summary.mode) {
+            switch (mode) {
                 case NEW: // fall through
                 case LAST:
                     firePositionChange(latLng);
@@ -63,7 +64,7 @@ public class Mapper implements PositionEventHandler, LevelEventHandler, MapsLoad
                 case LIST:
                     break;
                 default:
-                    throw new RuntimeException("mode not supported: " + summary.mode);
+                    throw new RuntimeException("mode not supported: " + mode);
             }
         }
     };
@@ -74,6 +75,7 @@ public class Mapper implements PositionEventHandler, LevelEventHandler, MapsLoad
         bus.addHandler(PositionEvent.TYPE, this);
         bus.addHandler(LevelEvent.TYPE, this);
         bus.addHandler(MapsLoadedEvent.TYPE, this);
+        bus.addHandler(ModeEvent.TYPE, this);
     }
 
     public void initMap(Element mapPlace) {
@@ -164,5 +166,10 @@ public class Mapper implements PositionEventHandler, LevelEventHandler, MapsLoad
             putPin(pendingPoint);
             pendingPoint = null;
         }
+    }
+
+    @Override
+    public void dispatch(ModeEvent event) {
+        mode = event.mode;
     }
 }
