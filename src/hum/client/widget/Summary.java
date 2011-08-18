@@ -26,9 +26,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.google.web.bindery.event.shared.EventBus;
-import com.google.web.bindery.requestfactory.shared.Receiver;
 
-@SuppressWarnings({"deprecation"})
 @Singleton
 public class Summary extends Composite implements StartedEventHandler,
         LevelEventHandler, PositionEventHandler, AddressEventHandler, ModeEventHandler {
@@ -150,11 +148,13 @@ public class Summary extends Composite implements StartedEventHandler,
     }
 
     private void sendHum() {
+/*
         humRequest.save(hum).fire(new Receiver<Void>() {
             @Override
             public void onSuccess(Void response) {
                 bus.fireEvent(new ModeEvent(Mode.LAST));
             }
         });
+*/
     }
 }
