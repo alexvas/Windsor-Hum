@@ -4,7 +4,10 @@ import hum.client.ReqFactory;
 import hum.client.adapter.JanrainWrapper;
 import hum.client.events.MeEvent;
 import hum.client.events.MeEventHandler;
+import hum.client.events.ModeEvent;
+import hum.client.events.ModeEventHandler;
 import hum.client.model.InfoProxy;
+import hum.client.model.UserProxy;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.HeadingElement;
@@ -29,7 +32,7 @@ import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.requestfactory.shared.Receiver;
 
 @Singleton
-public class Root extends Composite implements MeEventHandler {
+public class Root extends Composite implements MeEventHandler, ModeEventHandler {
 
     interface Binder extends UiBinder<Widget, Root> {
     }
@@ -88,6 +91,7 @@ public class Root extends Composite implements MeEventHandler {
         summary.init();
         initWidget(binder.createAndBindUi(this));
         bus.addHandler(MeEvent.TYPE, this);
+        bus.addHandler(ModeEvent.TYPE, this);
     }
 
     public com.google.gwt.user.client.Element getMapPlace() {
@@ -107,23 +111,44 @@ public class Root extends Composite implements MeEventHandler {
 
     @Override
     public void dispatch(MeEvent meEvent) {
-        if (meEvent == null || meEvent.user == null) {
+        setUser(meEvent.user);
+    }
+
+    private void setUser(UserProxy user) {
+        if (user == null) {
             userName.setInnerText(null);
             signOutWrapper.getStyle().setDisplay(Style.Display.NONE);
             avatar.setSrc(null);
             avatar.setAlt(null);
             report.setVisible(true);
-            deck.showWidget(0);
             return;
         }
-        InfoProxy info = meEvent.user.getInfo().get(0);
+        InfoProxy info = user.getInfo().get(0);
         userName.setInnerText("Welcome, " + info.getDisplayName() + "!");
         avatar.setAlt(info.getDisplayName());
         avatar.setSrc(info.getPhoto());
         avatar.setHeight(72);
         report.setVisible(false);
         signOutWrapper.getStyle().setDisplay(Style.Display.INLINE);
-        deck.showWidget(1);
+    }
+
+    @Override
+    public void dispatch(ModeEvent event) {
+        setMode(event.mode);
+    }
+
+    private void setMode(Mode mode) {
+        switch (mode) {
+            case NEW: // fall through
+            case LAST:
+                deck.showWidget(1);
+                break;
+            case LIST:
+                deck.showWidget(0);
+                break;
+            default:
+                throw new RuntimeException("mode not supported: " + mode);
+        }
     }
 
     @SuppressWarnings({"UnusedParameters"})
@@ -133,8 +158,8 @@ public class Root extends Composite implements MeEventHandler {
             @Override
             public void onSuccess(Void response) {
 //                janrainWrapper.signOut();
-                dispatch(null);
-                deck.showWidget(0);
+                bus.fireEvent(new MeEvent(null));
+                bus.fireEvent(new ModeEvent(Mode.LIST));
             }
         });
     }

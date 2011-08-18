@@ -50,7 +50,7 @@ public class Main implements Runnable {
         root.init();
         RootLayoutPanel.get().add(root);
         mapper.initMap(root.getMapPlace());
-        bus.fireEvent(new ModeEvent(Mode.NEW));
+        bus.fireEvent(new ModeEvent(Mode.LIST));
     }
 
     private void mapsLoaded() {
@@ -62,7 +62,12 @@ public class Main implements Runnable {
         reqFactory.userRequest().me().with("info").fire(new Receiver<UserProxy>() {
             @Override
             public void onSuccess(UserProxy user) {
-                reqFactory.getEventBus().fireEvent(new MeEvent(user));
+                bus.fireEvent(new MeEvent(user));
+                bus.fireEvent(new ModeEvent(
+                        user == null
+                                ? Mode.LIST
+                                : Mode.NEW
+                ));
             }
         });
     }

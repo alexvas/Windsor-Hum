@@ -28,10 +28,6 @@ public interface HumProxy extends EntityProxy {
 
     void setStart(Date start);
 
-    Date getEnd();
-
-    void setEnd(Date end);
-
     String getComment();
 
     void setComment(String comment);
