@@ -1,11 +1,11 @@
 package hum.client.widget;
 
 import hum.client.events.StartedEvent;
-import hum.client.events.StartedEventHandler;
 
 import java.util.Date;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.editor.client.LeafValueEditor;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -22,8 +22,7 @@ import com.google.web.bindery.event.shared.EventBus;
 
 @SuppressWarnings({"deprecation"})
 @Singleton
-public class StartedEditor extends Composite implements StartedEventHandler {
-
+public class StartedEditor extends Composite implements LeafValueEditor<Date> {
     interface Binder extends UiBinder<Widget, StartedEditor> {
     }
 
@@ -42,6 +41,8 @@ public class StartedEditor extends Composite implements StartedEventHandler {
 
     @UiField
     Button startedNow;
+
+    private Date current = null;
 
     public void init() {
         if (initialized) {
@@ -62,24 +63,22 @@ public class StartedEditor extends Composite implements StartedEventHandler {
                 fireStarted();
             }
         });
-
-        bus.addHandler(StartedEvent.TYPE, this);
     }
 
     private void fireStarted() {
-        Date started = startedDate.getValue();
-        if (started == null) {
-            started = new Date();
+        current = startedDate.getValue();
+        if (current == null) {
+            current = new Date();
         }
         if (startedTime.getMinutes() == null) {
-            started.setHours(0);
-            started.setMinutes(0);
+            current.setHours(0);
+            current.setMinutes(0);
         } else {
-            started.setHours(startedTime.getHour());
-            started.setMinutes(startedTime.getMinute());
+            current.setHours(startedTime.getHour());
+            current.setMinutes(startedTime.getMinute());
         }
-        started.setSeconds(0);
-        fireStarted(started);
+        current.setSeconds(0);
+        fireStarted(current);
     }
 
     @SuppressWarnings({"UnusedParameters"})
@@ -93,8 +92,15 @@ public class StartedEditor extends Composite implements StartedEventHandler {
     }
 
     @Override
-    public void dispatch(StartedEvent meEvent) {
-        startedDate.setValue(meEvent.started);
-        startedTime.setTime(null, meEvent.started.getHours(), meEvent.started.getMinutes());
+    public void setValue(Date value) {
+        current = value;
+        startedDate.setValue(value);
+        startedTime.setTime(null, value.getHours(), value.getMinutes());
     }
+
+    @Override
+    public Date getValue() {
+        return current;
+    }
+
 }
