@@ -6,7 +6,7 @@
 
     >
   <ui:style>
-    .where, .when, .howStrong, .comment {
+    .where, .howStrong, .comment {
       overflow: hidden;
     }
 
@@ -73,23 +73,6 @@
       clear: both;
     }
 
-    .datePicker, .timePicker {
-      margin-left: 20px;
-    }
-
-    .timePicker {
-      margin-top: 20px;
-      font-size: larger;
-    }
-
-    .startedNow {
-      display: block;
-      float: left;
-      clear: left;
-      margin-top: 20px;
-      margin-left: 20px;
-    }
-
     .go {
       display: block;
       float: left;
@@ -103,58 +86,52 @@
       float: left;
     }
   </ui:style>
-      <g:StackLayoutPanel unit='PX' ui:field="stack">
-        <g:stack>
-          <g:header size='30'>Where</g:header>
-          <g:HTMLPanel styleName="{style.where}">
-            <p>Click the map at the place you heard the hum or enter an address below</p>
-            <g:TextBox ui:field="zip" styleName="{style.zip}"/>
-            <g:Button ui:field="go" styleName="{style.go}" text="Go!"/>
-            <span class="{style.hint}">(just a postcode will do)</span>
-          </g:HTMLPanel>
-        </g:stack>
+  <g:StackLayoutPanel unit='PX' ui:field="stack">
+    <g:stack>
+      <g:header size='30'>Where</g:header>
+      <g:HTMLPanel styleName="{style.where}">
+        <p>Click the map at the place you heard the hum or enter an address below</p>
+        <g:TextBox ui:field="zip" styleName="{style.zip}"/>
+        <g:Button ui:field="go" styleName="{style.go}" text="Go!"/>
+        <span class="{style.hint}">(just a postcode will do)</span>
+      </g:HTMLPanel>
+    </g:stack>
 
-        <g:stack>
-          <g:header size='30'>When</g:header>
-          <g:HTMLPanel styleName="{style.when}">
-            <p>When did the hum started?</p>
-            <d:DatePicker ui:field="startedDate" addStyleNames="{style.datePicker}"/>
-            <h:HourMinutePicker ui:field="startedTime" addStyleNames="{style.timePicker}"/>
-            <g:Button text="Rumbling Has Just Started" ui:field="startedNow" addStyleNames="{style.startedNow}"/>
-          </g:HTMLPanel>
-        </g:stack>
+    <g:stack>
+      <g:header size='30'>When</g:header>
+      <h:StartedEditor ui:field="started"/>
+    </g:stack>
+    <g:stack>
+      <g:header size='30'>How Strong</g:header>
+      <g:HTMLPanel styleName="{style.howStrong}">
+        <p>How strong do you think the hum level is? Please select:</p>
+        <ul>
+          <li>
+            <img alt="" src=""/>
+            <g:RadioButton name="level" ui:field="levelLow"/>
+            Low (barely hear)
+          </li>
+          <li>
+            <img alt="" src=""/>
+            <g:RadioButton name="level" ui:field="levelMedium"/>
+            Medium (hard to ignore)
+          </li>
+          <li>
+            <img alt="" src=""/>
+            <g:RadioButton name="level" ui:field="levelHigh"/>
+            High (window rattle)
+          </li>
+        </ul>
+      </g:HTMLPanel>
+    </g:stack>
 
-        <g:stack>
-          <g:header size='30'>How Strong</g:header>
-          <g:HTMLPanel styleName="{style.howStrong}">
-            <p>How strong do you think the hum level is? Please select:</p>
-            <ul>
-              <li>
-                <img alt="" src=""/>
-                <g:RadioButton name="level" ui:field="levelLow"/>
-                Low (barely hear)
-              </li>
-              <li>
-                <img alt="" src=""/>
-                <g:RadioButton name="level" ui:field="levelMedium"/>
-                Medium (hard to ignore)
-              </li>
-              <li>
-                <img alt="" src=""/>
-                <g:RadioButton name="level" ui:field="levelHigh"/>
-                High (window rattle)
-              </li>
-            </ul>
-          </g:HTMLPanel>
-        </g:stack>
-
-        <g:stack>
-          <g:header size='30'>Comment</g:header>
-          <g:HTMLPanel styleName="{style.comment}">
-            Anything specific this time?
-            <g:TextArea ui:field="comment" addStyleNames="{style.commentText}"/>
-            <g:Button styleName="{style.share}" text="Share!" ui:field="share" enabled="false"/>
-          </g:HTMLPanel>
-        </g:stack>
-      </g:StackLayoutPanel>
+    <g:stack>
+      <g:header size='30'>Comment</g:header>
+      <g:HTMLPanel styleName="{style.comment}">
+        Anything specific this time?
+        <g:TextArea ui:field="comment" addStyleNames="{style.commentText}"/>
+        <g:Button styleName="{style.share}" text="Share!" ui:field="share" enabled="false"/>
+      </g:HTMLPanel>
+    </g:stack>
+  </g:StackLayoutPanel>
 </ui:UiBinder>

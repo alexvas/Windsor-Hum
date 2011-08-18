@@ -1,0 +1,35 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'
+             xmlns:d='urn:import:com.google.gwt.user.datepicker.client'
+             xmlns:h='urn:import:hum.client.widget'
+    >
+  <ui:style>
+    .when {
+      overflow: hidden;
+    }
+
+    .datePicker, .timePicker {
+      margin-left: 20px;
+    }
+
+    .timePicker {
+      margin-top: 20px;
+      font-size: larger;
+    }
+
+    .startedNow {
+      display: block;
+      float: left;
+      clear: left;
+      margin-top: 20px;
+      margin-left: 20px;
+    }
+  </ui:style>
+  <g:HTMLPanel styleName="{style.when}">
+    <p>When did the hum started?</p>
+    <d:DatePicker ui:field="startedDate" addStyleNames="{style.datePicker}"/>
+    <h:HourMinutePicker ui:field="startedTime" addStyleNames="{style.timePicker}"/>
+    <g:Button text="Rumbling Has Just Started" ui:field="startedNow" addStyleNames="{style.startedNow}"/>
+  </g:HTMLPanel>
+</ui:UiBinder>
