@@ -12,10 +12,14 @@ import hum.client.events.PositionEvent;
 import hum.client.events.PositionEventHandler;
 import hum.client.events.StartedEvent;
 import hum.client.events.StartedEventHandler;
+import hum.client.model.AddressProxy;
+import hum.client.model.PointProxy;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.ParagraphElement;
 import com.google.gwt.dom.client.SpanElement;
+import com.google.gwt.editor.client.IsEditor;
+import com.google.gwt.editor.client.LeafValueEditor;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -28,7 +32,9 @@ import com.google.web.bindery.event.shared.EventBus;
 
 @Singleton
 public class Summary extends Composite implements StartedEventHandler,
-        LevelEventHandler, PositionEventHandler, AddressEventHandler, ModeEventHandler {
+        LevelEventHandler, PositionEventHandler, AddressEventHandler, ModeEventHandler,
+        IsEditor<LeafValueEditor<AddressProxy>>, LeafValueEditor<PointProxy>
+{
 
     interface Binder extends UiBinder<Widget, Summary> {
     }
@@ -60,6 +66,10 @@ public class Summary extends Composite implements StartedEventHandler,
 
     @UiField
     ParagraphElement status;
+
+    private PointProxy currentPoint;
+
+    private AddressProxy currentAddress;
 
     public void init() {
         if (initialized) {
@@ -94,29 +104,37 @@ public class Summary extends Composite implements StartedEventHandler,
 
     @Override
     public void dispatch(PositionEvent event) {
-        if (event.point == null) {
+        setPoint(event.point);
+    }
+
+    private void setPoint(PointProxy point) {
+        currentPoint = point;
+        if (currentPoint == null) {
             lat.setInnerText(null);
             lng.setInnerText(null);
         } else {
-            lat.setInnerText(COORD_FORMAT.format(event.point.getLat()));
-            lng.setInnerText(COORD_FORMAT.format(event.point.getLng()));
+            lat.setInnerText(COORD_FORMAT.format(currentPoint.getLat()));
+            lng.setInnerText(COORD_FORMAT.format(currentPoint.getLng()));
         }
-        sendHum();
     }
 
     @Override
     public void dispatch(AddressEvent event) {
-        address.setInnerText(
-                event.address == null
+        setAddress(event.address);
+    }
+
+    private void setAddress(AddressProxy address) {
+        currentAddress = address;
+        this.address.setInnerText(
+                currentAddress == null
                         ? null
                         : CLIENT_UTILS.join(
                         ", ",
-                        event.address.getCountry(),
-                        event.address.getRegion(),
-                        event.address.getPostcode(),
-                        event.address.getAddressLine()
+                        currentAddress.getCountry(),
+                        currentAddress.getRegion(),
+                        currentAddress.getPostcode(),
+                        currentAddress.getAddressLine()
                 ));
-        sendHum();
     }
 
     @Override
@@ -146,4 +164,34 @@ public class Summary extends Composite implements StartedEventHandler,
         });
 */
     }
+
+    private AddressProxyWrapper addressProxyWrapper = new AddressProxyWrapper();
+
+    @Override
+    public LeafValueEditor<AddressProxy> asEditor() {
+        return addressProxyWrapper;
+    }
+
+    @Override
+    public void setValue(PointProxy value) {
+        setPoint(value);
+    }
+
+    @Override
+    public PointProxy getValue() {
+        return currentPoint;
+    }
+
+    private class AddressProxyWrapper implements LeafValueEditor<AddressProxy> {
+        @Override
+        public void setValue(AddressProxy value) {
+            setAddress(value);
+        }
+
+        @Override
+        public AddressProxy getValue() {
+            return currentAddress;
+        }
+    }
+
 }
