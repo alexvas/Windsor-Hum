@@ -34,4 +34,17 @@ public class Module extends AbstractGinModule {
         return factory;
     }
 
+    @Inject
+    @Provides
+    @Singleton
+    ReqFactory.HumRequest humRequest(ReqFactory factory) {
+        return factory.humRequest();
+    }
+
+    @Inject
+    @Provides
+    @Singleton
+    ReqFactory.UserRequest userRequest(ReqFactory factory) {
+        return factory.userRequest();
+    }
 }

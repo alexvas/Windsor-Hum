@@ -12,6 +12,10 @@ import hum.client.widget.Mapper;
 import hum.client.widget.Mode;
 import hum.client.widget.Root;
 
+import java.util.Set;
+
+import javax.validation.ConstraintViolation;
+
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.ajaxloader.client.AjaxLoader;
 import com.google.gwt.core.client.GWT;
@@ -44,6 +48,12 @@ public class Workflow implements Runnable, WannaSaveEventHandler {
 
     @Inject
     private ReqFactory reqFactory;
+
+    @Inject
+    private ReqFactory.HumRequest humRequest;
+
+    @Inject
+    private ReqFactory.UserRequest userRequest;
 
     @Inject
     private EventBus bus;
@@ -93,24 +103,22 @@ public class Workflow implements Runnable, WannaSaveEventHandler {
 
 
     private void editHum(HumProxy hum) {
-        ReqFactory.HumRequest request = reqFactory.humRequest();
         if (hum == null) {
-            hum = request.create(HumProxy.class);
+            hum = humRequest.create(HumProxy.class);
         }
-        hum = request.edit(hum);
-        humDriver.edit(hum, request);
+        hum = humRequest.edit(hum);
+        humDriver.edit(hum, humRequest);
 
-        request.save(hum).with(humDriver.getPaths()).to(new Receiver<HumProxy>() {
+        humRequest.save(hum).with(humDriver.getPaths()).to(new Receiver<HumProxy>() {
             @Override
             public void onSuccess(HumProxy response) {
                 editHum(response);
             }
-/*
+
             @Override
-            public void onViolation(Set<Violation> errors) {
-                humDriver.setConstraintViolations(errors);
+            public void onConstraintViolation(Set<ConstraintViolation<?>> violations) {
+              humDriver.setConstraintViolations(violations);
             }
-*/
         });
     }
 

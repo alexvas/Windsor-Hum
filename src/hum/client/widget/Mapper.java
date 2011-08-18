@@ -2,6 +2,7 @@ package hum.client.widget;
 
 import hum.client.Back;
 import hum.client.LevelHelper;
+import hum.client.ReqFactory;
 import hum.client.events.LevelEvent;
 import hum.client.events.LevelEventHandler;
 import hum.client.events.MapsLoadedEvent;
@@ -35,6 +36,9 @@ public class Mapper implements PointEventHandler, LevelEventHandler, MapsLoadedE
 
     @Inject
     private LevelHelper levelHelper;
+
+    @Inject
+    private ReqFactory.HumRequest humRequest;
 
     private Mode mode;
 
@@ -84,7 +88,10 @@ public class Mapper implements PointEventHandler, LevelEventHandler, MapsLoadedE
 
     private void firePositionChange(LatLng latLng) {
         geocoderService.reverse(latLng);
-        bus.fireEvent(new PointEvent(PointProxy.LatLngWrapper.from(latLng)));
+        PointProxy point = humRequest.create(PointProxy.class);
+        point.setLat(latLng.getLatitude());
+        point.setLng(latLng.getLongitude());
+        bus.fireEvent(new PointEvent(point));
     }
 
     private native void addClickListener(Map map, Back<LatLng> back) /*-{

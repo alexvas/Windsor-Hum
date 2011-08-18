@@ -1,5 +1,6 @@
 package hum.client.maps.geocoder;
 
+import hum.client.ReqFactory;
 import hum.client.events.AddressEvent;
 import hum.client.events.PointEvent;
 import hum.client.model.AddressProxy;
@@ -19,6 +20,9 @@ public class GeocoderService {
 
     @Inject
     private EventBus bus;
+
+    @Inject
+    private ReqFactory.HumRequest humRequest;
 
     public void direct(String address) {
         Log.debug("geocoding address '" + address + "', country 'ca'");
@@ -84,18 +88,22 @@ public class GeocoderService {
             boolean propagateResolvedLocation
     ) {
         if (propagateResolvedLocation) {
-            bus.fireEvent(new PointEvent(
-                    result == null
-                            ? null
-                            : PointProxy.LatLngWrapper.from(result.geometry().location())
-            ));
+            if (result == null) {
+                bus.fireEvent(new PointEvent(null));
+            } else {
+                PointProxy point = humRequest.create(PointProxy.class);
+                LatLng latLng = result.geometry().location();
+                point.setLat(latLng.getLatitude());
+                point.setLng(latLng.getLongitude());
+                bus.fireEvent(new PointEvent(point));
+            }
         }
 
-        final AddressProxy.AddressWrapper address;
+        final AddressProxy address;
         if (result == null) {
             address = null;
         } else {
-            address = new AddressProxy.AddressWrapper();
+            address = humRequest.create(AddressProxy.class);
             for (int i = 0; i < result.addressComponents().length(); ++i) {
                 AddressComponent c = result.addressComponents().get(i);
                 for (int j = 0; j < c.types().length(); ++j) {
