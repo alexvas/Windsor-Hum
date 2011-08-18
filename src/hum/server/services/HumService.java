@@ -11,5 +11,5 @@ public interface HumService {
 
     Hum latest();
 
-    void save(Hum toSave);
+    Hum save(Hum toSave);
 }

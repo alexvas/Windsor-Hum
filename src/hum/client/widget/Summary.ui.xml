@@ -5,13 +5,30 @@
   <ui:style>
     .summary {
       overflow: auto;
+      padding: 0 0 0 20px;
     }
 
     .status {
       font-style: italic;
+      margin-top: 0;
+      margin-left: 20px;
+      float: left;
     }
+
+    .summary ul {
+      clear: both;
+      margin: 0;
+    }
+
+    .save {
+      display: block;
+      float: left;
+      margin: 0 20px 20px 0;
+    }
+
   </ui:style>
   <g:HTMLPanel styleName="{style.summary}">
+    <g:Button text="Save" ui:field="save" addStyleNames="{style.save}"/>
     <p ui:field="status" class="{style.status}"/>
     <ul>
       <li>Address:
@@ -30,5 +47,6 @@
         <span ui:field="level"/>
       </li>
     </ul>
+
   </g:HTMLPanel>
 </ui:UiBinder>

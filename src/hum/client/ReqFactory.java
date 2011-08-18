@@ -26,7 +26,7 @@ public interface ReqFactory extends RequestFactory {
 
         Request<HumProxy> latest();
 
-        Request<Void> save(HumProxy hum);
+        Request<HumProxy> save(HumProxy hum);
     }
 
     @Service(value = UserService.class, locator = InjectingServiceLocator.class)

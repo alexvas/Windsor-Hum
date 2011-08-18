@@ -4,6 +4,8 @@ import hum.client.adapter.JanrainWrapper;
 import hum.client.events.MapsLoadedEvent;
 import hum.client.events.MeEvent;
 import hum.client.events.ModeEvent;
+import hum.client.events.WannaSaveEvent;
+import hum.client.events.WannaSaveEventHandler;
 import hum.client.model.HumProxy;
 import hum.client.model.UserProxy;
 import hum.client.widget.Mapper;
@@ -13,13 +15,15 @@ import hum.client.widget.Root;
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.ajaxloader.client.AjaxLoader;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.requestfactory.gwt.client.RequestFactoryEditorDriver;
 import com.google.web.bindery.requestfactory.shared.Receiver;
+import com.google.web.bindery.requestfactory.shared.RequestContext;
 
-public class Workflow implements Runnable {
+public class Workflow implements Runnable, WannaSaveEventHandler {
 
     interface HumDriver extends RequestFactoryEditorDriver<HumProxy, HumEditor> {
     }
@@ -62,6 +66,7 @@ public class Workflow implements Runnable {
         RootLayoutPanel.get().add(root);
         mapper.initMap(root.getMapPlace());
         bus.fireEvent(new ModeEvent(Mode.LIST));
+        bus.addHandler(WannaSaveEvent.TYPE, this);
         humDriver = GWT.create(HumDriver.class);
         humDriver.initialize(reqFactory, humEditor);
     }
@@ -83,9 +88,41 @@ public class Workflow implements Runnable {
                 ));
                 ReqFactory.HumRequest request = reqFactory.humRequest();
                 HumProxy hum = request.create(HumProxy.class);
-                humDriver.edit(hum, request);
+                editHum(hum, request);
             }
         });
     }
 
+
+    private void editHum(HumProxy hum, final ReqFactory.HumRequest request) {
+        hum = request.edit(hum);
+        humDriver.edit(hum, request);
+
+        request.save(hum).with(humDriver.getPaths()).to(new Receiver<HumProxy>() {
+            @Override
+            public void onSuccess(HumProxy response) {
+                editHum(response, request);
+            }
+/*
+            @Override
+            public void onViolation(Set<Violation> errors) {
+                humDriver.setConstraintViolations(errors);
+            }
+*/
+
+        });
+    }
+
+
+    @Override
+    public void dispatch(WannaSaveEvent event) {
+        RequestContext requestContext = humDriver.flush();
+
+        if (humDriver.hasErrors()) {
+            Window.alert("Errors detected locally");
+            return;
+        }
+
+        requestContext.fire();
+    }
 }

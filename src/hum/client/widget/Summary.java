@@ -12,16 +12,20 @@ import hum.client.events.PointEvent;
 import hum.client.events.PointEventHandler;
 import hum.client.events.StartedEvent;
 import hum.client.events.StartedEventHandler;
+import hum.client.events.WannaSaveEvent;
 import hum.client.model.AddressProxy;
 import hum.client.model.PointProxy;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.ParagraphElement;
 import com.google.gwt.dom.client.SpanElement;
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
@@ -63,6 +67,9 @@ public class Summary extends Composite implements StartedEventHandler,
 
     @UiField
     ParagraphElement status;
+
+    @UiField
+    Button save;
 
     public void init() {
         if (initialized) {
@@ -141,6 +148,11 @@ public class Summary extends Composite implements StartedEventHandler,
             default:
                 break;
         }
+    }
+
+    @UiHandler("save")
+    void save(ClickEvent save) {
+        bus.fireEvent(new WannaSaveEvent());
     }
 
 }

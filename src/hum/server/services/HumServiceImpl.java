@@ -45,13 +45,13 @@ public class HumServiceImpl extends DAOBase implements HumService {
     }
 
     @Override
-    public void save(Hum hum) {
+    public Hum save(Hum hum) {
         if (currentUser.getUserKey() == null) {
             log.warning("unknown user is saving hum");
-            return;
+            return null;
         }
         hum.owner = currentUser.getUserKey();
-        saver.get().save(hum);
+        return saver.get().save(hum);
     }
 
     private List<Hum> toList(Query<Hum> query) {
