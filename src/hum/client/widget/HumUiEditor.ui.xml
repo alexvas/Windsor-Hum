@@ -1,0 +1,54 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'
+             xmlns:h='urn:import:hum.client.widget'
+    >
+  <ui:style>
+    .where {
+      overflow: hidden;
+    }
+
+    .zip {
+      display: block;
+      float: left;
+    }
+
+    .go {
+      display: block;
+      float: left;
+      padding: 3px 3px;
+      margin-top: -1px;
+      margin-left: 2px;
+    }
+
+    .hint {
+      display: block;
+      float: left;
+    }
+  </ui:style>
+  <g:StackLayoutPanel unit='PX'>
+    <g:stack>
+      <g:header size='30'>Where</g:header>
+      <g:HTMLPanel styleName="{style.where}">
+        <p>Click the map at the place you heard the hum or enter an address below</p>
+        <g:TextBox ui:field="zip" styleName="{style.zip}"/>
+        <g:Button ui:field="go" styleName="{style.go}" text="Go!"/>
+        <span class="{style.hint}">(just a postcode will do)</span>
+      </g:HTMLPanel>
+    </g:stack>
+
+    <g:stack>
+      <g:header size='30'>When</g:header>
+      <h:StartedEditor ui:field="started"/>
+    </g:stack>
+    <g:stack>
+      <g:header size='30'>How Strong</g:header>
+      <h:LevelEditor ui:field="level"/>
+    </g:stack>
+
+    <g:stack>
+      <g:header size='30'>Comment</g:header>
+      <h:CommentEditor ui:field="comment"/>
+    </g:stack>
+  </g:StackLayoutPanel>
+</ui:UiBinder>

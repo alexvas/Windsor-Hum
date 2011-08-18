@@ -12,7 +12,6 @@ import hum.client.events.PositionEvent;
 import hum.client.events.PositionEventHandler;
 import hum.client.events.StartedEvent;
 import hum.client.events.StartedEventHandler;
-import hum.client.model.HumProxy;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.ParagraphElement;
@@ -62,18 +61,12 @@ public class Summary extends Composite implements StartedEventHandler,
     @UiField
     ParagraphElement status;
 
-    private HumProxy hum;
-
-    private ReqFactory.HumRequest humRequest;
-
     public void init() {
         if (initialized) {
             return;
         }
         initialized = true;
         initWidget(binder.createAndBindUi(this));
-        humRequest = reqFactory.humRequest();
-        hum = humRequest.create(HumProxy.class);
         bus.addHandler(StartedEvent.TYPE, this);
         bus.addHandler(LevelEvent.TYPE, this);
         bus.addHandler(PositionEvent.TYPE, this);
@@ -83,7 +76,6 @@ public class Summary extends Composite implements StartedEventHandler,
 
     @Override
     public void dispatch(StartedEvent meEvent) {
-        hum.setStart(meEvent.started);
         started.setInnerText(
                 DateTimeFormat
                         .getFormat(DateTimeFormat.PredefinedFormat.DATE_TIME_LONG)
@@ -94,7 +86,6 @@ public class Summary extends Composite implements StartedEventHandler,
 
     @Override
     public void dispatch(LevelEvent event) {
-        hum.setLevel(event.level);
         level.setInnerText(CLIENT_UTILS.capitalize(event.level.name()));
         sendHum();
     }
@@ -103,7 +94,6 @@ public class Summary extends Composite implements StartedEventHandler,
 
     @Override
     public void dispatch(PositionEvent event) {
-        hum.setPoint(event.point);
         if (event.point == null) {
             lat.setInnerText(null);
             lng.setInnerText(null);
@@ -116,7 +106,6 @@ public class Summary extends Composite implements StartedEventHandler,
 
     @Override
     public void dispatch(AddressEvent event) {
-        hum.setAddress(event.address);
         address.setInnerText(
                 event.address == null
                         ? null

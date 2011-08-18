@@ -118,7 +118,7 @@
                 <h:Summary ui:field="summary"/>
               </g:north>
               <g:center>
-                <h:HumInstanceEditor ui:field="humInstanceEditor"/>
+                <h:HumUiEditor ui:field="humUiEditor"/>
               </g:center>
             </g:DockLayoutPanel>
           </g:DeckLayoutPanel>

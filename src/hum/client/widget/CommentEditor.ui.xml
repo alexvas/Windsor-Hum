@@ -1,0 +1,63 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'
+             xmlns:h='urn:import:hum.client.widget'
+    >
+  <ui:style>
+    .comment {
+      overflow: hidden;
+    }
+
+    .commentText {
+      display: block;
+    }
+
+    .share {
+      -moz-border-bottom-colors: none;
+      -moz-border-image: none;
+      -moz-border-left-colors: none;
+      -moz-border-right-colors: none;
+      -moz-border-top-colors: none;
+      background: url("images/btn_stretch.png") repeat-x red;
+      border-color: transparent;
+      border-radius: 5px 5px 5px 5px;
+      border-style: solid;
+      border-width: 1px;
+      cursor: pointer;
+      margin: 0;
+      padding: 9px 16px;
+      text-decoration: none;
+      clear: both;
+      margin-top: 30px;
+      font-size: larger;
+      font-weight: bold;
+      color: white;
+    }
+
+    .share:active {
+      border: 1px inset #CCCCCC;
+    }
+
+    .share:hover {
+      border-color: #939393;
+    }
+
+    .share[disabled] {
+      color: #888888;
+      cursor: default;
+    }
+
+    .share[disabled]:hover {
+      border: 1px outset #CCCCCC;
+    }
+
+    .share {
+      clear: both;
+    }
+  </ui:style>
+  <g:HTMLPanel styleName="{style.comment}">
+    Anything specific this time?
+    <g:TextArea ui:field="comment" addStyleNames="{style.commentText}"/>
+    <g:Button styleName="{style.share}" text="Share!" ui:field="share" enabled="false"/>
+  </g:HTMLPanel>
+</ui:UiBinder>

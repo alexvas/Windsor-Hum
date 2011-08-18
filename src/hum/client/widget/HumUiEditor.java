@@ -12,8 +12,6 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.StackLayoutPanel;
-import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
@@ -21,9 +19,9 @@ import com.google.inject.Singleton;
 
 @SuppressWarnings({"deprecation"})
 @Singleton
-public class HumInstanceEditor extends Composite {
+public class HumUiEditor extends Composite {
 
-    interface Binder extends UiBinder<Widget, HumInstanceEditor> {
+    interface Binder extends UiBinder<Widget, HumUiEditor> {
     }
 
     private static Binder binder = GWT.create(Binder.class);
@@ -40,15 +38,6 @@ public class HumInstanceEditor extends Composite {
     TextBox zip;
 
     @UiField
-    StackLayoutPanel stack;
-
-    @UiField
-    TextArea comment;
-
-    @UiField
-    Button share;
-
-    @UiField
     Button go;
 
     @Inject
@@ -59,6 +48,10 @@ public class HumInstanceEditor extends Composite {
     @UiField(provided = true)
     LevelEditor level;
 
+    @Inject
+    @UiField(provided = true)
+    CommentEditor comment;
+
     public void init() {
         if (initialized) {
             return;
@@ -66,6 +59,7 @@ public class HumInstanceEditor extends Composite {
         initialized = true;
         started.init();
         level.init();
+        comment.init();
         initWidget(binder.createAndBindUi(this));
 
         zip.addChangeHandler(new ChangeHandler() {
