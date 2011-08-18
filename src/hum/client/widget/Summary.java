@@ -1,7 +1,7 @@
 package hum.client.widget;
 
 import static hum.client.ClientUtils.CLIENT_UTILS;
-import hum.client.ReqFactory;
+import hum.client.HumWorkflow;
 import hum.client.events.AddressEvent;
 import hum.client.events.AddressEventHandler;
 import hum.client.events.LevelEvent;
@@ -12,7 +12,6 @@ import hum.client.events.PointEvent;
 import hum.client.events.PointEventHandler;
 import hum.client.events.StartedEvent;
 import hum.client.events.StartedEventHandler;
-import hum.client.events.WannaSaveEvent;
 import hum.client.model.AddressProxy;
 import hum.client.model.PointProxy;
 
@@ -46,7 +45,7 @@ public class Summary extends Composite implements StartedEventHandler,
     private EventBus bus;
 
     @Inject
-    private ReqFactory reqFactory;
+    private HumWorkflow humWorkflow;
 
     boolean initialized = false;
 
@@ -150,9 +149,10 @@ public class Summary extends Composite implements StartedEventHandler,
         }
     }
 
+    @SuppressWarnings({"UnusedParameters"})
     @UiHandler("save")
     void save(ClickEvent save) {
-        bus.fireEvent(new WannaSaveEvent());
+        humWorkflow.save();
     }
 
 }

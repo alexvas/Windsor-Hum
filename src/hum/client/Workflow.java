@@ -4,39 +4,19 @@ import hum.client.adapter.JanrainWrapper;
 import hum.client.events.MapsLoadedEvent;
 import hum.client.events.MeEvent;
 import hum.client.events.ModeEvent;
-import hum.client.events.WannaSaveEvent;
-import hum.client.events.WannaSaveEventHandler;
-import hum.client.model.HumProxy;
 import hum.client.model.UserProxy;
 import hum.client.widget.Mapper;
 import hum.client.widget.Mode;
 import hum.client.widget.Root;
 
-import java.util.Set;
-
-import javax.validation.ConstraintViolation;
-
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.ajaxloader.client.AjaxLoader;
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
-import com.google.web.bindery.requestfactory.gwt.client.RequestFactoryEditorDriver;
 import com.google.web.bindery.requestfactory.shared.Receiver;
-import com.google.web.bindery.requestfactory.shared.RequestContext;
 
-public class Workflow implements Runnable, WannaSaveEventHandler {
-
-    interface HumDriver extends RequestFactoryEditorDriver<HumProxy, HumEditor> {
-    }
-
-    private HumDriver humDriver;
-
-    @Inject
-    private HumEditor humEditor;
-
+public class Workflow implements Runnable {
     @Inject
     private Root root;
 
@@ -50,13 +30,10 @@ public class Workflow implements Runnable, WannaSaveEventHandler {
     private ReqFactory reqFactory;
 
     @Inject
-    private ReqFactory.HumRequest humRequest;
-
-    @Inject
-    private ReqFactory.UserRequest userRequest;
-
-    @Inject
     private EventBus bus;
+
+    @Inject
+    private HumWorkflow humWorkflow;
 
     @Override
     public void run() {
@@ -76,9 +53,7 @@ public class Workflow implements Runnable, WannaSaveEventHandler {
         RootLayoutPanel.get().add(root);
         mapper.initMap(root.getMapPlace());
         bus.fireEvent(new ModeEvent(Mode.LIST));
-        bus.addHandler(WannaSaveEvent.TYPE, this);
-        humDriver = GWT.create(HumDriver.class);
-        humDriver.initialize(reqFactory, humEditor);
+        humWorkflow.init();
     }
 
     private void mapsLoaded() {
@@ -91,47 +66,14 @@ public class Workflow implements Runnable, WannaSaveEventHandler {
             @Override
             public void onSuccess(UserProxy user) {
                 bus.fireEvent(new MeEvent(user));
-                bus.fireEvent(new ModeEvent(
-                        user == null
-                                ? Mode.LIST
-                                : Mode.NEW
-                ));
-                editHum(null);
+                if (user == null) {
+                    bus.fireEvent(new ModeEvent(Mode.LIST));
+                } else {
+                    bus.fireEvent(new ModeEvent(Mode.NEW));
+                    humWorkflow.edit(humWorkflow.create());
+                }
             }
         });
     }
 
-
-    private void editHum(HumProxy hum) {
-        if (hum == null) {
-            hum = humRequest.create(HumProxy.class);
-        }
-        hum = humRequest.edit(hum);
-        humDriver.edit(hum, humRequest);
-
-        humRequest.save(hum).with(humDriver.getPaths()).to(new Receiver<HumProxy>() {
-            @Override
-            public void onSuccess(HumProxy response) {
-                editHum(response);
-            }
-
-            @Override
-            public void onConstraintViolation(Set<ConstraintViolation<?>> violations) {
-              humDriver.setConstraintViolations(violations);
-            }
-        });
-    }
-
-
-    @Override
-    public void dispatch(WannaSaveEvent event) {
-        RequestContext requestContext = humDriver.flush();
-
-        if (humDriver.hasErrors()) {
-            Window.alert("Errors detected locally");
-            return;
-        }
-
-        requestContext.fire();
-    }
 }
