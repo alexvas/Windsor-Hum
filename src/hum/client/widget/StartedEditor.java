@@ -95,7 +95,11 @@ public class StartedEditor extends Composite implements LeafValueEditor<Date> {
     public void setValue(Date value) {
         current = value;
         startedDate.setValue(value);
-        startedTime.setTime(null, value.getHours(), value.getMinutes());
+        if (value == null) {
+            startedTime.clear();
+        } else {
+            startedTime.setTime(null, value.getHours(), value.getMinutes());
+        }
     }
 
     @Override

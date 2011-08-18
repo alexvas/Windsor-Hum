@@ -8,8 +8,8 @@ import hum.client.events.LevelEvent;
 import hum.client.events.LevelEventHandler;
 import hum.client.events.ModeEvent;
 import hum.client.events.ModeEventHandler;
-import hum.client.events.PositionEvent;
-import hum.client.events.PositionEventHandler;
+import hum.client.events.PointEvent;
+import hum.client.events.PointEventHandler;
 import hum.client.events.StartedEvent;
 import hum.client.events.StartedEventHandler;
 import hum.client.model.AddressProxy;
@@ -18,8 +18,6 @@ import hum.client.model.PointProxy;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.ParagraphElement;
 import com.google.gwt.dom.client.SpanElement;
-import com.google.gwt.editor.client.IsEditor;
-import com.google.gwt.editor.client.LeafValueEditor;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -32,8 +30,7 @@ import com.google.web.bindery.event.shared.EventBus;
 
 @Singleton
 public class Summary extends Composite implements StartedEventHandler,
-        LevelEventHandler, PositionEventHandler, AddressEventHandler, ModeEventHandler,
-        IsEditor<LeafValueEditor<AddressProxy>>, LeafValueEditor<PointProxy>
+        LevelEventHandler, PointEventHandler, AddressEventHandler, ModeEventHandler
 {
 
     interface Binder extends UiBinder<Widget, Summary> {
@@ -67,10 +64,6 @@ public class Summary extends Composite implements StartedEventHandler,
     @UiField
     ParagraphElement status;
 
-    private PointProxy currentPoint;
-
-    private AddressProxy currentAddress;
-
     public void init() {
         if (initialized) {
             return;
@@ -79,7 +72,7 @@ public class Summary extends Composite implements StartedEventHandler,
         initWidget(binder.createAndBindUi(this));
         bus.addHandler(StartedEvent.TYPE, this);
         bus.addHandler(LevelEvent.TYPE, this);
-        bus.addHandler(PositionEvent.TYPE, this);
+        bus.addHandler(PointEvent.TYPE, this);
         bus.addHandler(AddressEvent.TYPE, this);
         bus.addHandler(ModeEvent.TYPE, this);
     }
@@ -91,30 +84,27 @@ public class Summary extends Composite implements StartedEventHandler,
                         .getFormat(DateTimeFormat.PredefinedFormat.DATE_TIME_LONG)
                         .format(meEvent.started)
         );
-        sendHum();
     }
 
     @Override
     public void dispatch(LevelEvent event) {
         level.setInnerText(CLIENT_UTILS.capitalize(event.level.name()));
-        sendHum();
     }
 
     private static final NumberFormat COORD_FORMAT = NumberFormat.getFormat("###.######");
 
     @Override
-    public void dispatch(PositionEvent event) {
+    public void dispatch(PointEvent event) {
         setPoint(event.point);
     }
 
     private void setPoint(PointProxy point) {
-        currentPoint = point;
-        if (currentPoint == null) {
+        if (point == null) {
             lat.setInnerText(null);
             lng.setInnerText(null);
         } else {
-            lat.setInnerText(COORD_FORMAT.format(currentPoint.getLat()));
-            lng.setInnerText(COORD_FORMAT.format(currentPoint.getLng()));
+            lat.setInnerText(COORD_FORMAT.format(point.getLat()));
+            lng.setInnerText(COORD_FORMAT.format(point.getLng()));
         }
     }
 
@@ -124,16 +114,15 @@ public class Summary extends Composite implements StartedEventHandler,
     }
 
     private void setAddress(AddressProxy address) {
-        currentAddress = address;
         this.address.setInnerText(
-                currentAddress == null
+                address == null
                         ? null
                         : CLIENT_UTILS.join(
                         ", ",
-                        currentAddress.getCountry(),
-                        currentAddress.getRegion(),
-                        currentAddress.getPostcode(),
-                        currentAddress.getAddressLine()
+                        address.getCountry(),
+                        address.getRegion(),
+                        address.getPostcode(),
+                        address.getAddressLine()
                 ));
     }
 
@@ -151,46 +140,6 @@ public class Summary extends Composite implements StartedEventHandler,
                 break;
             default:
                 break;
-        }
-    }
-
-    private void sendHum() {
-/*
-        humRequest.save(hum).fire(new Receiver<Void>() {
-            @Override
-            public void onSuccess(Void response) {
-                bus.fireEvent(new ModeEvent(Mode.LAST));
-            }
-        });
-*/
-    }
-
-    private AddressProxyWrapper addressProxyWrapper = new AddressProxyWrapper();
-
-    @Override
-    public LeafValueEditor<AddressProxy> asEditor() {
-        return addressProxyWrapper;
-    }
-
-    @Override
-    public void setValue(PointProxy value) {
-        setPoint(value);
-    }
-
-    @Override
-    public PointProxy getValue() {
-        return currentPoint;
-    }
-
-    private class AddressProxyWrapper implements LeafValueEditor<AddressProxy> {
-        @Override
-        public void setValue(AddressProxy value) {
-            setAddress(value);
-        }
-
-        @Override
-        public AddressProxy getValue() {
-            return currentAddress;
         }
     }
 

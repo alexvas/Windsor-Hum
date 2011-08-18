@@ -1,19 +1,21 @@
 package hum.client;
 
+import hum.client.model.HumProxy;
 import hum.client.widget.CommentEditor;
 import hum.client.widget.LevelEditor;
 import hum.client.widget.StartedEditor;
-import hum.client.widget.Summary;
 
 import com.google.gwt.editor.client.Editor;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
-public class HumEditor implements Editor<HumEntry> {
+@Singleton
+public class HumEditor implements Editor<HumProxy> {
     @Inject
-    Summary point;
+    PointEditor point;
 
     @Inject
-    Summary address;
+    AddressEditor address;
 
     @Inject
     LevelEditor level;

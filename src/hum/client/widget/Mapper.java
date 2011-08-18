@@ -8,8 +8,8 @@ import hum.client.events.MapsLoadedEvent;
 import hum.client.events.MapsLoadedEventHandler;
 import hum.client.events.ModeEvent;
 import hum.client.events.ModeEventHandler;
-import hum.client.events.PositionEvent;
-import hum.client.events.PositionEventHandler;
+import hum.client.events.PointEvent;
+import hum.client.events.PointEventHandler;
 import hum.client.maps.Animation;
 import hum.client.maps.MapOptions;
 import hum.client.maps.Marker;
@@ -26,7 +26,7 @@ import com.google.inject.Singleton;
 import com.google.web.bindery.event.shared.EventBus;
 
 @Singleton
-public class Mapper implements PositionEventHandler, LevelEventHandler, MapsLoadedEventHandler, ModeEventHandler {
+public class Mapper implements PointEventHandler, LevelEventHandler, MapsLoadedEventHandler, ModeEventHandler {
 
     private EventBus bus;
 
@@ -72,7 +72,7 @@ public class Mapper implements PositionEventHandler, LevelEventHandler, MapsLoad
     @Inject
     Mapper(EventBus bus) {
         this.bus = bus;
-        bus.addHandler(PositionEvent.TYPE, this);
+        bus.addHandler(PointEvent.TYPE, this);
         bus.addHandler(LevelEvent.TYPE, this);
         bus.addHandler(MapsLoadedEvent.TYPE, this);
         bus.addHandler(ModeEvent.TYPE, this);
@@ -84,7 +84,7 @@ public class Mapper implements PositionEventHandler, LevelEventHandler, MapsLoad
 
     private void firePositionChange(LatLng latLng) {
         geocoderService.reverse(latLng);
-        bus.fireEvent(new PositionEvent(PointProxy.LatLngWrapper.from(latLng)));
+        bus.fireEvent(new PointEvent(PointProxy.LatLngWrapper.from(latLng)));
     }
 
     private native void addClickListener(Map map, Back<LatLng> back) /*-{
@@ -100,7 +100,7 @@ public class Mapper implements PositionEventHandler, LevelEventHandler, MapsLoad
     }-*/;
 
     @Override
-    public void dispatch(PositionEvent event) {
+    public void dispatch(PointEvent event) {
         if (map == null) {
             pendingPoint = event.point;
             return;

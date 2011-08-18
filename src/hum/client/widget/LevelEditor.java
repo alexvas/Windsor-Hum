@@ -107,15 +107,21 @@ public class LevelEditor extends Composite implements MapsLoadedEventHandler, Le
     @Override
     public void setValue(HumProxy.Level value) {
         current = value;
+        if (value == null) {
+            levelLow.setValue(false);
+            levelMedium.setValue(false);
+            levelHigh.setValue(false);
+            return;
+        }
         switch (value) {
             case LOW:
-                levelLow.setFocus(true);
+                levelLow.setValue(true);
                 break;
             case MEDIUM:
-                levelMedium.setFocus(true);
+                levelMedium.setValue(true);
                 break;
             case HIGH:
-                levelHigh.setFocus(true);
+                levelHigh.setValue(true);
                 break;
             default:
                 throw new RuntimeException("level " + value + " is not supported");

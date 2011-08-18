@@ -1,11 +1,11 @@
 package hum.client.gin;
 
-import hum.client.Main;
+import hum.client.Workflow;
 
 import com.google.gwt.inject.client.GinModules;
 import com.google.gwt.inject.client.Ginjector;
 
 @GinModules({Module.class})
 public interface Jector extends Ginjector {
-    public Main main();
+    public Workflow main();
 }

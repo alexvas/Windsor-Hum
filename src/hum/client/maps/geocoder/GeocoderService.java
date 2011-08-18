@@ -1,7 +1,7 @@
 package hum.client.maps.geocoder;
 
 import hum.client.events.AddressEvent;
-import hum.client.events.PositionEvent;
+import hum.client.events.PointEvent;
 import hum.client.model.AddressProxy;
 import hum.client.model.PointProxy;
 
@@ -84,7 +84,7 @@ public class GeocoderService {
             boolean propagateResolvedLocation
     ) {
         if (propagateResolvedLocation) {
-            bus.fireEvent(new PositionEvent(
+            bus.fireEvent(new PointEvent(
                     result == null
                             ? null
                             : PointProxy.LatLngWrapper.from(result.geometry().location())

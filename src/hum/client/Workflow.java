@@ -4,6 +4,7 @@ import hum.client.adapter.JanrainWrapper;
 import hum.client.events.MapsLoadedEvent;
 import hum.client.events.MeEvent;
 import hum.client.events.ModeEvent;
+import hum.client.model.HumProxy;
 import hum.client.model.UserProxy;
 import hum.client.widget.Mapper;
 import hum.client.widget.Mode;
@@ -11,12 +12,22 @@ import hum.client.widget.Root;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.ajaxloader.client.AjaxLoader;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
+import com.google.web.bindery.requestfactory.gwt.client.RequestFactoryEditorDriver;
 import com.google.web.bindery.requestfactory.shared.Receiver;
 
-public class Main implements Runnable {
+public class Workflow implements Runnable {
+
+    interface HumDriver extends RequestFactoryEditorDriver<HumProxy, HumEditor> {
+    }
+
+    private HumDriver humDriver;
+
+    @Inject
+    private HumEditor humEditor;
 
     @Inject
     private Root root;
@@ -51,6 +62,8 @@ public class Main implements Runnable {
         RootLayoutPanel.get().add(root);
         mapper.initMap(root.getMapPlace());
         bus.fireEvent(new ModeEvent(Mode.LIST));
+        humDriver = GWT.create(HumDriver.class);
+        humDriver.initialize(reqFactory, humEditor);
     }
 
     private void mapsLoaded() {
@@ -68,6 +81,9 @@ public class Main implements Runnable {
                                 ? Mode.LIST
                                 : Mode.NEW
                 ));
+                ReqFactory.HumRequest request = reqFactory.humRequest();
+                HumProxy hum = request.create(HumProxy.class);
+                humDriver.edit(hum, request);
             }
         });
     }
