@@ -1,12 +1,10 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
              xmlns:g='urn:import:com.google.gwt.user.client.ui'
-             xmlns:d='urn:import:com.google.gwt.user.datepicker.client'
              xmlns:h='urn:import:hum.client.widget'
-
     >
   <ui:style>
-    .where, .howStrong, .comment {
+    .where, .comment {
       overflow: hidden;
     }
 
@@ -103,26 +101,7 @@
     </g:stack>
     <g:stack>
       <g:header size='30'>How Strong</g:header>
-      <g:HTMLPanel styleName="{style.howStrong}">
-        <p>How strong do you think the hum level is? Please select:</p>
-        <ul>
-          <li>
-            <img alt="" src=""/>
-            <g:RadioButton name="level" ui:field="levelLow"/>
-            Low (barely hear)
-          </li>
-          <li>
-            <img alt="" src=""/>
-            <g:RadioButton name="level" ui:field="levelMedium"/>
-            Medium (hard to ignore)
-          </li>
-          <li>
-            <img alt="" src=""/>
-            <g:RadioButton name="level" ui:field="levelHigh"/>
-            High (window rattle)
-          </li>
-        </ul>
-      </g:HTMLPanel>
+      <h:LevelEditor ui:field="level"/>
     </g:stack>
 
     <g:stack>

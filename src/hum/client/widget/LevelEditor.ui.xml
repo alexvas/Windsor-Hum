@@ -1,0 +1,41 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'
+    >
+  <ui:style>
+    .howStrong {
+      overflow: hidden;
+    }
+
+    .howStrong ul {
+      list-style: none;
+      margin-left: 0;
+      padding-left: 1em;
+      text-indent: -1em;
+    }
+
+    .howStrong li {
+      cursor: pointer;
+    }
+  </ui:style>
+  <g:HTMLPanel styleName="{style.howStrong}">
+    <p>How strong do you think the hum level is? Please select:</p>
+    <ul>
+      <li>
+        <img alt="" src=""/>
+        <g:RadioButton name="level" ui:field="levelLow"/>
+        Low (barely hear)
+      </li>
+      <li>
+        <img alt="" src=""/>
+        <g:RadioButton name="level" ui:field="levelMedium"/>
+        Medium (hard to ignore)
+      </li>
+      <li>
+        <img alt="" src=""/>
+        <g:RadioButton name="level" ui:field="levelHigh"/>
+        High (window rattle)
+      </li>
+    </ul>
+  </g:HTMLPanel>
+</ui:UiBinder>
