@@ -86,22 +86,24 @@ public class Workflow implements Runnable, WannaSaveEventHandler {
                                 ? Mode.LIST
                                 : Mode.NEW
                 ));
-                ReqFactory.HumRequest request = reqFactory.humRequest();
-                HumProxy hum = request.create(HumProxy.class);
-                editHum(hum, request);
+                editHum(null);
             }
         });
     }
 
 
-    private void editHum(HumProxy hum, final ReqFactory.HumRequest request) {
+    private void editHum(HumProxy hum) {
+        ReqFactory.HumRequest request = reqFactory.humRequest();
+        if (hum == null) {
+            hum = request.create(HumProxy.class);
+        }
         hum = request.edit(hum);
         humDriver.edit(hum, request);
 
         request.save(hum).with(humDriver.getPaths()).to(new Receiver<HumProxy>() {
             @Override
             public void onSuccess(HumProxy response) {
-                editHum(response, request);
+                editHum(response);
             }
 /*
             @Override
@@ -109,7 +111,6 @@ public class Workflow implements Runnable, WannaSaveEventHandler {
                 humDriver.setConstraintViolations(errors);
             }
 */
-
         });
     }
 
