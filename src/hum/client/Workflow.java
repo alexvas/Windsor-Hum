@@ -68,8 +68,7 @@ public class Workflow implements Runnable {
                 if (user == null) {
                     bus.fireEvent(new ModeEvent(Mode.LIST));
                 } else {
-                    bus.fireEvent(new ModeEvent(Mode.NEW));
-                    humWorkflow.edit(humWorkflow.createHum());
+                    humWorkflow.editLastHum();
                 }
             }
         });

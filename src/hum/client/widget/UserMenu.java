@@ -53,14 +53,13 @@ public class UserMenu extends Composite implements MeEventHandler {
         reportNewHum.setCommand(new Command() {
             @Override
             public void execute() {
-                fire(Mode.NEW);
-                humWorkflow.edit(humWorkflow.createHum());
+                humWorkflow.reportNewHum();
             }
         });
         editLastHum.setCommand(new Command() {
             @Override
             public void execute() {
-                fire(Mode.LAST);
+                humWorkflow.editLastHum();
             }
         });
         overview.setCommand(new Command() {

@@ -42,23 +42,33 @@ public class HumWorkflow {
         humRequest = factory.humRequest();
     }
 
-    public void edit(HumProxy in) {
+    public void reportNewHum() {
+        edit(createHum());
+        bus.fireEvent(new ModeEvent(Mode.NEW));
+    }
+
+    private HumReceiver saveReceiver = new HumReceiver();
+
+    private HumReceiver latestReceiver = new HumReceiver() {
+        @Override
+        public void onSuccess(HumProxy response) {
+            if (response == null) {
+                reportNewHum();
+            } else {
+                super.onSuccess(response);
+            }
+        }
+    };
+
+    public void editLastHum() {
+        humRequest = factory.humRequest();
+        humRequest.latest().with(humDriver.getPaths()).to(latestReceiver).fire();
+    }
+
+    private void edit(HumProxy in) {
         HumProxy owned = humRequest.edit(in);
         humDriver.edit(owned, humRequest);
-
-        humRequest.save(owned).with(humDriver.getPaths()).to(new Receiver<HumProxy>() {
-            @Override
-            public void onSuccess(HumProxy response) {
-                humRequest = factory.humRequest();
-                edit(response);
-                bus.fireEvent(new ModeEvent(Mode.LAST));
-            }
-
-            @Override
-            public void onConstraintViolation(Set<ConstraintViolation<?>> violations) {
-                humDriver.setConstraintViolations(violations);
-            }
-        });
+        humRequest.save(owned).with(humDriver.getPaths()).to(saveReceiver);
     }
 
     public HumProxy createHum() {
@@ -82,5 +92,19 @@ public class HumWorkflow {
         }
 
         requestContext.fire();
+    }
+
+    private class HumReceiver extends Receiver<HumProxy> {
+        @Override
+        public void onSuccess(HumProxy response) {
+            humRequest = factory.humRequest();
+            edit(response);
+            bus.fireEvent(new ModeEvent(Mode.LAST));
+        }
+
+        @Override
+        public void onConstraintViolation(Set<ConstraintViolation<?>> violations) {
+            humDriver.setConstraintViolations(violations);
+        }
     }
 }
