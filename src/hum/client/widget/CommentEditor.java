@@ -20,7 +20,7 @@ public class CommentEditor extends Composite implements IsEditor<ValueBoxEditor<
 
     private static Binder binder = GWT.create(Binder.class);
 
-    boolean initialized = false;
+    private boolean initialized = false;
 
     @UiField
     TextArea comment;

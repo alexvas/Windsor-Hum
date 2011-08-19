@@ -6,30 +6,24 @@ import hum.client.events.MeEvent;
 import hum.client.events.MeEventHandler;
 import hum.client.events.ModeEvent;
 import hum.client.events.ModeEventHandler;
-import hum.client.model.InfoProxy;
 import hum.client.model.UserProxy;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.HeadingElement;
-import com.google.gwt.dom.client.ImageElement;
-import com.google.gwt.dom.client.SpanElement;
-import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DeckLayoutPanel;
+import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.google.web.bindery.event.shared.EventBus;
-import com.google.web.bindery.requestfactory.shared.Receiver;
 
 @Singleton
 public class Root extends Composite implements MeEventHandler, ModeEventHandler {
@@ -58,19 +52,10 @@ public class Root extends Composite implements MeEventHandler, ModeEventHandler 
     Button report;
 
     @UiField
-    HeadingElement userName;
-
-    @UiField
-    ImageElement avatar;
-
-    @UiField
-    SpanElement signOutWrapper;
-
-    @UiField
-    Anchor signOut;
-
-    @UiField
     DeckLayoutPanel deck;
+
+    @UiField
+    DockLayoutPanel editor;
 
     @Inject
     @UiField(provided = true)
@@ -79,6 +64,10 @@ public class Root extends Composite implements MeEventHandler, ModeEventHandler 
     @Inject
     @UiField(provided = true)
     Summary summary;
+
+    @Inject
+    @UiField(provided = true)
+    Profile profile;
 
     boolean initialized = false;
 
@@ -89,6 +78,7 @@ public class Root extends Composite implements MeEventHandler, ModeEventHandler 
         initialized = true;
         humUiEditor.init();
         summary.init();
+        profile.init();
         initWidget(binder.createAndBindUi(this));
         bus.addHandler(MeEvent.TYPE, this);
         bus.addHandler(ModeEvent.TYPE, this);
@@ -115,21 +105,7 @@ public class Root extends Composite implements MeEventHandler, ModeEventHandler 
     }
 
     private void setUser(UserProxy user) {
-        if (user == null) {
-            userName.setInnerText(null);
-            signOutWrapper.getStyle().setDisplay(Style.Display.NONE);
-            avatar.setSrc(null);
-            avatar.setAlt(null);
-            report.setVisible(true);
-            return;
-        }
-        InfoProxy info = user.getInfo().get(0);
-        userName.setInnerText("Welcome, " + info.getDisplayName() + "!");
-        avatar.setAlt(info.getDisplayName());
-        avatar.setSrc(info.getPhoto());
-        avatar.setHeight(72);
-        report.setVisible(false);
-        signOutWrapper.getStyle().setDisplay(Style.Display.INLINE);
+        report.setVisible(user == null);
     }
 
     @Override
@@ -141,26 +117,13 @@ public class Root extends Composite implements MeEventHandler, ModeEventHandler 
         switch (mode) {
             case NEW: // fall through
             case LAST:
-                deck.showWidget(1);
+                deck.showWidget(editor);
                 break;
             case LIST:
-                deck.showWidget(0);
+                deck.showWidget(about);
                 break;
             default:
                 throw new RuntimeException("mode not supported: " + mode);
         }
-    }
-
-    @SuppressWarnings({"UnusedParameters"})
-    @UiHandler("signOut")
-    void signOut(ClickEvent signOut) {
-        reqFactory.userRequest().signOut().fire(new Receiver<Void>() {
-            @Override
-            public void onSuccess(Void response) {
-//                janrainWrapper.signOut();
-                bus.fireEvent(new MeEvent(null));
-                bus.fireEvent(new ModeEvent(Mode.LIST));
-            }
-        });
     }
 }

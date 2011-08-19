@@ -47,7 +47,7 @@ public class Summary extends Composite implements StartedEventHandler,
     @Inject
     private HumWorkflow humWorkflow;
 
-    boolean initialized = false;
+    private boolean initialized = false;
 
     @UiField
     SpanElement address;

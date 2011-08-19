@@ -32,7 +32,7 @@ public class HumUiEditor extends Composite {
     @Inject
     private LevelHelper levelHelper;
 
-    boolean initialized = false;
+    private boolean initialized = false;
 
     @UiField
     TextBox zip;

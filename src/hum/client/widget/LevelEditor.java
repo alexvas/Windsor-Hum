@@ -35,7 +35,7 @@ public class LevelEditor extends Composite implements MapsLoadedEventHandler, Le
     @Inject
     private LevelHelper levelHelper;
 
-    boolean initialized = false;
+    private boolean initialized = false;
 
     @UiField
     RadioButton levelLow;

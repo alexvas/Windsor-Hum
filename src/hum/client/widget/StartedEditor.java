@@ -31,7 +31,7 @@ public class StartedEditor extends Composite implements LeafValueEditor<Date> {
     @Inject
     private EventBus bus;
 
-    boolean initialized = false;
+    private boolean initialized = false;
 
     @UiField(provided = true)
     HourMinutePicker startedTime;

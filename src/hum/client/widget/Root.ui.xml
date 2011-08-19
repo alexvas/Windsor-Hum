@@ -15,16 +15,6 @@
       margin-bottom: 0;
     }
 
-    .header h1, .header h2 {
-      margin-top: 0;
-    }
-
-    .header h2, .header img {
-      display: block;
-      float: right;
-      margin-left: 20px;
-    }
-
     .about {
       padding: 20px;
       line-height: 1.6;
@@ -70,14 +60,8 @@
       border: 1px outset #CCCCCC;
     }
 
-    .userName {
-      overflow: hidden;
+    .profile {
       float: right;
-    }
-
-    .signOutWrapper {
-      float: right;
-      clear: right;
     }
 
   </ui:style>
@@ -85,13 +69,7 @@
     <g:north size='112'>
       <g:HTMLPanel styleName="{style.header}">
         <h1>Windsor Hum</h1>
-        <div class="{style.userName}">
-          <h2 ui:field="userName"/>
-          <span ui:field="signOutWrapper" class="{style.signOutWrapper}" style="display: none;">Not you?
-            <g:Anchor ui:field="signOut" href="javascript:" text="Sign Out"/>
-          </span>
-        </div>
-        <img ui:field="avatar" alt="" src=""/>
+        <h:Profile addStyleNames="{style.profile}" ui:field="profile"/>
         <p>Do you hear rumbling again?</p>
       </g:HTMLPanel>
     </g:north>
@@ -113,7 +91,7 @@
               here when you hear it.
               <g:Button text="Report!" ui:field="report" styleName="{style.btnReport}"/>
             </g:HTMLPanel>
-            <g:DockLayoutPanel>
+            <g:DockLayoutPanel ui:field="editor">
               <g:north size="150">
                 <h:Summary ui:field="summary"/>
               </g:north>

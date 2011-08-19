@@ -1,0 +1,43 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'
+    >
+  <ui:style>
+    .profile {
+      overflow: hidden;
+    }
+
+    .profile h2 {
+      margin-top: 0;
+    }
+
+    .profile h2, .profile img {
+      display: block;
+      float: right;
+      margin-left: 20px;
+    }
+
+    .userName {
+      overflow: hidden;
+      float: right;
+    }
+
+    .signOutWrapper {
+      float: right;
+      clear: right;
+    }
+
+    .avatar {
+      height: 72px;
+    }
+  </ui:style>
+  <g:HTMLPanel styleName="{style.profile}">
+    <div class="{style.userName}">
+      <h2 ui:field="userName"/>
+      <span ui:field="signOutWrapper" class="{style.signOutWrapper}" style="display: none;">Not you?
+        <g:Anchor ui:field="signOut" href="javascript:" text="Sign Out"/>
+      </span>
+    </div>
+    <img ui:field="avatar" alt="" src="" class="{style.avatar}"/>
+  </g:HTMLPanel>
+</ui:UiBinder>
