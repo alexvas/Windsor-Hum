@@ -8,7 +8,6 @@ import hum.client.model.HumProxy;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.ImageElement;
-import com.google.gwt.dom.client.InputElement;
 import com.google.gwt.editor.client.LeafValueEditor;
 import com.google.gwt.query.client.Function;
 import com.google.gwt.query.client.GQuery;
@@ -62,22 +61,6 @@ public class LevelEditor extends Composite implements MapsLoadedEventHandler, Le
         bus.addHandler(MapsLoadedEvent.TYPE, this);
     }
 
-    public void dispatch(LevelEvent event) {
-        switch (event.level) {
-            case LOW:
-                levelLow.setFocus(true);
-                break;
-            case MEDIUM:
-                levelMedium.setFocus(true);
-                break;
-            case HIGH:
-                levelHigh.setFocus(true);
-                break;
-            default:
-                throw new RuntimeException("level " + event.level + " is not supported");
-        }
-    }
-
     @Override
     public void dispatch(MapsLoadedEvent event) {
         init();
@@ -87,21 +70,18 @@ public class LevelEditor extends Composite implements MapsLoadedEventHandler, Le
     }
 
     private void addClickListener(RadioButton button, final HumProxy.Level level) {
-        current = level;
-        final GQuery li = GQuery.$(button).parent("li");
-        li.click(new Function() {
+        GQuery.$(button).parent("li").click(new Function() {
             @Override
             public void f() {
-                InputElement in = li.find("input").get(0).cast();
-                in.setChecked(true);
+                setValue(level);
                 bus.fireEvent(new LevelEvent(level));
             }
         });
     }
 
     private void setLiIcon(RadioButton button, HumProxy.Level level) {
-        final GQuery li = GQuery.$(button).parent("li");
-        li.find("img").get(0).<ImageElement>cast().setSrc(levelHelper.icon(level).getIcon().url());
+        GQuery.$(button).parent("li")
+                .find("img").get(0).<ImageElement>cast().setSrc(levelHelper.icon(level).getIcon().url());
     }
 
     @Override
