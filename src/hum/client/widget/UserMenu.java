@@ -65,7 +65,7 @@ public class UserMenu extends Composite implements MeEventHandler {
         overview.setCommand(new Command() {
             @Override
             public void execute() {
-                fire(Mode.LIST);
+                humWorkflow.overviewLastSubmitted();
             }
         });
         bus.addHandler(MeEvent.TYPE, this);

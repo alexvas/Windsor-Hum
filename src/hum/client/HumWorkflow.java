@@ -29,19 +29,19 @@ public class HumWorkflow {
     private EventBus bus;
 
     @Inject
-    private HumEditor humEditor;
+    private HumEditor editor;
 
     interface HumDriver extends RequestFactoryEditorDriver<HumProxy, HumEditor> {
     }
 
-    private HumDriver humDriver;
+    private HumDriver driver;
 
-    private ReqFactory.HumRequest humRequest;
+    private ReqFactory.HumRequest editingRequest;
 
     public void init() {
-        humDriver = GWT.create(HumDriver.class);
-        humDriver.initialize(factory, humEditor);
-        humRequest = factory.humRequest();
+        driver = GWT.create(HumDriver.class);
+        driver.initialize(factory, editor);
+        editingRequest = factory.humRequest();
     }
 
     public void reportNewHum() {
@@ -63,17 +63,14 @@ public class HumWorkflow {
     };
 
     public void editLastHum() {
-        humRequest = factory.humRequest();
-        humRequest.latest().with(humDriver.getPaths()).to(latestReceiver).fire();
+        factory.humRequest().latest().with(driver.getPaths()).to(latestReceiver).fire();
     }
 
     public void overviewLastSubmitted() {
-        humRequest = factory.humRequest();
-        humRequest.overview().with(humDriver.getPaths()).to(
+        factory.humRequest().overview().with(driver.getPaths()).to(
                 new Receiver<List<HumProxy>>() {
                     @Override
                     public void onSuccess(List<HumProxy> response) {
-                        bus.fireEvent(new ModeEvent(Mode.LIST));
                         bus.fireEvent(new OverviewEvent(response));
                     }
                 }
@@ -81,27 +78,27 @@ public class HumWorkflow {
     }
 
     private void edit(HumProxy in) {
-        HumProxy owned = humRequest.edit(in);
-        humDriver.edit(owned, humRequest);
-        humRequest.save(owned).with(humDriver.getPaths()).to(saveReceiver);
+        HumProxy owned = editingRequest.edit(in);
+        driver.edit(owned, editingRequest);
+        editingRequest.save(owned).with(driver.getPaths()).to(saveReceiver);
     }
 
     private HumProxy createHum() {
-        return humRequest.create(HumProxy.class);
+        return editingRequest.create(HumProxy.class);
     }
 
     public PointProxy createPoint() {
-        return humRequest.create(PointProxy.class);
+        return editingRequest.create(PointProxy.class);
     }
 
     public AddressProxy createAddress() {
-        return humRequest.create(AddressProxy.class);
+        return editingRequest.create(AddressProxy.class);
     }
 
     public void save() {
-        RequestContext requestContext = humDriver.flush();
+        RequestContext requestContext = driver.flush();
 
-        if (humDriver.hasErrors()) {
+        if (driver.hasErrors()) {
             Window.alert("Errors detected locally");
             return;
         }
@@ -112,14 +109,14 @@ public class HumWorkflow {
     private class HumReceiver extends Receiver<HumProxy> {
         @Override
         public void onSuccess(HumProxy response) {
-            humRequest = factory.humRequest();
+            editingRequest = factory.humRequest();
             edit(response);
             bus.fireEvent(new ModeEvent(Mode.LAST));
         }
 
         @Override
         public void onConstraintViolation(Set<ConstraintViolation<?>> violations) {
-            humDriver.setConstraintViolations(violations);
+            driver.setConstraintViolations(violations);
         }
     }
 }

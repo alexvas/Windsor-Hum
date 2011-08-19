@@ -10,6 +10,8 @@ import hum.client.events.MapsLoadedEvent;
 import hum.client.events.MapsLoadedEventHandler;
 import hum.client.events.ModeEvent;
 import hum.client.events.ModeEventHandler;
+import hum.client.events.OverviewEvent;
+import hum.client.events.OverviewEventHandler;
 import hum.client.events.PointEvent;
 import hum.client.events.PointEventHandler;
 import hum.client.maps.Animation;
@@ -20,6 +22,9 @@ import hum.client.maps.geocoder.GeocoderService;
 import hum.client.model.HumProxy;
 import hum.client.model.PointProxy;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.gwt.maps.client.Map;
 import com.google.gwt.maps.client.base.LatLng;
 import com.google.gwt.user.client.Element;
@@ -28,7 +33,8 @@ import com.google.inject.Singleton;
 import com.google.web.bindery.event.shared.EventBus;
 
 @Singleton
-public class Mapper implements PointEventHandler, LevelEventHandler, MapsLoadedEventHandler, ModeEventHandler {
+public class Mapper implements PointEventHandler, LevelEventHandler, MapsLoadedEventHandler,
+        ModeEventHandler, OverviewEventHandler {
 
     private EventBus bus;
 
@@ -48,6 +54,7 @@ public class Mapper implements PointEventHandler, LevelEventHandler, MapsLoadedE
     private HumProxy.Level pendingLevel = null;
 
     private Marker currentHum = null;
+    private List<Marker> overview = new ArrayList<Marker>();
 
     private Element mapPlace;
 
@@ -79,6 +86,7 @@ public class Mapper implements PointEventHandler, LevelEventHandler, MapsLoadedE
         bus.addHandler(LevelEvent.TYPE, this);
         bus.addHandler(MapsLoadedEvent.TYPE, this);
         bus.addHandler(ModeEvent.TYPE, this);
+        bus.addHandler(OverviewEvent.TYPE, this);
     }
 
     public void initMap(Element mapPlace) {
@@ -151,7 +159,7 @@ public class Mapper implements PointEventHandler, LevelEventHandler, MapsLoadedE
         }
         MarkerOptions opts = new MarkerOptions.Builder(LatLng.newInstance(point.getLat(), point.getLng()))
                 .icon(levelHelper.icon(level).getIcon())
-                .shadow(levelHelper.icon(level).getShadow())
+                .shadow(levelHelper.icon(HumProxy.Level.HIGH).getShadow())
 //                .shape(red.getShape())
                 .animation(Animation.DROP)
                 .draggable(true)
@@ -190,16 +198,61 @@ public class Mapper implements PointEventHandler, LevelEventHandler, MapsLoadedE
         mode = event.mode;
         switch (mode) {
             case NEW:
-                // do nothing
+                detachOverview();
                 break;
             case LAST:
+                detachOverview();
                 attachCurrentHum();
                 break;
             case LIST:
                 detachCurrentHum();
+                attachOverview();
                 break;
             default:
                 throw new RuntimeException("mode not supported: " + mode);
         }
     }
+
+    @Override
+    public void dispatch(OverviewEvent event) {
+        detachOverview();
+        overview.clear();
+
+        for (HumProxy hum : event.hums) {
+            PointProxy point = hum.getPoint();
+            HumProxy.Level level = hum.getLevel();
+
+            if (point == null || level == null) {
+                continue;
+            }
+
+            MarkerOptions opts = new MarkerOptions.Builder(LatLng.newInstance(point.getLat(), point.getLng()))
+                    .icon(levelHelper.icon(level).getIcon())
+                    .shadow(levelHelper.icon(HumProxy.Level.HIGH).getShadow())
+                    .animation(Animation.DROP)
+                    .draggable(false)
+                    .clickable(false)
+                    .build();
+            Marker marker = Marker.newInstance(opts);
+            overview.add(marker);
+        }
+
+        bus.fireEvent(new ModeEvent(Mode.LIST));
+    }
+
+    private void attachOverview() {
+        if (map == null) {
+            return;
+        }
+        for (Marker m : overview) {
+            m.setMap(map);
+        }
+    }
+
+    private void detachOverview() {
+        for (Marker m : overview) {
+            m.setMap(null);
+        }
+    }
+
 }

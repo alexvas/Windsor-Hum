@@ -37,17 +37,27 @@ public class IconBuilder {
         return this;
     }
 
+    MarkerImage cachedIcon = null;
+
     public MarkerImage getIcon() {
+        if (cachedIcon != null) {
+            return cachedIcon;
+        }
         String iconBase = BASE_URL + "&chs=" + width + "x" + height + "&chco="
                 + cornerColor + "," + primaryColor + "," + strokeColor;
         String iconUrl = iconBase + "&ext=.png";
-        return new MarkerImage.Builder(iconUrl)
+        return cachedIcon = new MarkerImage.Builder(iconUrl)
                 .size(Size.newInstance(width, height))
                 .anchor(Point.newInstance(width / 2, height))
                 .build();
     }
 
+    MarkerImage cachedShadow = null;
+
     public MarkerImage getShadow() {
+        if (cachedShadow != null) {
+            return cachedShadow;
+        }
         MarkerImage.Builder shadowBuilder = new MarkerImage.Builder(SHADOW_URL)
                 .size(Size.newInstance(40, 37))
                 .anchor(Point.newInstance(13, 37));
@@ -61,7 +71,7 @@ public class IconBuilder {
         }
 */
 
-        return shadowBuilder.build();
+        return cachedShadow = shadowBuilder.build();
     }
 
     public MarkerShape getShape() {
