@@ -1,10 +1,12 @@
 package hum.client;
 
 import hum.client.events.ModeEvent;
+import hum.client.events.OverviewEvent;
 import hum.client.model.AddressProxy;
 import hum.client.model.HumProxy;
 import hum.client.model.PointProxy;
 
+import java.util.List;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
@@ -65,13 +67,26 @@ public class HumWorkflow {
         humRequest.latest().with(humDriver.getPaths()).to(latestReceiver).fire();
     }
 
+    public void overviewLastSubmitted() {
+        humRequest = factory.humRequest();
+        humRequest.overview().with(humDriver.getPaths()).to(
+                new Receiver<List<HumProxy>>() {
+                    @Override
+                    public void onSuccess(List<HumProxy> response) {
+                        bus.fireEvent(new ModeEvent(Mode.LIST));
+                        bus.fireEvent(new OverviewEvent(response));
+                    }
+                }
+        ).fire();
+    }
+
     private void edit(HumProxy in) {
         HumProxy owned = humRequest.edit(in);
         humDriver.edit(owned, humRequest);
         humRequest.save(owned).with(humDriver.getPaths()).to(saveReceiver);
     }
 
-    public HumProxy createHum() {
+    private HumProxy createHum() {
         return humRequest.create(HumProxy.class);
     }
 

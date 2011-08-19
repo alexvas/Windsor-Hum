@@ -20,9 +20,9 @@ public interface ReqFactory extends RequestFactory {
 
     @Service(value = HumService.class, locator = InjectingServiceLocator.class)
     interface HumRequest extends RequestContext {
-        Request<List<HumProxy>> my();
+        Request<List<HumProxy>> mine();
 
-        Request<List<HumProxy>> all();
+        Request<List<HumProxy>> overview();
 
         Request<HumProxy> latest();
 

@@ -28,15 +28,15 @@ public class HumServiceImpl extends DAOBase implements HumService {
     private CurrentUser currentUser;
 
     @Override
-    public List<Hum> my() {
+    public List<Hum> mine() {
         return currentUser.getUserKey() == null
                 ? Collections.<Hum>emptyList()
                 : toList(query().filter("owner", currentUser.getUserKey()).order("-start"));
     }
 
     @Override
-    public List<Hum> all() {
-        return toList(query().order("-start"));
+    public List<Hum> overview() {
+        return toList(query().order("-start").limit(100));
     }
 
     @Override

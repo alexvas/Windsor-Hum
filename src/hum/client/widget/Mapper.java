@@ -48,10 +48,8 @@ public class Mapper implements PointEventHandler, LevelEventHandler, MapsLoadedE
     private HumProxy.Level pendingLevel = null;
 
     private Marker currentHum = null;
-    boolean currentHumDetached = true;
 
     private Element mapPlace;
-    boolean mapsLoaded = false;
 
     private static interface BackLatLng extends Back<LatLng> {
         @Override
@@ -118,10 +116,7 @@ public class Mapper implements PointEventHandler, LevelEventHandler, MapsLoadedE
 
     private void putPin(PointProxy point) {
         if (point == null) {
-            if (currentHum != null && !currentHumDetached) {
-                currentHum.setMap(null);
-                currentHumDetached = true;
-            }
+            detachCurrentHum();
             return;
         }
         if (currentHum == null) {
@@ -129,10 +124,21 @@ public class Mapper implements PointEventHandler, LevelEventHandler, MapsLoadedE
         } else {
             currentHum.setPosition(LatLng.newInstance(point.getLat(), point.getLng()));
         }
-        if (currentHumDetached) {
-            currentHum.setMap(map);
-            currentHumDetached = false;
+        attachCurrentHum();
+    }
+
+    private void detachCurrentHum() {
+        if (currentHum == null || currentHum.getMap() == null) {
+            return;
         }
+        currentHum.setMap(null);
+    }
+
+    private void attachCurrentHum() {
+        if (currentHum == null || currentHum.getMap() != null ) {
+            return;
+        }
+        currentHum.setMap(map);
     }
 
     private Marker buildMarkerForCurrentHum(PointProxy point) {
@@ -157,7 +163,7 @@ public class Mapper implements PointEventHandler, LevelEventHandler, MapsLoadedE
 
     @Override
     public void dispatch(LevelEvent event) {
-        if (mapsLoaded && !currentHumDetached) {
+        if (map != null && currentHum != null) {
             currentHum.setIcon(levelHelper.icon(event.level).getIcon());
         } else {
             pendingLevel = event.level;
@@ -166,7 +172,6 @@ public class Mapper implements PointEventHandler, LevelEventHandler, MapsLoadedE
 
     @Override
     public void dispatch(MapsLoadedEvent event) {
-        mapsLoaded = true;
         MapOptions mapOptions = MapOptions.newInstance();
         mapOptions.center(LatLng.newInstance(42.163403, -82.900772));
         mapOptions.zoom(11);
@@ -183,5 +188,18 @@ public class Mapper implements PointEventHandler, LevelEventHandler, MapsLoadedE
     @Override
     public void dispatch(ModeEvent event) {
         mode = event.mode;
+        switch (mode) {
+            case NEW:
+                // do nothing
+                break;
+            case LAST:
+                attachCurrentHum();
+                break;
+            case LIST:
+                detachCurrentHum();
+                break;
+            default:
+                throw new RuntimeException("mode not supported: " + mode);
+        }
     }
 }

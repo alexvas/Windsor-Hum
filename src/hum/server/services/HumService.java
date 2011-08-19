@@ -5,9 +5,9 @@ import hum.server.model.Hum;
 import java.util.List;
 
 public interface HumService {
-    List<Hum> my();
+    List<Hum> mine();
 
-    List<Hum> all();
+    List<Hum> overview();
 
     Hum latest();
 
