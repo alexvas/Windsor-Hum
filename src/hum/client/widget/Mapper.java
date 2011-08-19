@@ -118,6 +118,10 @@ public class Mapper implements PointEventHandler, LevelEventHandler, MapsLoadedE
 
     private void putPin(PointProxy point) {
         if (point == null) {
+            if (currentHum != null && !currentHumDetached) {
+                currentHum.setMap(null);
+                currentHumDetached = true;
+            }
             return;
         }
         if (currentHum == null) {

@@ -42,7 +42,7 @@ public class HumWorkflow {
         humRequest = factory.humRequest();
     }
 
-    void edit(HumProxy in) {
+    public void edit(HumProxy in) {
         HumProxy owned = humRequest.edit(in);
         humDriver.edit(owned, humRequest);
 

@@ -1,5 +1,6 @@
 package hum.client.widget;
 
+import hum.client.HumWorkflow;
 import hum.client.Mode;
 import hum.client.events.MeEvent;
 import hum.client.events.MeEventHandler;
@@ -39,6 +40,9 @@ public class UserMenu extends Composite implements MeEventHandler {
     @UiField
     MenuItem overview;
 
+    @Inject
+    private HumWorkflow humWorkflow;
+
     public void init() {
         if (initialized) {
             return;
@@ -50,6 +54,7 @@ public class UserMenu extends Composite implements MeEventHandler {
             @Override
             public void execute() {
                 fire(Mode.NEW);
+                humWorkflow.edit(humWorkflow.createHum());
             }
         });
         editLastHum.setCommand(new Command() {
