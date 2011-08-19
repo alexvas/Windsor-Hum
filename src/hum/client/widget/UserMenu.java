@@ -31,7 +31,7 @@ public class UserMenu extends Composite implements MeEventHandler {
     private boolean initialized = false;
 
     @UiField
-    MenuItem addNewHum;
+    MenuItem reportNewHum;
 
     @UiField
     MenuItem editLastHum;
@@ -46,7 +46,7 @@ public class UserMenu extends Composite implements MeEventHandler {
         initialized = true;
         initWidget(binder.createAndBindUi(this));
         setVisible(false);
-        addNewHum.setCommand(new Command() {
+        reportNewHum.setCommand(new Command() {
             @Override
             public void execute() {
                 fire(Mode.NEW);

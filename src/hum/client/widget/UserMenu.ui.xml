@@ -8,10 +8,18 @@
     }
   </ui:style>
   <g:HTMLPanel styleName="{style.menu}">
-    <g:MenuBar>
-      <g:MenuItem ui:field="addNewHum" text="Add New Entry"/>
-      <g:MenuItem ui:field="editLastHum" text="Edit Last Entry"/>
-      <g:MenuItem ui:field="overview" text="Overview"/>
+    <g:MenuBar animationEnabled="true">
+      <g:MenuItem text="Edit">
+        <g:MenuBar vertical="true" animationEnabled="true">
+          <g:MenuItem ui:field="reportNewHum" text="Report A New Hum Case"/>
+          <g:MenuItem ui:field="editLastHum" text="Edit The Last Hum Case"/>
+        </g:MenuBar>
+      </g:MenuItem>
+      <g:MenuItem text="Analyse">
+        <g:MenuBar vertical="true" animationEnabled="true">
+          <g:MenuItem ui:field="overview" text="Overview The Latest Submitted Data"/>
+        </g:MenuBar>
+      </g:MenuItem>
     </g:MenuBar>
   </g:HTMLPanel>
 </ui:UiBinder>
