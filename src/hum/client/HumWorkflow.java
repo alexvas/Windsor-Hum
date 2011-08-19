@@ -1,8 +1,10 @@
 package hum.client;
 
+import hum.client.events.ModeEvent;
 import hum.client.model.AddressProxy;
 import hum.client.model.HumProxy;
 import hum.client.model.PointProxy;
+import hum.client.widget.Mode;
 
 import java.util.Set;
 
@@ -41,19 +43,16 @@ public class HumWorkflow {
         humRequest = factory.humRequest();
     }
 
-    public HumProxy create() {
-        return humRequest.create(HumProxy.class);
-    }
-
     void edit(HumProxy in) {
         HumProxy owned = humRequest.edit(in);
         humDriver.edit(owned, humRequest);
 
         humRequest.save(owned).with(humDriver.getPaths()).to(new Receiver<HumProxy>() {
             @Override
-            public void onSuccess(final HumProxy response) {
+            public void onSuccess(HumProxy response) {
                 humRequest = factory.humRequest();
                 edit(response);
+                bus.fireEvent(new ModeEvent(Mode.LAST));
             }
 
             @Override
@@ -63,11 +62,15 @@ public class HumWorkflow {
         });
     }
 
-    public PointProxy getPoint() {
+    public HumProxy createHum() {
+        return humRequest.create(HumProxy.class);
+    }
+
+    public PointProxy createPoint() {
         return humRequest.create(PointProxy.class);
     }
 
-    public AddressProxy getAddress() {
+    public AddressProxy createAddress() {
         return humRequest.create(AddressProxy.class);
     }
 

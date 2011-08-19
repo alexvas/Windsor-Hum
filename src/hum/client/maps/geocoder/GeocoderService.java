@@ -91,7 +91,7 @@ public class GeocoderService {
             if (result == null) {
                 bus.fireEvent(new PointEvent(null));
             } else {
-                PointProxy point = humWorkflow.getPoint();
+                PointProxy point = humWorkflow.createPoint();
                 LatLng latLng = result.geometry().location();
                 point.setLat(latLng.getLatitude());
                 point.setLng(latLng.getLongitude());
@@ -103,7 +103,7 @@ public class GeocoderService {
         if (result == null) {
             address = null;
         } else {
-            address = humWorkflow.getAddress();
+            address = humWorkflow.createAddress();
             for (int i = 0; i < result.addressComponents().length(); ++i) {
                 AddressComponent c = result.addressComponents().get(i);
                 for (int j = 0; j < c.types().length(); ++j) {

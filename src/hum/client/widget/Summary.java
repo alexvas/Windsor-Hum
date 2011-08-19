@@ -136,7 +136,7 @@ public class Summary extends Composite implements StartedEventHandler,
     public void dispatch(ModeEvent event) {
         switch (event.mode) {
             case NEW:
-                status.setInnerText("not saved");
+                status.setInnerText("draft");
                 break;
             case LAST:
                 status.setInnerText("saved");

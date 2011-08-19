@@ -70,7 +70,7 @@ public class Workflow implements Runnable {
                     bus.fireEvent(new ModeEvent(Mode.LIST));
                 } else {
                     bus.fireEvent(new ModeEvent(Mode.NEW));
-                    humWorkflow.edit(humWorkflow.create());
+                    humWorkflow.edit(humWorkflow.createHum());
                 }
             }
         });

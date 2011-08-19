@@ -88,7 +88,7 @@ public class Mapper implements PointEventHandler, LevelEventHandler, MapsLoadedE
 
     private void firePositionChange(LatLng latLng) {
         geocoderService.reverse(latLng);
-        PointProxy point = humWorkflow.getPoint();
+        PointProxy point = humWorkflow.createPoint();
         point.setLat(latLng.getLatitude());
         point.setLng(latLng.getLongitude());
         bus.fireEvent(new PointEvent(point));
