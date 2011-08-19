@@ -1,6 +1,6 @@
 package hum.client.events;
 
-import hum.client.widget.Mode;
+import hum.client.Mode;
 
 import com.google.web.bindery.event.shared.Event;
 

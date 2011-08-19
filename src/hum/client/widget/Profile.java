@@ -1,5 +1,6 @@
 package hum.client.widget;
 
+import hum.client.Mode;
 import hum.client.ReqFactory;
 import hum.client.adapter.JanrainWrapper;
 import hum.client.events.MeEvent;
@@ -12,7 +13,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.HeadingElement;
 import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.dom.client.SpanElement;
-import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -62,6 +62,7 @@ public class Profile extends Composite implements MeEventHandler {
         }
         initialized = true;
         initWidget(binder.createAndBindUi(this));
+        setVisible(false);
         bus.addHandler(MeEvent.TYPE, this);
     }
 
@@ -71,18 +72,13 @@ public class Profile extends Composite implements MeEventHandler {
     }
 
     private void setUser(UserProxy user) {
-        if (user == null) {
-            userName.setInnerText(null);
-            signOutWrapper.getStyle().setDisplay(Style.Display.NONE);
-            avatar.setSrc(null);
-            avatar.setAlt(null);
-            return;
+        boolean hasUser = user != null;
+        if (hasUser) {
+            InfoProxy info = user.getInfo().get(0);
+            userName.setInnerText("Welcome, " + info.getDisplayName() + "!");
+            avatar.setSrc(info.getPhoto());
         }
-        InfoProxy info = user.getInfo().get(0);
-        userName.setInnerText("Welcome, " + info.getDisplayName() + "!");
-        avatar.setSrc(info.getPhoto());
-        avatar.setHeight(72);
-        signOutWrapper.getStyle().setDisplay(Style.Display.INLINE);
+        setVisible(hasUser);
     }
 
     @SuppressWarnings({"UnusedParameters"})

@@ -17,7 +17,6 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
-@SuppressWarnings({"deprecation"})
 @Singleton
 public class HumUiEditor extends Composite {
 

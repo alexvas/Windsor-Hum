@@ -1,3 +1,3 @@
-package hum.client.widget;
+package hum.client;
 
 public enum Mode {NEW, LAST, LIST}

@@ -3,6 +3,7 @@ package hum.client.widget;
 import hum.client.Back;
 import hum.client.HumWorkflow;
 import hum.client.LevelHelper;
+import hum.client.Mode;
 import hum.client.events.LevelEvent;
 import hum.client.events.LevelEventHandler;
 import hum.client.events.MapsLoadedEvent;

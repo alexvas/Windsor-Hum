@@ -34,7 +34,7 @@
   <g:HTMLPanel styleName="{style.profile}">
     <div class="{style.userName}">
       <h2 ui:field="userName"/>
-      <span ui:field="signOutWrapper" class="{style.signOutWrapper}" style="display: none;">Not you?
+      <span ui:field="signOutWrapper" class="{style.signOutWrapper}">Not you?
         <g:Anchor ui:field="signOut" href="javascript:" text="Sign Out"/>
       </span>
     </div>

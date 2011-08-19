@@ -1,5 +1,6 @@
 package hum.client.widget;
 
+import hum.client.Mode;
 import hum.client.ReqFactory;
 import hum.client.adapter.JanrainWrapper;
 import hum.client.events.MeEvent;
@@ -69,6 +70,10 @@ public class Root extends Composite implements MeEventHandler, ModeEventHandler 
     @UiField(provided = true)
     Profile profile;
 
+    @Inject
+    @UiField(provided = true)
+    UserMenu userMenu;
+
     boolean initialized = false;
 
     public void init() {
@@ -79,6 +84,7 @@ public class Root extends Composite implements MeEventHandler, ModeEventHandler 
         humUiEditor.init();
         summary.init();
         profile.init();
+        userMenu.init();
         initWidget(binder.createAndBindUi(this));
         bus.addHandler(MeEvent.TYPE, this);
         bus.addHandler(ModeEvent.TYPE, this);

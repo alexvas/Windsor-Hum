@@ -15,6 +15,10 @@
       margin-bottom: 0;
     }
 
+    .header h1 {
+      margin-top: 0;
+    }
+
     .about {
       padding: 20px;
       line-height: 1.6;
@@ -64,12 +68,19 @@
       float: right;
     }
 
+    .userMenu {
+      position: absolute;
+      top: 20px;
+      left: 360px;
+    }
+
   </ui:style>
   <g:DockLayoutPanel unit='PX'>
     <g:north size='112'>
       <g:HTMLPanel styleName="{style.header}">
         <h1>Windsor Hum</h1>
         <h:Profile addStyleNames="{style.profile}" ui:field="profile"/>
+        <h:UserMenu addStyleNames="{style.userMenu}" ui:field="userMenu"/>
         <p>Do you hear rumbling again?</p>
       </g:HTMLPanel>
     </g:north>

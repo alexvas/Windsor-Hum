@@ -4,7 +4,6 @@ import hum.client.events.ModeEvent;
 import hum.client.model.AddressProxy;
 import hum.client.model.HumProxy;
 import hum.client.model.PointProxy;
-import hum.client.widget.Mode;
 
 import java.util.Set;
 

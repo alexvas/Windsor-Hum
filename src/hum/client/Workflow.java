@@ -6,7 +6,6 @@ import hum.client.events.MeEvent;
 import hum.client.events.ModeEvent;
 import hum.client.model.UserProxy;
 import hum.client.widget.Mapper;
-import hum.client.widget.Mode;
 import hum.client.widget.Root;
 
 import com.allen_sauer.gwt.log.client.Log;

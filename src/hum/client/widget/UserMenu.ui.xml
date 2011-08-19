@@ -1,0 +1,17 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'
+    >
+  <ui:style>
+    .menu {
+      overflow: hidden;
+    }
+  </ui:style>
+  <g:HTMLPanel styleName="{style.menu}">
+    <g:MenuBar>
+      <g:MenuItem ui:field="addNewHum" text="Add New Entry"/>
+      <g:MenuItem ui:field="editLastHum" text="Edit Last Entry"/>
+      <g:MenuItem ui:field="overview" text="Overview"/>
+    </g:MenuBar>
+  </g:HTMLPanel>
+</ui:UiBinder>

@@ -11,7 +11,6 @@ import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Singleton;
 
-@SuppressWarnings({"deprecation"})
 @Singleton
 public class CommentEditor extends Composite implements IsEditor<ValueBoxEditor<String>> {
 
