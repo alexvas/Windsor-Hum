@@ -21,7 +21,7 @@ precompiled
 lib
 !public/js/lib
 out
-gwt/base/client/resources/Style.java
+src/hum/client/resources/Style.java
 generated
 public_gwt
 war/WEB-INF/deploy

@@ -16,6 +16,7 @@ import hum.client.events.StartedEventHandler;
 import hum.client.model.AddressProxy;
 import hum.client.model.HumProxy;
 import hum.client.model.PointProxy;
+import static hum.client.resources.Resources.RESOURCES;
 
 import java.util.Date;
 
@@ -157,12 +158,15 @@ public class Summary extends Composite implements StartedEventHandler,
         switch (modeHolder.mode()) {
             case NEW:
                 status.setInnerText("draft");
+                save.addStyleName(RESOURCES.style().hint());
                 break;
             case LAST:
                 status.setInnerText("saved");
+                save.removeStyleName(RESOURCES.style().hint());
                 break;
             case UPDATED:
                 status.setInnerText("updated");
+                save.addStyleName(RESOURCES.style().hint());
                 break;
             case LIST:
                 // do nothing

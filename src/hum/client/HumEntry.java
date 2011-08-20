@@ -1,6 +1,7 @@
 package hum.client;
 
 import hum.client.gin.Jector;
+import hum.client.resources.Resources;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.EntryPoint;
@@ -23,7 +24,7 @@ public class HumEntry implements EntryPoint {
 
     private void onModuleLoad2() {
         Log.debug("script is loaded");
-//        Resources.RESOURCES.style().ensureInjected();
+        Resources.RESOURCES.style().ensureInjected();
         Jector jector = GWT.create(Jector.class);
         jector.main().run();
     }

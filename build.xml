@@ -29,7 +29,30 @@
     <delete dir="${generated.dir}"/>
   </target>
 
-  <target name="build" description="Compile main source tree java files into class files, generate jar files">
+  <target name="css_resource" description="Generate CssResource file for Application's layout css">
+    <java failonerror="true" fork="true" classname="com.google.gwt.resources.css.InterfaceGenerator"
+          output="${style.dir}/Style.java">
+      <classpath refid="devmode.path"/>
+      <jvmarg value="-Xms${devmode.ms}m"/>
+      <jvmarg value="-Xmx${devmode.mx}m"/>
+      <jvmarg value="-XX:NewSize=${devmode.NewSize}m"/>
+      <jvmarg value="-XX:MaxNewSize=${devmode.MaxNewSize}m"/>
+      <jvmarg value="-XX:PermSize=${devmode.PermSize}m"/>
+      <jvmarg value="-XX:MaxPermSize=${devmode.MaxPermSize}m"/>
+      <arg value="-standalone"/>
+      <arg value="-typeName"/>
+      <arg value="${style.package}.Style"/>
+      <arg value="-css"/>
+      <arg value="${style.dir}/style.css"/>
+    </java>
+    <replaceregexp file="${style.dir}/Style.java"
+                   match="^interface"
+                   replace="@CssResource.Shared public interface"
+                   flags="m"
+        />
+  </target>
+
+  <target name="build" depends="css_resource" description="Compile main source tree java files into class files, generate jar files">
     <mkdir dir="${build.dir}"/>
     <javac encoding="utf-8"
            destdir="${build.dir}"
