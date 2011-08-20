@@ -79,5 +79,10 @@ public class Validator {
         public ConstraintDescriptor<?> getConstraintDescriptor() {
             return null;
         }
+
+        @Override
+        public String toString() {
+            return message;
+        }
     }
 }

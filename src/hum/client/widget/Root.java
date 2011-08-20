@@ -74,6 +74,10 @@ public class Root extends Composite implements MeEventHandler, ModeEventHandler 
     @UiField(provided = true)
     UserMenu userMenu;
 
+    @Inject
+    @UiField(provided = true)
+    Errors errors;
+
     boolean initialized = false;
 
     public void init() {
@@ -85,6 +89,7 @@ public class Root extends Composite implements MeEventHandler, ModeEventHandler 
         summary.init();
         profile.init();
         userMenu.init();
+        errors.init();
         initWidget(binder.createAndBindUi(this));
         bus.addHandler(MeEvent.TYPE, this);
         bus.addHandler(ModeEvent.TYPE, this);

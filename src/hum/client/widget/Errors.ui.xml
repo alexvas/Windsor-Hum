@@ -1,0 +1,22 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'
+    >
+  <ui:style>
+    @def baseColor yellow;
+
+    .errors {
+      overflow: hidden;
+      margin-top: 5px;
+      margin-left: 20px;
+      float: left;
+      padding: 2px 9px 2px 7px;
+      background-color: baseColor;
+      -moz-box-shadow: 0 0 5px baseColor;
+      -webkit-box-shadow: 0 0 5px baseColor;
+      box-shadow: 0 0 5px baseColor;
+      border-radius: 7px 7px 7px 7px;
+    }
+  </ui:style>
+  <g:Label styleName="{style.errors}" ui:field="errors" visible="false"/>
+</ui:UiBinder>
