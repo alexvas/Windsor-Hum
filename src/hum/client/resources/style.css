@@ -1,4 +1,5 @@
 .hint {
-    -moz-box-shadow: 0 0 5px yellow;
-    -webkit-box-shadow: 0 0 5px yellow;
+    -moz-box-shadow: 0 0 7px yellow;
+    -webkit-box-shadow: 0 0 7px yellow;
+    box-shadow: 0 0 7px yellow;
 }

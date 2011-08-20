@@ -77,6 +77,9 @@ public class Summary extends Composite implements StartedEventHandler,
     @UiField
     Button save;
 
+    @UiField
+    Button share;
+
     public void init() {
         if (initialized) {
             return;
@@ -159,14 +162,17 @@ public class Summary extends Composite implements StartedEventHandler,
             case NEW:
                 status.setInnerText("draft");
                 save.addStyleName(RESOURCES.style().hint());
+                share.setVisible(false);
                 break;
             case LAST:
                 status.setInnerText("saved");
                 save.removeStyleName(RESOURCES.style().hint());
+                share.setVisible(true);
                 break;
             case UPDATED:
                 status.setInnerText("updated");
                 save.addStyleName(RESOURCES.style().hint());
+                share.setVisible(false);
                 break;
             case LIST:
                 // do nothing
