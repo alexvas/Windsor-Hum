@@ -157,7 +157,7 @@ public class HumWorkflow implements GonnaShareEventHandler {
 
     @Override
     public void dispatch(GonnaShareEvent event) {
-        Activity activity = Activity.getInstance(
+        final Activity activity = Activity.getInstance(
                 "Share The Hum",
                 "I've heard a hum again",
                 Window.Location.getHref()
@@ -175,6 +175,12 @@ public class HumWorkflow implements GonnaShareEventHandler {
                 ? "I've heard it again!"
                 : hum.getComment();
         activity.setUserGeneratedContent(comment);
-        janrainWrapper.publishActivity(activity);
+        janrainWrapper.init("ldpdafgpolkpoliepgbe");
+        janrainWrapper.loadStaticModule(new Back<Object>() {
+            @Override
+            public void call(Object o) {
+                janrainWrapper.publishActivity(activity);
+            }
+        });
     }
 }

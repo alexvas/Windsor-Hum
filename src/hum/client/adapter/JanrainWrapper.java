@@ -1,5 +1,7 @@
 package hum.client.adapter;
 
+import hum.client.Back;
+
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.ScriptElement;
 import com.google.gwt.user.client.Window;
@@ -15,6 +17,12 @@ public class JanrainWrapper {
 
     public native void init(String appId) /*-{
         $wnd.RPXNOW.init({appId: appId, xdReceiver: '/rpx_xdcomm.html'});
+    }-*/;
+
+    public native void loadStaticModule(Back<Object> back) /*-{
+        $wnd.RPXNOW.loadAndRun(['Social'], function () {
+            back.@hum.client.Back::call(Ljava/lang/Object;)("done");
+        });
     }-*/;
 
     public void loadJanrain() {
