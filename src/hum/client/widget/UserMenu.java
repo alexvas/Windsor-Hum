@@ -1,10 +1,8 @@
 package hum.client.widget;
 
 import hum.client.HumWorkflow;
-import hum.client.Mode;
 import hum.client.events.MeEvent;
 import hum.client.events.MeEventHandler;
-import hum.client.events.ModeEvent;
 import hum.client.model.UserProxy;
 
 import com.google.gwt.core.client.GWT;
@@ -69,10 +67,6 @@ public class UserMenu extends Composite implements MeEventHandler {
             }
         });
         bus.addHandler(MeEvent.TYPE, this);
-    }
-
-    private void fire(Mode mode) {
-        bus.fireEvent(new ModeEvent(mode));
     }
 
     @Override

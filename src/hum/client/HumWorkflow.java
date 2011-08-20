@@ -2,7 +2,6 @@ package hum.client;
 
 import hum.client.events.ErrorEvent;
 import hum.client.events.LevelEvent;
-import hum.client.events.ModeEvent;
 import hum.client.events.OverviewEvent;
 import hum.client.events.StartedEvent;
 import hum.client.model.AddressProxy;
@@ -38,6 +37,9 @@ public class HumWorkflow {
     @Inject
     private Validator validator;
 
+    @Inject
+    private ModeHolder modeHolder;
+
     interface HumDriver extends RequestFactoryEditorDriver<HumProxy, HumEditor> {
     }
 
@@ -53,7 +55,7 @@ public class HumWorkflow {
 
     public void reportNewHum() {
         edit(createHum());
-        bus.fireEvent(new ModeEvent(Mode.NEW));
+        modeHolder.newHumCreated();
         bus.fireEvent(new LevelEvent(null));
         bus.fireEvent(new StartedEvent(null));
     }
@@ -132,7 +134,7 @@ public class HumWorkflow {
         public void onSuccess(HumProxy response) {
             editingRequest = factory.humRequest();
             edit(response);
-            bus.fireEvent(new ModeEvent(Mode.LAST));
+            modeHolder.lastHumLoaded();
         }
 
         @Override

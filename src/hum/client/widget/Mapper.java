@@ -3,7 +3,7 @@ package hum.client.widget;
 import hum.client.Back;
 import hum.client.HumWorkflow;
 import hum.client.LevelHelper;
-import hum.client.Mode;
+import hum.client.ModeHolder;
 import hum.client.events.LevelEvent;
 import hum.client.events.LevelEventHandler;
 import hum.client.events.MapsLoadedEvent;
@@ -47,7 +47,8 @@ public class Mapper implements PointEventHandler, LevelEventHandler, MapsLoadedE
     @Inject
     private HumWorkflow humWorkflow;
 
-    private Mode mode;
+    @Inject
+    private ModeHolder modeHolder;
 
     protected Map map;
     private PointProxy pendingPoint = null;
@@ -66,15 +67,16 @@ public class Mapper implements PointEventHandler, LevelEventHandler, MapsLoadedE
     private final BackLatLng firePositionChange = new BackLatLng() {
         @Override
         public void call(LatLng latLng) {
-            switch (mode) {
+            switch (modeHolder.mode()) {
                 case NEW: // fall through
-                case LAST:
+                case LAST: // fall through
+                case UPDATED:
                     firePositionChange(latLng);
                     break;
                 case LIST:
                     break;
                 default:
-                    throw new RuntimeException("mode not supported: " + mode);
+                    throw new RuntimeException("mode not supported: " + modeHolder.mode());
             }
         }
     };
@@ -99,6 +101,7 @@ public class Mapper implements PointEventHandler, LevelEventHandler, MapsLoadedE
         point.setLat(latLng.getLatitude());
         point.setLng(latLng.getLongitude());
         bus.fireEvent(new PointEvent(point));
+        modeHolder.userEvent();
     }
 
     private native void addClickListener(Map map, Back<LatLng> back) /*-{
@@ -200,12 +203,12 @@ public class Mapper implements PointEventHandler, LevelEventHandler, MapsLoadedE
 
     @Override
     public void dispatch(ModeEvent event) {
-        mode = event.mode;
-        switch (mode) {
+        switch (modeHolder.mode()) {
             case NEW:
                 detachOverview();
                 break;
-            case LAST:
+            case LAST: // fall through
+            case UPDATED:
                 detachOverview();
                 attachCurrentHum();
                 break;
@@ -214,7 +217,7 @@ public class Mapper implements PointEventHandler, LevelEventHandler, MapsLoadedE
                 attachOverview();
                 break;
             default:
-                throw new RuntimeException("mode not supported: " + mode);
+                throw new RuntimeException("mode not supported: " + modeHolder.mode());
         }
     }
 
@@ -242,22 +245,32 @@ public class Mapper implements PointEventHandler, LevelEventHandler, MapsLoadedE
             overview.add(marker);
         }
 
-        bus.fireEvent(new ModeEvent(Mode.LIST));
+        modeHolder.showList();
     }
 
+    private boolean overviewAttached = false;
+
     private void attachOverview() {
+        if (overviewAttached) {
+            return;
+        }
         if (map == null) {
             return;
         }
         for (Marker m : overview) {
             m.setMap(map);
         }
+        overviewAttached = true;
     }
 
     private void detachOverview() {
+        if (!overviewAttached) {
+            return;
+        }
         for (Marker m : overview) {
             m.setMap(null);
         }
+        overviewAttached = false;
     }
 
 }

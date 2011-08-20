@@ -1,5 +1,6 @@
 package hum.client.widget;
 
+import hum.client.ModeHolder;
 import hum.client.events.StartedEvent;
 
 import java.util.Date;
@@ -30,6 +31,9 @@ public class StartedEditor extends Composite implements LeafValueEditor<Date> {
 
     @Inject
     private EventBus bus;
+
+    @Inject
+    private ModeHolder modeHolder;
 
     private boolean initialized = false;
 
@@ -89,6 +93,7 @@ public class StartedEditor extends Composite implements LeafValueEditor<Date> {
 
     private void fireStarted(Date date) {
         bus.fireEvent(new StartedEvent(date));
+        modeHolder.userEvent();
     }
 
     @Override

@@ -51,7 +51,7 @@ public class Workflow implements Runnable {
         root.init();
         RootLayoutPanel.get().add(root);
         mapper.initMap(root.getMapPlace());
-        bus.fireEvent(new ModeEvent(Mode.LIST));
+        bus.fireEvent(new ModeEvent());
         humWorkflow.init();
     }
 

@@ -2,6 +2,7 @@ package hum.client.widget;
 
 import static hum.client.ClientUtils.CLIENT_UTILS;
 import hum.client.HumWorkflow;
+import hum.client.ModeHolder;
 import hum.client.events.AddressEvent;
 import hum.client.events.AddressEventHandler;
 import hum.client.events.LevelEvent;
@@ -48,6 +49,9 @@ public class Summary extends Composite implements StartedEventHandler,
 
     @Inject
     private HumWorkflow humWorkflow;
+
+    @Inject
+    private ModeHolder modeHolder;
 
     private boolean initialized = false;
 
@@ -150,18 +154,21 @@ public class Summary extends Composite implements StartedEventHandler,
 
     @Override
     public void dispatch(ModeEvent event) {
-        switch (event.mode) {
+        switch (modeHolder.mode()) {
             case NEW:
                 status.setInnerText("draft");
                 break;
             case LAST:
                 status.setInnerText("saved");
                 break;
+            case UPDATED:
+                status.setInnerText("updated");
+                break;
             case LIST:
                 // do nothing
                 break;
             default:
-                break;
+                throw new RuntimeException("mode " + modeHolder.mode() + " is not supported");
         }
     }
 

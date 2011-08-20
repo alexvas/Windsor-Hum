@@ -1,6 +1,7 @@
 package hum.client.widget;
 
 import hum.client.LevelHelper;
+import hum.client.ModeHolder;
 import hum.client.events.LevelEvent;
 import hum.client.events.MapsLoadedEvent;
 import hum.client.events.MapsLoadedEventHandler;
@@ -33,6 +34,9 @@ public class LevelEditor extends Composite implements MapsLoadedEventHandler, Le
 
     @Inject
     private LevelHelper levelHelper;
+
+    @Inject
+    private ModeHolder modeHolder;
 
     private boolean initialized = false;
 
@@ -75,6 +79,7 @@ public class LevelEditor extends Composite implements MapsLoadedEventHandler, Le
             public void f() {
                 setValue(level);
                 bus.fireEvent(new LevelEvent(level));
+                modeHolder.userEvent();
             }
         });
     }

@@ -1,3 +1,3 @@
 package hum.client;
 
-public enum Mode {NEW, LAST, LIST}
+public enum Mode {NEW, LAST, UPDATED, LIST}

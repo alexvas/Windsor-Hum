@@ -1,11 +1,10 @@
 package hum.client.widget;
 
-import hum.client.Mode;
+import hum.client.ModeHolder;
 import hum.client.ReqFactory;
 import hum.client.adapter.JanrainWrapper;
 import hum.client.events.MeEvent;
 import hum.client.events.MeEventHandler;
-import hum.client.events.ModeEvent;
 import hum.client.model.InfoProxy;
 import hum.client.model.UserProxy;
 
@@ -41,6 +40,9 @@ public class Profile extends Composite implements MeEventHandler {
 
     @Inject
     private ReqFactory reqFactory;
+
+    @Inject
+    private ModeHolder modeHolder;
 
     @UiField
     HeadingElement userName;
@@ -89,7 +91,7 @@ public class Profile extends Composite implements MeEventHandler {
             public void onSuccess(Void response) {
 //                janrainWrapper.signOut();
                 bus.fireEvent(new MeEvent(null));
-                bus.fireEvent(new ModeEvent(Mode.LIST));
+                modeHolder.showList();
             }
         });
     }

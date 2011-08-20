@@ -1,6 +1,6 @@
 package hum.client.widget;
 
-import hum.client.Mode;
+import hum.client.ModeHolder;
 import hum.client.ReqFactory;
 import hum.client.adapter.JanrainWrapper;
 import hum.client.events.MeEvent;
@@ -42,6 +42,9 @@ public class Root extends Composite implements MeEventHandler, ModeEventHandler 
 
     @Inject
     private ReqFactory reqFactory;
+
+    @Inject
+    private ModeHolder modeHolder;
 
     @UiField
     HTML mapPlace;
@@ -121,20 +124,21 @@ public class Root extends Composite implements MeEventHandler, ModeEventHandler 
 
     @Override
     public void dispatch(ModeEvent event) {
-        setMode(event.mode);
+        setMode();
     }
 
-    private void setMode(Mode mode) {
-        switch (mode) {
+    private void setMode() {
+        switch (modeHolder.mode()) {
             case NEW: // fall through
-            case LAST:
+            case LAST: // fall through
+            case UPDATED:
                 deck.showWidget(editor);
                 break;
             case LIST:
                 deck.showWidget(about);
                 break;
             default:
-                throw new RuntimeException("mode not supported: " + mode);
+                throw new RuntimeException("mode not supported: " + modeHolder.mode());
         }
     }
 }
