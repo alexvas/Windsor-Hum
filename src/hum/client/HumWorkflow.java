@@ -1,6 +1,11 @@
 package hum.client;
 
+import hum.client.adapter.Activity;
+import hum.client.adapter.ImageMediaCollection;
+import hum.client.adapter.JanrainWrapper;
 import hum.client.events.ErrorEvent;
+import hum.client.events.GonnaShareEvent;
+import hum.client.events.GonnaShareEventHandler;
 import hum.client.events.LevelEvent;
 import hum.client.events.OverviewEvent;
 import hum.client.events.StartedEvent;
@@ -24,7 +29,7 @@ import com.google.web.bindery.requestfactory.shared.Receiver;
 import com.google.web.bindery.requestfactory.shared.RequestContext;
 
 @Singleton
-public class HumWorkflow {
+public class HumWorkflow implements GonnaShareEventHandler {
     @Inject
     private ReqFactory factory;
 
@@ -40,6 +45,12 @@ public class HumWorkflow {
     @Inject
     private ModeHolder modeHolder;
 
+    @Inject
+    private LevelHelper levelHelper;
+
+    @Inject
+    private JanrainWrapper janrainWrapper;
+
     interface HumDriver extends RequestFactoryEditorDriver<HumProxy, HumEditor> {
     }
 
@@ -51,6 +62,7 @@ public class HumWorkflow {
         driver = GWT.create(HumDriver.class);
         driver.initialize(factory, editor);
         editingRequest = factory.humRequest();
+        bus.addHandler(GonnaShareEvent.TYPE, this);
     }
 
     public void reportNewHum() {
@@ -141,5 +153,28 @@ public class HumWorkflow {
         public void onConstraintViolation(Set<ConstraintViolation<?>> violations) {
             driver.setConstraintViolations(violations);
         }
+    }
+
+    @Override
+    public void dispatch(GonnaShareEvent event) {
+        Activity activity = Activity.getInstance(
+                "Share The Hum",
+                "I've heard a hum again",
+                Window.Location.getHref()
+        );
+        HumProxy hum = ((AbstractEditorDelegate<HumProxy, HumEditor>) editor.getDelegate()).getObject();
+        ImageMediaCollection images = ImageMediaCollection.getInstance();
+        images.buildMarkerImage(
+                hum.getPoint().getLat(),
+                hum.getPoint().getLng(),
+                levelHelper.color(hum.getLevel()),
+                Window.Location.getHref()
+        );
+        activity.setMediaItem(images);
+        String comment = hum.getComment() == null
+                ? "I've heard it again!"
+                : hum.getComment();
+        activity.setUserGeneratedContent(comment);
+        janrainWrapper.publishActivity(activity);
     }
 }

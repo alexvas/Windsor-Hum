@@ -13,10 +13,8 @@ public class JanrainWrapper {
         return $wnd.RPXNOW != null;
     }-*/;
 
-    public native void configureJanrain(boolean overlay, String lang, String appId) /*-{
-        $wnd.RPXNOW.overlay = overlay;
-        $wnd.RPXNOW.language_preference = lang;
-//        $wnd.RPXNOW.init({appId: appId, xdReceiver: '/rpx_xdcomm.html'});
+    public native void init(String appId) /*-{
+        $wnd.RPXNOW.init({appId: appId, xdReceiver: '/rpx_xdcomm.html'});
     }-*/;
 
     public void loadJanrain() {
@@ -32,6 +30,10 @@ public class JanrainWrapper {
 
     public native void show(String callback, String domain) /*-{
         $wnd.RPXNOW.show(callback, domain);
+    }-*/;
+
+    public native void publishActivity(Activity activity) /*-{
+        $wnd.RPXNOW.Social.publishActivity(activity);
     }-*/;
 
     public native void signOut() /*-{

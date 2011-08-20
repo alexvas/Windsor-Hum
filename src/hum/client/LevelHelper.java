@@ -7,20 +7,37 @@ import com.google.inject.Singleton;
 
 @Singleton
 public class LevelHelper {
-    private final IconBuilder yellow = new IconBuilder().primaryColor("ffff00");
-    private final IconBuilder green = new IconBuilder().primaryColor("00ff00");
-    private final IconBuilder red = new IconBuilder().primaryColor("ff0000");
 
-    public IconBuilder icon(HumProxy.Level level) {
+    public String color(HumProxy.Level level) {
         switch (level) {
             case LOW:
-                return yellow;
+                return "ffff00";
             case MEDIUM:
-                return green;
+                return "00ff00";
             case HIGH:
-                return red;
+                return "ff0000";
             default:
                 throw new RuntimeException("level " + level + " is not supported");
         }
     }
+
+    private final IconBuilder LOW = new IconBuilder().primaryColor(color(HumProxy.Level.LOW));
+    private final IconBuilder MEDIUM = new IconBuilder().primaryColor(color(HumProxy.Level.MEDIUM));
+    private final IconBuilder HIGH = new IconBuilder().primaryColor(color(HumProxy.Level.HIGH));
+
+    public IconBuilder icon(HumProxy.Level level) {
+        switch (level) {
+            case LOW:
+                return LOW;
+            case MEDIUM:
+                return MEDIUM;
+            case HIGH:
+                return HIGH;
+            default:
+                throw new RuntimeException("level " + level + " is not supported");
+        }
+    }
+
+
+
 }

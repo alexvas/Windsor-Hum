@@ -5,6 +5,7 @@ import hum.client.HumWorkflow;
 import hum.client.ModeHolder;
 import hum.client.events.AddressEvent;
 import hum.client.events.AddressEventHandler;
+import hum.client.events.GonnaShareEvent;
 import hum.client.events.LevelEvent;
 import hum.client.events.LevelEventHandler;
 import hum.client.events.ModeEvent;
@@ -186,6 +187,12 @@ public class Summary extends Composite implements StartedEventHandler,
     @UiHandler("save")
     void save(ClickEvent save) {
         humWorkflow.save();
+    }
+
+    @SuppressWarnings({"UnusedParameters"})
+    @UiHandler("share")
+    void share(ClickEvent share) {
+        bus.fireEvent(new GonnaShareEvent());
     }
 
 }
