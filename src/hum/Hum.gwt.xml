@@ -2,6 +2,7 @@
     "http://google-web-toolkit.googlecode.com/svn/releases/2.0/distro-source/core/src/gwt-module.dtd">
 <module rename-to="hum">
 
+  <inherits name="org.hibernate.validator.HibernateValidator"/>
   <inherits name='com.google.gwt.user.User'/>
   <inherits name='com.google.gwt.user.theme.clean.Clean'/>
   <inherits name="com.google.web.bindery.requestfactory.RequestFactory"/>

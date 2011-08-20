@@ -1,5 +1,6 @@
 package hum.client;
 
+import hum.client.events.ErrorEvent;
 import hum.client.events.ModeEvent;
 import hum.client.events.OverviewEvent;
 import hum.client.model.AddressProxy;
@@ -12,6 +13,7 @@ import java.util.Set;
 import javax.validation.ConstraintViolation;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.editor.client.impl.AbstractEditorDelegate;
 import com.google.gwt.user.client.Window;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -30,6 +32,9 @@ public class HumWorkflow {
 
     @Inject
     private HumEditor editor;
+
+    @Inject
+    private Validator validator;
 
     interface HumDriver extends RequestFactoryEditorDriver<HumProxy, HumEditor> {
     }
@@ -98,7 +103,17 @@ public class HumWorkflow {
     public void save() {
         RequestContext requestContext = driver.flush();
 
+        HumProxy hum = ((AbstractEditorDelegate<HumProxy, HumEditor>) editor.getDelegate()).getObject();
+
+
+        List<ConstraintViolation<HumProxy>> violations = validator.validate(hum);
+        if (!violations.isEmpty()) {
+            bus.fireEvent(new ErrorEvent(violations));
+            return;
+        }
+
         if (driver.hasErrors()) {
+            // these errors escaped
             Window.alert("Errors detected locally");
             return;
         }
