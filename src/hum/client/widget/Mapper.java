@@ -143,7 +143,7 @@ public class Mapper implements PointEventHandler, LevelEventHandler, MapsLoadedE
     }
 
     private void attachCurrentHum() {
-        if (currentHum == null || currentHum.getMap() != null ) {
+        if (currentHum == null || currentHum.getMap() != null) {
             return;
         }
         currentHum.setMap(map);
@@ -171,10 +171,15 @@ public class Mapper implements PointEventHandler, LevelEventHandler, MapsLoadedE
 
     @Override
     public void dispatch(LevelEvent event) {
+        HumProxy.Level level = event.level;
         if (map != null && currentHum != null) {
-            currentHum.setIcon(levelHelper.icon(event.level).getIcon());
+            currentHum.setIcon(levelHelper.icon(
+                    level == null
+                            ? HumProxy.Level.HIGH
+                            : level
+            ).getIcon());
         } else {
-            pendingLevel = event.level;
+            pendingLevel = level;
         }
     }
 

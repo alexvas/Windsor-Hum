@@ -15,6 +15,7 @@ import hum.client.events.StartedEvent;
 import hum.client.events.StartedEventHandler;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.query.client.Function;
 import com.google.gwt.query.client.GQuery;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -43,15 +44,6 @@ public class Errors extends Composite implements StartedEventHandler,
 
     @UiField
     Label errors;
-
-    private boolean showing = false;
-
-    private Function clearText = new Function() {
-        @Override
-        public void f() {
-            errors.setText(null);
-        }
-    };
 
     public void init() {
         if (initialized) {
@@ -92,27 +84,72 @@ public class Errors extends Composite implements StartedEventHandler,
         clear();
     }
 
-    private final Function dummy = new Function() {
+    private GQuery current;
+
+    private enum State {VISIBLE, FADE_IN, FADE_OUT, HIDDEN}
+
+    private State state = State.HIDDEN;
+
+    private final Function onFadeIn = new Function() {
         @Override
         public void f() {
+            current = null;
+            state = State.VISIBLE;
+        }
+    };
+
+    private Function onFadeOut = new Function() {
+        @Override
+        public void f() {
+            errors.setText(null);
+            current = null;
+            state = State.HIDDEN;
         }
     };
 
     @Override
     public void dispatch(ErrorEvent event) {
         errors.setText(CLIENT_UTILS.join("; ", event.violations));
-        if (showing) {
-            return;
+        switch (state) {
+            case VISIBLE:
+                return;
+            case FADE_IN:
+                return;
+            case FADE_OUT:
+                current.stop();
+                break;
+            case HIDDEN:
+                break;
+            default:
+                throw new RuntimeException("state " + state + " is not supported");
         }
-        showing = true;
-        GQuery.$(errors).fadeIn(2000, dummy);
+        state = State.FADE_IN;
+        resetStyle();
+        current = GQuery.$(errors).fadeIn(2000, onFadeIn);
     }
 
     private void clear() {
-        if (!showing) {
-            return;
+        switch (state) {
+            case VISIBLE:
+                break;
+            case FADE_IN:
+                current.stop();
+                break;
+            case FADE_OUT:
+                return;
+            case HIDDEN:
+                return;
+            default:
+                throw new RuntimeException("state " + state + " is not supported");
         }
-        showing = false;
-        GQuery.$(errors).fadeOut(1000, clearText);
+        state = State.FADE_OUT;
+        resetStyle();
+        GQuery.$(errors).fadeOut(1000, onFadeOut);
+    }
+
+    private void resetStyle() {
+        Style style = errors.getElement().getStyle();
+        style.clearOpacity();
+        style.clearVisibility();
     }
 }

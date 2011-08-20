@@ -13,7 +13,10 @@ import hum.client.events.PointEventHandler;
 import hum.client.events.StartedEvent;
 import hum.client.events.StartedEventHandler;
 import hum.client.model.AddressProxy;
+import hum.client.model.HumProxy;
 import hum.client.model.PointProxy;
+
+import java.util.Date;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.ParagraphElement;
@@ -33,8 +36,7 @@ import com.google.web.bindery.event.shared.EventBus;
 
 @Singleton
 public class Summary extends Composite implements StartedEventHandler,
-        LevelEventHandler, PointEventHandler, AddressEventHandler, ModeEventHandler
-{
+        LevelEventHandler, PointEventHandler, AddressEventHandler, ModeEventHandler {
 
     interface Binder extends UiBinder<Widget, Summary> {
     }
@@ -85,16 +87,30 @@ public class Summary extends Composite implements StartedEventHandler,
 
     @Override
     public void dispatch(StartedEvent meEvent) {
-        started.setInnerText(
-                DateTimeFormat
+        setStarted(meEvent.started);
+    }
+
+    private void setStarted(Date started) {
+        this.started.setInnerText(
+                started == null
+                        ? null
+                        : DateTimeFormat
                         .getFormat(DateTimeFormat.PredefinedFormat.DATE_TIME_LONG)
-                        .format(meEvent.started)
+                        .format(started)
         );
     }
 
     @Override
     public void dispatch(LevelEvent event) {
-        level.setInnerText(CLIENT_UTILS.capitalize(event.level.name()));
+        setLevel(event.level);
+    }
+
+    private void setLevel(HumProxy.Level level) {
+        this.level.setInnerText(
+                level == null
+                        ? null
+                        : CLIENT_UTILS.capitalize(level.name())
+        );
     }
 
     private static final NumberFormat COORD_FORMAT = NumberFormat.getFormat("###.######");

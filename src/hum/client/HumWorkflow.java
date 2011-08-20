@@ -1,8 +1,10 @@
 package hum.client;
 
 import hum.client.events.ErrorEvent;
+import hum.client.events.LevelEvent;
 import hum.client.events.ModeEvent;
 import hum.client.events.OverviewEvent;
+import hum.client.events.StartedEvent;
 import hum.client.model.AddressProxy;
 import hum.client.model.HumProxy;
 import hum.client.model.PointProxy;
@@ -52,6 +54,8 @@ public class HumWorkflow {
     public void reportNewHum() {
         edit(createHum());
         bus.fireEvent(new ModeEvent(Mode.NEW));
+        bus.fireEvent(new LevelEvent(null));
+        bus.fireEvent(new StartedEvent(null));
     }
 
     private HumReceiver saveReceiver = new HumReceiver();
@@ -63,6 +67,8 @@ public class HumWorkflow {
                 reportNewHum();
             } else {
                 super.onSuccess(response);
+                bus.fireEvent(new LevelEvent(response.getLevel()));
+                bus.fireEvent(new StartedEvent(response.getStart()));
             }
         }
     };
