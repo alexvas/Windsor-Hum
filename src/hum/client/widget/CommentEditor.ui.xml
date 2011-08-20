@@ -1,7 +1,6 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
              xmlns:g='urn:import:com.google.gwt.user.client.ui'
-             xmlns:h='urn:import:hum.client.widget'
     >
   <ui:style>
     .comment {
@@ -10,10 +9,13 @@
 
     .commentText {
       display: block;
+      margin-left: 20px;
+      width: 292px;
+      height: 180px;
     }
   </ui:style>
   <g:HTMLPanel styleName="{style.comment}">
-    Anything specific this time?
+    <p>Anything specific this time?</p>
     <g:TextArea ui:field="comment" addStyleNames="{style.commentText}"/>
   </g:HTMLPanel>
 </ui:UiBinder>

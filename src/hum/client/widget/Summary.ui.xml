@@ -27,6 +27,7 @@
     .summary ul {
       clear: both;
       margin: 0;
+      padding-left: 13px;
     }
 
     .save {
