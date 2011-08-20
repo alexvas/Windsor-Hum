@@ -15,17 +15,17 @@ import com.google.inject.Singleton;
 public class Validator {
     public List<ConstraintViolation<HumProxy>> validate(HumProxy hum) {
         List<ConstraintViolation<HumProxy>> violations = new ArrayList<ConstraintViolation<HumProxy>>();
-        if (hum.getAddress() == null) {
-            violations.add(new NotProvided(hum, "Address Is Not Resolved. Move Pin a Little."));
+        if (hum.getPoint() == null) {
+            violations.add(new NotProvided(hum, "Click on the Map"));
         }
         if (hum.getLevel() == null) {
             violations.add(new NotProvided(hum, "Specify How Strong Hum Was"));
         }
-        if (hum.getPoint() == null) {
-            violations.add(new NotProvided(hum, "Specify Where Hum Took Place"));
-        }
         if (hum.getStart() == null) {
             violations.add(new NotProvided(hum, "Specify When Hum Started"));
+        }
+        if (hum.getPoint() != null && hum.getAddress() == null) {
+            violations.add(new NotProvided(hum, "Address Is Not Resolved. Move Pin a Little."));
         }
 
         return violations;
