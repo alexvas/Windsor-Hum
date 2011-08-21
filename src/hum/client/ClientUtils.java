@@ -6,9 +6,12 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.i18n.client.NumberFormat;
 
 public enum ClientUtils {
     CLIENT_UTILS;
+
+    public final NumberFormat coordFormat = NumberFormat.getFormat("###.######");
 
     public native String dump(JavaScriptObject obj, String name, String indent, int depth) /*-{
         if (depth > 100) {

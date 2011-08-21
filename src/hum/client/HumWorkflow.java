@@ -165,10 +165,8 @@ public class HumWorkflow implements GonnaShareEventHandler {
         );
         HumProxy hum = ((AbstractEditorDelegate<HumProxy, HumEditor>) editor.getDelegate()).getObject();
         ImageMediaCollection images = ImageMediaCollection.getInstance();
-        images.buildMarkerImage(
-                hum.getPoint().getLat(),
-                hum.getPoint().getLng(),
-                levelHelper.color(hum.getLevel()),
+        images.addImage(
+                janrainWrapper.buildBingShareImageSrc(hum),
                 Window.Location.getHref()
         );
         activity.setMediaItem(images);

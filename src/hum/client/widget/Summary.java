@@ -26,7 +26,6 @@ import com.google.gwt.dom.client.ParagraphElement;
 import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -122,8 +121,6 @@ public class Summary extends Composite implements StartedEventHandler,
         );
     }
 
-    private static final NumberFormat COORD_FORMAT = NumberFormat.getFormat("###.######");
-
     @Override
     public void dispatch(PointEvent event) {
         setPoint(event.point);
@@ -134,8 +131,8 @@ public class Summary extends Composite implements StartedEventHandler,
             lat.setInnerText(null);
             lng.setInnerText(null);
         } else {
-            lat.setInnerText(COORD_FORMAT.format(point.getLat()));
-            lng.setInnerText(COORD_FORMAT.format(point.getLng()));
+            lat.setInnerText(CLIENT_UTILS.coordFormat.format(point.getLat()));
+            lng.setInnerText(CLIENT_UTILS.coordFormat.format(point.getLng()));
         }
     }
 

@@ -1,15 +1,22 @@
 package hum.client.adapter.janrain;
 
 import hum.client.Back;
+import static hum.client.ClientUtils.CLIENT_UTILS;
+import hum.client.LevelHelper;
+import hum.client.model.HumProxy;
 
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.ScriptElement;
 import com.google.gwt.user.client.Window;
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 @Singleton
 public class JanrainWrapper {
     public static final String JANRAIN_CALLBACK = "/janrain";
+
+    @Inject
+    private LevelHelper levelHelper;
 
     public native boolean isJanrainLoaded() /*-{
         return $wnd.RPXNOW != null;
@@ -47,4 +54,31 @@ public class JanrainWrapper {
     public native void signOut() /*-{
         $wnd.RPXNOW.Social.clearSocialCookies();
     }-*/;
+
+    public String buildGoogleShareImageSrc(HumProxy hum) {
+        String src = new StringBuilder("http://maps.googleapis.com/maps/api/staticmap?center=")
+                .append(hum.getPoint().getLat()).append(",").append(hum.getPoint().getLng())
+                .append("&zoom=10&size=90x90&markers=color:0x")
+                .append(levelHelper.color(hum.getLevel()))
+                .append("%7C")
+                .append(hum.getPoint().getLat()).append(",").append(hum.getPoint().getLng())
+                .append("&sensor=false")
+                .toString();
+        return src;
+    }
+
+    public String buildBingShareImageSrc(HumProxy hum) {
+        String lat = CLIENT_UTILS.coordFormat.format(hum.getPoint().getLat());
+        String lng = CLIENT_UTILS.coordFormat.format(hum.getPoint().getLng());
+        String src = new StringBuilder("http://dev.virtualearth.net/REST/v1/Imagery/Map/Road/")
+                .append(lat).append(",").append(lng)
+                .append("/12?mapSize=90,90&pushpin=")
+                .append(lat).append(",").append(lng)
+                .append(";10;")
+                .append(hum.getLevel().name().substring(0, 1))
+                .append("&key=AvQDII5pngruPpQZRshSYG5tfN17m66_LhFjq1kodiYtXl0aLtls0M8syDcAoA2h")
+                .toString();
+        return src;
+    }
+
 }
