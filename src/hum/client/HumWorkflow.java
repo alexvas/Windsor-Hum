@@ -97,6 +97,7 @@ public class HumWorkflow implements GonnaShareEventHandler {
                     @Override
                     public void onSuccess(List<HumProxy> response) {
                         bus.fireEvent(new OverviewEvent(response));
+                        modeHolder.showList();
                     }
                 }
         ).fire();

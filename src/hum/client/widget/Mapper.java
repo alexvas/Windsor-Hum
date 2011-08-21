@@ -230,8 +230,6 @@ public class Mapper implements PointEventHandler, LevelEventHandler, MapsLoadedE
                 attachCurrentHum();
                 break;
             case LIST:
-                detachCurrentHum();
-                attachOverview();
                 break;
             default:
                 throw new RuntimeException("mode not supported: " + modeHolder.mode());
@@ -245,28 +243,28 @@ public class Mapper implements PointEventHandler, LevelEventHandler, MapsLoadedE
 
         if (map == null) {
             pendingOverview = event;
-        } else {
-            for (HumProxy hum : event.hums) {
-                PointProxy point = hum.getPoint();
-                HumProxy.Level level = hum.getLevel();
-
-                if (point == null || level == null) {
-                    continue;
-                }
-
-                MarkerOptions opts = new MarkerOptions.Builder(LatLng.newInstance(point.getLat(), point.getLng()))
-                        .icon(levelHelper.icon(level).getIcon())
-                        .shadow(levelHelper.icon(HumProxy.Level.HIGH).getShadow())
-                        .animation(Animation.DROP)
-                        .draggable(false)
-                        .clickable(false)
-                        .build();
-                Marker marker = Marker.newInstance(opts);
-                overview.add(marker);
-            }
+            return;
         }
+        for (HumProxy hum : event.hums) {
+            PointProxy point = hum.getPoint();
+            HumProxy.Level level = hum.getLevel();
 
-        modeHolder.showList();
+            if (point == null || level == null) {
+                continue;
+            }
+
+            MarkerOptions opts = new MarkerOptions.Builder(LatLng.newInstance(point.getLat(), point.getLng()))
+                    .icon(levelHelper.icon(level).getIcon())
+                    .shadow(levelHelper.icon(HumProxy.Level.HIGH).getShadow())
+                    .animation(Animation.DROP)
+                    .draggable(false)
+                    .clickable(false)
+                    .build();
+            Marker marker = Marker.newInstance(opts);
+            overview.add(marker);
+        }
+        detachCurrentHum();
+        attachOverview();
     }
 
     private boolean overviewAttached = false;
