@@ -1,5 +1,6 @@
 package hum.client.widget;
 
+import static com.google.gwt.query.client.GQuery.$;
 import hum.client.ModeHolder;
 import hum.client.ReqFactory;
 import hum.client.adapter.janrain.JanrainWrapper;
@@ -10,6 +11,7 @@ import hum.client.events.ModeEventHandler;
 import hum.client.model.UserProxy;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -81,6 +83,9 @@ public class Root extends Composite implements MeEventHandler, ModeEventHandler 
     @UiField(provided = true)
     Errors errors;
 
+    @UiField
+    DivElement addthis;
+
     boolean initialized = false;
 
     public void init() {
@@ -119,7 +124,13 @@ public class Root extends Composite implements MeEventHandler, ModeEventHandler 
     }
 
     private void setUser(UserProxy user) {
-        report.setVisible(user == null);
+        if (user == null) {
+            $(report).fadeIn(1000);
+            $(addthis).fadeIn(1000);
+        } else {
+            $(report).fadeOut(1000);
+            $(addthis).fadeOut(1000);
+        }
     }
 
     @Override

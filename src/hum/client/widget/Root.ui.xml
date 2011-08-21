@@ -95,7 +95,7 @@
         <h:UserMenu addStyleNames="{style.userMenu}" ui:field="userMenu"/>
         <h:Errors addStyleNames="{style.errors}" ui:field="errors"/>
         <p>Do you hear rumbling again?</p>
-        <div class="addthis_toolbox addthis_default_style {style.addthis}">
+        <div class="addthis_toolbox addthis_default_style {style.addthis} addthis_32x32_style" ui:field="addthis">
           <a class="addthis_button_preferred_1"/>
           <a class="addthis_button_preferred_2"/>
           <a class="addthis_button_preferred_3"/>
@@ -111,7 +111,7 @@
           <g:HTML ui:field='mapPlace'/>
         </g:center>
         <g:west size='360'>
-          <g:DeckLayoutPanel ui:field="deck">
+          <g:DeckLayoutPanel ui:field="deck" animationDuration="500">
             <g:HTMLPanel ui:field="about" styleName="{style.about}">
               <h2>About</h2>
               The goal of the project is to find out and track the source of rumbling noise bothering

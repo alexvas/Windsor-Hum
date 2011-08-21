@@ -1,5 +1,6 @@
 package hum.client.widget;
 
+import static com.google.gwt.query.client.GQuery.$;
 import hum.client.ModeHolder;
 import hum.client.ReqFactory;
 import hum.client.adapter.janrain.JanrainWrapper;
@@ -79,8 +80,10 @@ public class Profile extends Composite implements MeEventHandler {
             InfoProxy info = user.getInfo().get(0);
             userName.setInnerText("Welcome, " + info.getDisplayName() + "!");
             avatar.setSrc(info.getPhoto());
+            $(this).fadeIn(1000);
+        } else {
+            $(this).fadeOut(1000);
         }
-        setVisible(hasUser);
     }
 
     @SuppressWarnings({"UnusedParameters"})

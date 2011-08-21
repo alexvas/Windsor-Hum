@@ -30,6 +30,12 @@
     .avatar {
       height: 72px;
     }
+
+    .addthis {
+      overflow: hidden;
+      float: right;
+      margin: 0 35px 0 20px;
+    }
   </ui:style>
   <g:HTMLPanel styleName="{style.profile}">
     <div class="{style.userName}">
@@ -37,6 +43,14 @@
       <span ui:field="signOutWrapper" class="{style.signOutWrapper}">Not you?
         <g:Anchor ui:field="signOut" href="javascript:" text="Sign Out"/>
       </span>
+      <div class="addthis_toolbox addthis_default_style {style.addthis}">
+        <a class="addthis_button_preferred_1"/>
+        <a class="addthis_button_preferred_2"/>
+        <a class="addthis_button_preferred_3"/>
+        <a class="addthis_button_preferred_4"/>
+        <a class="addthis_button_compact"/>
+        <a class="addthis_counter addthis_bubble_style"/>
+      </div>
     </div>
     <img ui:field="avatar" alt="" src="" class="{style.avatar}"/>
   </g:HTMLPanel>
