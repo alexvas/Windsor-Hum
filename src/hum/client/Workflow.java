@@ -1,6 +1,7 @@
 package hum.client;
 
-import hum.client.adapter.JanrainWrapper;
+import hum.client.adapter.addthis.AddthisWrapper;
+import hum.client.adapter.janrain.JanrainWrapper;
 import hum.client.events.MapsLoadedEvent;
 import hum.client.events.MeEvent;
 import hum.client.events.ModeEvent;
@@ -24,6 +25,9 @@ public class Workflow implements Runnable {
 
     @Inject
     private JanrainWrapper janrainWrapper;
+
+    @Inject
+    private AddthisWrapper addthisWrapper;
 
     @Inject
     private ReqFactory reqFactory;
@@ -53,6 +57,7 @@ public class Workflow implements Runnable {
         mapper.initMap(root.getMapPlace());
         bus.fireEvent(new ModeEvent());
         humWorkflow.init();
+        addthisWrapper.load("ra-4e50705441f5a8f1");
     }
 
     private void mapsLoaded() {

@@ -1,4 +1,4 @@
-package hum.client.adapter;
+package hum.client.adapter.janrain;
 
 import com.google.gwt.core.client.JavaScriptObject;
 

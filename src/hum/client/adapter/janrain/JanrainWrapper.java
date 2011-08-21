@@ -1,4 +1,4 @@
-package hum.client.adapter;
+package hum.client.adapter.janrain;
 
 import hum.client.Back;
 

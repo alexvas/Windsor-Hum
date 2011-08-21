@@ -2,7 +2,7 @@ package hum.client.widget;
 
 import hum.client.ModeHolder;
 import hum.client.ReqFactory;
-import hum.client.adapter.JanrainWrapper;
+import hum.client.adapter.janrain.JanrainWrapper;
 import hum.client.events.MeEvent;
 import hum.client.events.MeEventHandler;
 import hum.client.model.InfoProxy;

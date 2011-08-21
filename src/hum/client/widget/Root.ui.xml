@@ -9,14 +9,20 @@
       padding: 20px 20px;
     }
 
-    .header h1, .header p {
+    .header h1, .header p, .addthis {
+      overflow: hidden;
       float: left;
       clear: left;
-      margin-bottom: 0;
     }
 
     .header h1 {
       margin-top: 0;
+      margin-bottom: 0;
+    }
+
+    .header p {
+      margin-top: 10px;
+      margin-bottom: 5px;
     }
 
     .about {
@@ -89,6 +95,14 @@
         <h:UserMenu addStyleNames="{style.userMenu}" ui:field="userMenu"/>
         <h:Errors addStyleNames="{style.errors}" ui:field="errors"/>
         <p>Do you hear rumbling again?</p>
+        <div class="addthis_toolbox addthis_default_style {style.addthis}">
+          <a class="addthis_button_preferred_1"/>
+          <a class="addthis_button_preferred_2"/>
+          <a class="addthis_button_preferred_3"/>
+          <a class="addthis_button_preferred_4"/>
+          <a class="addthis_button_compact"/>
+          <a class="addthis_counter addthis_bubble_style"/>
+        </div>
       </g:HTMLPanel>
     </g:north>
     <g:center>

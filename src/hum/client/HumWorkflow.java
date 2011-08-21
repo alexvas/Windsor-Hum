@@ -1,8 +1,8 @@
 package hum.client;
 
-import hum.client.adapter.Activity;
-import hum.client.adapter.ImageMediaCollection;
-import hum.client.adapter.JanrainWrapper;
+import hum.client.adapter.janrain.Activity;
+import hum.client.adapter.janrain.ImageMediaCollection;
+import hum.client.adapter.janrain.JanrainWrapper;
 import hum.client.events.ErrorEvent;
 import hum.client.events.GonnaShareEvent;
 import hum.client.events.GonnaShareEventHandler;

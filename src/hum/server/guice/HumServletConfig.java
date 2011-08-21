@@ -1,6 +1,6 @@
 package hum.server.guice;
 
-import hum.client.adapter.JanrainWrapper;
+import hum.client.adapter.janrain.JanrainWrapper;
 import hum.server.ResetMemcacheServlet;
 import hum.server.adapter.janrain.JanrainCallbackServlet;
 import hum.server.services.HumService;

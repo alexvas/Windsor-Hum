@@ -51,13 +51,15 @@ public class Mapper implements PointEventHandler, LevelEventHandler, MapsLoadedE
     private ModeHolder modeHolder;
 
     protected Map map;
-    private PointProxy pendingPoint = null;
-    private HumProxy.Level pendingLevel = null;
 
     private Marker currentHum = null;
     private List<Marker> overview = new ArrayList<Marker>();
 
     private Element mapPlace;
+
+    private PointEvent pendingPoint = null;
+    private LevelEvent pendingLevel = null;
+    private OverviewEvent pendingOverview = null;
 
     private static interface BackLatLng extends Back<LatLng> {
         @Override
@@ -119,7 +121,7 @@ public class Mapper implements PointEventHandler, LevelEventHandler, MapsLoadedE
     @Override
     public void dispatch(PointEvent event) {
         if (map == null) {
-            pendingPoint = event.point;
+            pendingPoint = event;
             return;
         }
         putPin(event.point);
@@ -132,6 +134,10 @@ public class Mapper implements PointEventHandler, LevelEventHandler, MapsLoadedE
         }
         if (currentHum == null) {
             currentHum = buildMarkerForCurrentHum(point);
+            if (pendingLevel != null) {
+                dispatch(pendingLevel);
+                pendingLevel = null;
+            }
         } else {
             currentHum.setPosition(LatLng.newInstance(point.getLat(), point.getLng()));
         }
@@ -153,15 +159,8 @@ public class Mapper implements PointEventHandler, LevelEventHandler, MapsLoadedE
     }
 
     private Marker buildMarkerForCurrentHum(PointProxy point) {
-        final HumProxy.Level level;
-        if (pendingLevel == null) {
-            level = HumProxy.Level.HIGH;
-        } else {
-            level = pendingLevel;
-            pendingLevel = null;
-        }
         MarkerOptions opts = new MarkerOptions.Builder(LatLng.newInstance(point.getLat(), point.getLng()))
-                .icon(levelHelper.icon(level).getIcon())
+                .icon(levelHelper.icon(HumProxy.Level.HIGH).getIcon())
                 .shadow(levelHelper.icon(HumProxy.Level.HIGH).getShadow())
 //                .shape(red.getShape())
                 .animation(Animation.DROP)
@@ -175,15 +174,15 @@ public class Mapper implements PointEventHandler, LevelEventHandler, MapsLoadedE
     @Override
     public void dispatch(LevelEvent event) {
         HumProxy.Level level = event.level;
-        if (map != null && currentHum != null) {
-            currentHum.setIcon(levelHelper.icon(
-                    level == null
-                            ? HumProxy.Level.HIGH
-                            : level
-            ).getIcon());
-        } else {
-            pendingLevel = level;
+        if (map == null || currentHum == null) {
+            pendingLevel = event;
+            return;
         }
+        currentHum.setIcon(levelHelper.icon(
+                level == null
+                        ? HumProxy.Level.HIGH
+                        : level
+        ).getIcon());
     }
 
     @Override
@@ -195,9 +194,27 @@ public class Mapper implements PointEventHandler, LevelEventHandler, MapsLoadedE
         map = Map.newInstance(mapPlace, mapOptions);
 
         addClickListener(map, firePositionChange);
-        if (pendingPoint != null) {
-            putPin(pendingPoint);
-            pendingPoint = null;
+        switch (modeHolder.mode()) {
+            case NEW: // fall through
+            case LAST: // fall through
+            case UPDATED:
+                if (pendingPoint != null) {
+                    dispatch(pendingPoint);
+                    pendingPoint = null;
+                }
+                if (pendingLevel != null) {
+                    dispatch(pendingLevel);
+                    pendingLevel = null;
+                }
+                break;
+            case LIST:
+                if (pendingOverview != null) {
+                    dispatch(pendingOverview);
+                    pendingOverview = null;
+                }
+                break;
+            default:
+                throw new RuntimeException("mode not supported: " + modeHolder.mode());
         }
     }
 
@@ -226,23 +243,27 @@ public class Mapper implements PointEventHandler, LevelEventHandler, MapsLoadedE
         detachOverview();
         overview.clear();
 
-        for (HumProxy hum : event.hums) {
-            PointProxy point = hum.getPoint();
-            HumProxy.Level level = hum.getLevel();
+        if (map == null) {
+            pendingOverview = event;
+        } else {
+            for (HumProxy hum : event.hums) {
+                PointProxy point = hum.getPoint();
+                HumProxy.Level level = hum.getLevel();
 
-            if (point == null || level == null) {
-                continue;
+                if (point == null || level == null) {
+                    continue;
+                }
+
+                MarkerOptions opts = new MarkerOptions.Builder(LatLng.newInstance(point.getLat(), point.getLng()))
+                        .icon(levelHelper.icon(level).getIcon())
+                        .shadow(levelHelper.icon(HumProxy.Level.HIGH).getShadow())
+                        .animation(Animation.DROP)
+                        .draggable(false)
+                        .clickable(false)
+                        .build();
+                Marker marker = Marker.newInstance(opts);
+                overview.add(marker);
             }
-
-            MarkerOptions opts = new MarkerOptions.Builder(LatLng.newInstance(point.getLat(), point.getLng()))
-                    .icon(levelHelper.icon(level).getIcon())
-                    .shadow(levelHelper.icon(HumProxy.Level.HIGH).getShadow())
-                    .animation(Animation.DROP)
-                    .draggable(false)
-                    .clickable(false)
-                    .build();
-            Marker marker = Marker.newInstance(opts);
-            overview.add(marker);
         }
 
         modeHolder.showList();
