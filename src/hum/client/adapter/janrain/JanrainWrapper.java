@@ -13,6 +13,7 @@ import com.google.inject.Singleton;
 
 @Singleton
 public class JanrainWrapper {
+    public static final String JANRAIN_DOMAIN = "windsorhum.rpxnow.com";
     public static final String JANRAIN_CALLBACK = "/janrain";
 
     @Inject
@@ -42,6 +43,11 @@ public class JanrainWrapper {
         script.setType("text/javascript");
         Document.get().getBody().appendChild(script);
     }
+
+    public native void afterLoadInitHack(String callback, String domain) /*-{
+        $wnd.RPXNOW.domain = domain;
+        $wnd.RPXNOW.token_url = callback;
+    }-*/;
 
     public native void show(String callback, String domain) /*-{
         $wnd.RPXNOW.show(callback, domain);

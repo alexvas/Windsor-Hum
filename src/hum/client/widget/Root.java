@@ -115,7 +115,8 @@ public class Root extends Composite implements MeEventHandler, ModeEventHandler 
                 .createUrlBuilder()
                 .setPath(JanrainWrapper.JANRAIN_CALLBACK)
                 .buildString();
-        janrainWrapper.show(callback, "windsorhum.rpxnow.com");
+        janrainWrapper.show(callback, JanrainWrapper.JANRAIN_DOMAIN);
+        janrainWrapper.afterLoadInitHack(callback, JanrainWrapper.JANRAIN_DOMAIN);
     }
 
     @Override
