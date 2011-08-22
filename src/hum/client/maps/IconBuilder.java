@@ -4,7 +4,7 @@ import com.google.gwt.maps.client.base.Size;
 
 public class IconBuilder {
     private static final String BASE_URL = "http://chart.apis.google.com/chart?cht=mm";
-    private static final String SHADOW_URL = "http://www.google.com/chart?chst=d_map_pin_shadow";
+    private static final String SHADOW_URL = "/images/shadow.png";
 
     private int width = 32;
     private int height = 32;
