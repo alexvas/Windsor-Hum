@@ -1,6 +1,6 @@
 package hum.client.widget;
 
-import static hum.client.ClientUtils.CLIENT_UTILS;
+import static hum.client.Utils.UTILS;
 import hum.client.events.AddressEvent;
 import hum.client.events.AddressEventHandler;
 import hum.client.events.ErrorEvent;
@@ -109,7 +109,7 @@ public class Errors extends Composite implements StartedEventHandler,
 
     @Override
     public void dispatch(ErrorEvent event) {
-        errors.setText(CLIENT_UTILS.join("; ", event.violations));
+        errors.setText(UTILS.join("; ", event.violations));
         switch (state) {
             case VISIBLE:
                 return;

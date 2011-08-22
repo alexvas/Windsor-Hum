@@ -40,6 +40,11 @@ public class HumServiceImpl extends DAOBase implements HumService {
     }
 
     @Override
+    public Iterable<Hum> all() {
+        return query().order("-start");
+    }
+
+    @Override
     public Hum latest() {
         return query().filter("owner", currentUser.getUserKey()).order("-start").get();
     }

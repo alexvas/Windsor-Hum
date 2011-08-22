@@ -9,6 +9,8 @@ public interface HumService {
 
     List<Hum> overview();
 
+    Iterable<Hum> all();
+
     Hum latest();
 
     Hum save(Hum toSave);

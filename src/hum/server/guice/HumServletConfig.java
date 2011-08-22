@@ -1,6 +1,7 @@
 package hum.server.guice;
 
 import hum.client.adapter.janrain.JanrainWrapper;
+import hum.server.DownloadServlet;
 import hum.server.ResetMemcacheServlet;
 import hum.server.adapter.janrain.JanrainCallbackServlet;
 import hum.server.services.HumService;
@@ -37,6 +38,7 @@ public class HumServletConfig extends GuiceServletContextListener {
             serve("*/gwt-log").with(RemoteLoggerServlet.class);
             serve(JanrainWrapper.JANRAIN_CALLBACK).with(JanrainCallbackServlet.class);
             serve("/resetMemcacheNow").with(ResetMemcacheServlet.class);
+            serve("/download*").with(DownloadServlet.class);
         }
     }
 }

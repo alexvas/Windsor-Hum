@@ -3,6 +3,7 @@ package hum.client.widget;
 import static hum.client.ClientUtils.CLIENT_UTILS;
 import hum.client.HumWorkflow;
 import hum.client.ModeHolder;
+import static hum.client.Utils.UTILS;
 import hum.client.events.AddressEvent;
 import hum.client.events.AddressEventHandler;
 import hum.client.events.GonnaShareEvent;
@@ -117,7 +118,7 @@ public class Summary extends Composite implements StartedEventHandler,
         this.level.setInnerText(
                 level == null
                         ? null
-                        : CLIENT_UTILS.capitalize(level.name())
+                        : UTILS.capitalize(level.name())
         );
     }
 
@@ -145,7 +146,7 @@ public class Summary extends Composite implements StartedEventHandler,
         this.address.setInnerText(
                 address == null
                         ? null
-                        : CLIENT_UTILS.join(
+                        : UTILS.join(
                         ", ",
                         address.getCountry(),
                         address.getRegion(),

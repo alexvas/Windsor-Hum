@@ -10,7 +10,14 @@ import com.google.web.bindery.requestfactory.shared.ProxyFor;
 
 @ProxyFor(value = Hum.class, locator = ObjectifyLocator.class)
 public interface HumProxy extends EntityProxy {
-    enum Level {LOW, MEDIUM, HIGH}
+    enum Level {
+        LOW(10), MEDIUM(20), HIGH(30);
+        public final int amount;
+
+        Level(int amount) {
+            this.amount = amount;
+        }
+    }
 
     PointProxy getPoint();
 
