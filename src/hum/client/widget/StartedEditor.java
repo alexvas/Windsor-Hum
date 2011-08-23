@@ -88,12 +88,14 @@ public class StartedEditor extends Composite implements LeafValueEditor<Date> {
     @SuppressWarnings({"UnusedParameters"})
     @UiHandler("startedNow")
     void startedNow(ClickEvent startedNow) {
-        fireStarted(new Date());
+        Date now = new Date();
+        fireStarted(now);
     }
 
     private void fireStarted(Date date) {
         bus.fireEvent(new StartedEvent(date));
         modeHolder.userEvent();
+        setValue(date);
     }
 
     @Override
