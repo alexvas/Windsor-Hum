@@ -1,5 +1,58 @@
 .hint {
-    -moz-box-shadow: 0 0 7px yellow;
-    -webkit-box-shadow: 0 0 7px yellow;
+    \\-moz-box-shadow: 0 0 7px yellow;
+    \\-webkit-box-shadow: 0 0 7px yellow;
     box-shadow: 0 0 7px yellow;
 }
+
+@sprite .pinLow {
+    gwt-image: "pinLow";
+}
+
+@sprite .pinMedium {
+    gwt-image: "pinMedium";
+}
+
+@sprite .pinHigh {
+    gwt-image: "pinHigh";
+}
+
+@sprite .btnReport {
+  -moz-border-bottom-colors: none;
+  -moz-border-image: none;
+  -moz-border-left-colors: none;
+  -moz-border-right-colors: none;
+  -moz-border-top-colors: none;
+  gwt-image: "buttonStretch";
+  background-color: red;
+  border-color: transparent;
+  border-radius: 5px 5px 5px 5px;
+  border-style: solid;
+  border-width: 1px;
+  cursor: pointer;
+  margin: 0;
+  padding: 9px 15px;
+  text-decoration: none;
+  clear: both;
+  margin-top: 30px;
+  font-size: larger;
+  font-weight: bold;
+  color: white;
+}
+
+.btnReport:active {
+  border: 1px inset #CCCCCC;
+}
+
+.btnReport:hover {
+  border-color: #939393;
+}
+
+.btnReport[disabled] {
+  color: #888888;
+  cursor: default;
+}
+
+.btnReport[disabled]:hover {
+  border: 1px outset #CCCCCC;
+}
+

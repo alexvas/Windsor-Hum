@@ -2,22 +2,14 @@ package hum.client.adapter.janrain;
 
 import hum.client.Back;
 import static hum.client.ClientUtils.CLIENT_UTILS;
-import hum.client.LevelHelper;
 import hum.client.model.HumProxy;
 
-import com.google.gwt.dom.client.Document;
-import com.google.gwt.dom.client.ScriptElement;
-import com.google.gwt.user.client.Window;
-import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 @Singleton
 public class JanrainWrapper {
     public static final String JANRAIN_DOMAIN = "windsorhum.rpxnow.com";
     public static final String JANRAIN_CALLBACK = "/janrain";
-
-    @Inject
-    private LevelHelper levelHelper;
 
     public native boolean isJanrainLoaded() /*-{
         return $wnd.RPXNOW != null;
@@ -32,6 +24,7 @@ public class JanrainWrapper {
             back.@hum.client.Back::call(Ljava/lang/Object;)("done");
         });
     }-*/;
+/*
 
     public void loadJanrain() {
         StringBuilder rpxJsHost = "https:".equals(Window.Location.getProtocol())
@@ -43,11 +36,12 @@ public class JanrainWrapper {
         script.setType("text/javascript");
         Document.get().getBody().appendChild(script);
     }
+*/
 
-    public native void afterLoadInitHack(String callback, String domain) /*-{
-        $wnd.RPXNOW.domain = domain;
-        $wnd.RPXNOW.token_url = callback;
-    }-*/;
+//    public native void afterLoadInitHack(String callback, String domain) /*-{
+//        $wnd.RPXNOW.domain = domain;
+//        $wnd.RPXNOW.token_url = callback;
+//    }-*/;
 
     public native void show(String callback, String domain) /*-{
         $wnd.RPXNOW.show(callback, domain);
@@ -61,6 +55,7 @@ public class JanrainWrapper {
         $wnd.RPXNOW.Social.clearSocialCookies();
     }-*/;
 
+/*
     public String buildGoogleShareImageSrc(HumProxy hum) {
         String src = new StringBuilder("http://maps.googleapis.com/maps/api/staticmap?center=")
                 .append(hum.getPoint().getLat()).append(",").append(hum.getPoint().getLng())
@@ -72,6 +67,7 @@ public class JanrainWrapper {
                 .toString();
         return src;
     }
+*/
 
     public String buildBingShareImageSrc(HumProxy hum) {
         String lat = CLIENT_UTILS.coordFormat.format(hum.getPoint().getLat());

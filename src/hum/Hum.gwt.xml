@@ -12,5 +12,6 @@
   <inherits name='com.google.gwt.editor.Editor'/>
   <inherits name="com.google.gwt.inject.Inject"/>
   <set-configuration-property name="UiBinder.useSafeHtmlTemplates" value="true"/>
+  <script src="http://static.rpxnow.com/js/lib/rpx.js"/>
   <entry-point class='hum.client.HumEntry'/>
 </module>

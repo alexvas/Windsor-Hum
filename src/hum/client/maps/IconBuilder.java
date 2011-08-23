@@ -1,6 +1,9 @@
 package hum.client.maps;
 
+import static hum.client.resources.Resources.RESOURCES;
+
 import com.google.gwt.maps.client.base.Size;
+import com.google.gwt.resources.client.ImageResource;
 
 public class IconBuilder {
     private static final String BASE_URL = "http://chart.apis.google.com/chart?cht=mm";
@@ -38,6 +41,7 @@ public class IconBuilder {
     }
 
     MarkerImage cachedIcon = null;
+/*
 
     public MarkerImage getIcon() {
         if (cachedIcon != null) {
@@ -51,6 +55,18 @@ public class IconBuilder {
                 .anchor(Point.newInstance(width / 2, height))
                 .build();
     }
+*/
+
+    public MarkerImage getIcon(ImageResource image) {
+        if (cachedIcon != null) {
+            return cachedIcon;
+        }
+        return cachedIcon = new MarkerImage.Builder(image.getSafeUri().asString())
+                .origin(Point.newInstance(image.getLeft(), image.getTop()))
+                .size(Size.newInstance(image.getWidth(), image.getHeight()))
+                .anchor(Point.newInstance(image.getWidth() / 2, image.getHeight()))
+                .build();
+    }
 
     MarkerImage cachedShadow = null;
 
@@ -58,9 +74,12 @@ public class IconBuilder {
         if (cachedShadow != null) {
             return cachedShadow;
         }
-        MarkerImage.Builder shadowBuilder = new MarkerImage.Builder(SHADOW_URL)
-                .size(Size.newInstance(40, 37))
-                .anchor(Point.newInstance(13, 37));
+        ImageResource shadow = RESOURCES.shadow();
+
+        MarkerImage.Builder shadowBuilder = new MarkerImage.Builder(shadow.getSafeUri().asString())
+                .origin(Point.newInstance(shadow.getLeft(), shadow.getTop()))
+                .size(Size.newInstance(shadow.getWidth(), shadow.getHeight()))
+                .anchor(Point.newInstance(shadow.getWidth() / 3, shadow.getHeight()));
 /*
 
         if (Math.abs(width / 32.0 - 1.0) > 0.05) {

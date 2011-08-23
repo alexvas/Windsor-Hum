@@ -51,7 +51,7 @@ public class Workflow implements Runnable {
             }
         }, options);
         whoAmI();
-        janrainWrapper.loadJanrain();
+//        janrainWrapper.loadJanrain();
         root.init();
         RootLayoutPanel.get().add(root);
         mapper.initMap(root.getMapPlace());

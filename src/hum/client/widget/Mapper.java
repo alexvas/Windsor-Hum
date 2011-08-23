@@ -15,6 +15,7 @@ import hum.client.events.OverviewEventHandler;
 import hum.client.events.PointEvent;
 import hum.client.events.PointEventHandler;
 import hum.client.maps.Animation;
+import hum.client.maps.IconBuilder;
 import hum.client.maps.MapOptions;
 import hum.client.maps.Marker;
 import hum.client.maps.MarkerOptions;
@@ -49,6 +50,9 @@ public class Mapper implements PointEventHandler, LevelEventHandler, MapsLoadedE
 
     @Inject
     private ModeHolder modeHolder;
+
+    @Inject
+    private IconBuilder shadowBuilder;
 
     protected Map map;
 
@@ -160,8 +164,8 @@ public class Mapper implements PointEventHandler, LevelEventHandler, MapsLoadedE
 
     private Marker buildMarkerForCurrentHum(PointProxy point) {
         MarkerOptions opts = new MarkerOptions.Builder(LatLng.newInstance(point.getLat(), point.getLng()))
-                .icon(levelHelper.icon(HumProxy.Level.HIGH).getIcon())
-                .shadow(levelHelper.icon(HumProxy.Level.HIGH).getShadow())
+                .icon(levelHelper.icon(HumProxy.Level.HIGH))
+                .shadow(shadowBuilder.getShadow())
 //                .shape(red.getShape())
                 .animation(Animation.DROP)
                 .draggable(true)
@@ -182,7 +186,7 @@ public class Mapper implements PointEventHandler, LevelEventHandler, MapsLoadedE
                 level == null
                         ? HumProxy.Level.HIGH
                         : level
-        ).getIcon());
+        ));
     }
 
     @Override
@@ -254,8 +258,8 @@ public class Mapper implements PointEventHandler, LevelEventHandler, MapsLoadedE
             }
 
             MarkerOptions opts = new MarkerOptions.Builder(LatLng.newInstance(point.getLat(), point.getLng()))
-                    .icon(levelHelper.icon(level).getIcon())
-                    .shadow(levelHelper.icon(HumProxy.Level.HIGH).getShadow())
+                    .icon(levelHelper.icon(level))
+                    .shadow(shadowBuilder.getShadow())
                     .animation(Animation.DROP)
                     .draggable(false)
                     .clickable(false)

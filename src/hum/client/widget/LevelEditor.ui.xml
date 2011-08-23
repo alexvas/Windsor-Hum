@@ -17,22 +17,26 @@
     .howStrong li {
       cursor: pointer;
     }
+
+    .icon {
+      display: inline-block;
+    }
   </ui:style>
   <g:HTMLPanel styleName="{style.howStrong}">
     <p>How strong do you think the hum level is? Please select:</p>
     <ul>
       <li>
-        <img alt="" src=""/>
+        <div class="{style.icon}"/>
         <g:RadioButton name="level" ui:field="levelLow"/>
         Low (barely hear)
       </li>
       <li>
-        <img alt="" src=""/>
+        <div class="{style.icon}"/>
         <g:RadioButton name="level" ui:field="levelMedium"/>
         Medium (hard to ignore)
       </li>
       <li>
-        <img alt="" src=""/>
+        <div class="{style.icon}"/>
         <g:RadioButton name="level" ui:field="levelHigh"/>
         High (window rattle)
       </li>

@@ -116,7 +116,7 @@ public class Root extends Composite implements MeEventHandler, ModeEventHandler 
                 .setPath(JanrainWrapper.JANRAIN_CALLBACK)
                 .buildString();
         janrainWrapper.show(callback, JanrainWrapper.JANRAIN_DOMAIN);
-        janrainWrapper.afterLoadInitHack(callback, JanrainWrapper.JANRAIN_DOMAIN);
+//        janrainWrapper.afterLoadInitHack(callback, JanrainWrapper.JANRAIN_DOMAIN);
     }
 
     @Override

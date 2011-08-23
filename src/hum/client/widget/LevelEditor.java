@@ -8,7 +8,7 @@ import hum.client.events.MapsLoadedEventHandler;
 import hum.client.model.HumProxy;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.ImageElement;
+import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.editor.client.LeafValueEditor;
 import com.google.gwt.query.client.Function;
 import com.google.gwt.query.client.GQuery;
@@ -86,7 +86,7 @@ public class LevelEditor extends Composite implements MapsLoadedEventHandler, Le
 
     private void setLiIcon(RadioButton button, HumProxy.Level level) {
         GQuery.$(button).parent("li")
-                .find("img").get(0).<ImageElement>cast().setSrc(levelHelper.icon(level).getIcon().url());
+                .find("div").get(0).<DivElement>cast().addClassName(levelHelper.style(level));
     }
 
     @Override
