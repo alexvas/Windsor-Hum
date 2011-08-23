@@ -69,7 +69,7 @@ public class StartedEditor extends Composite implements LeafValueEditor<Date> {
     private ChangeHandler onTimeChanged = new ChangeHandler() {
         @Override
         public void onChange(ChangeEvent event) {
-            fireStarted();
+            fireStarted2();
         }
     };
 

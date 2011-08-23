@@ -32,6 +32,7 @@ public class GeocoderService {
         }
 
         GeocoderRequest request = GeocoderRequest.newInstance();
+        request.removeGwtObjectId();
         request.address(address);
         request.region("ca");
 
@@ -62,6 +63,7 @@ public class GeocoderService {
         }
 
         GeocoderRequest request = GeocoderRequest.newInstance();
+        request.removeGwtObjectId();
         request.location(point);
 
         try {
