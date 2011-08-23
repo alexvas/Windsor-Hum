@@ -23,12 +23,15 @@
     }
 
     .signOutWrapper {
+      overflow: hidden;
       float: right;
       clear: right;
     }
 
     .avatar {
       height: 72px;
+      display: block;
+      float: right;
     }
 
     .addthis {
@@ -40,9 +43,9 @@
   <g:HTMLPanel styleName="{style.profile}">
     <div class="{style.userName}">
       <h2 ui:field="userName"/>
-      <span ui:field="signOutWrapper" class="{style.signOutWrapper}">Not you?
+      <div class="{style.signOutWrapper}">Not you?
         <g:Anchor ui:field="signOut" href="javascript:" text="Sign Out"/>
-      </span>
+      </div>
       <div class="addthis_toolbox addthis_default_style {style.addthis}">
         <a class="addthis_button_preferred_1"/>
         <a class="addthis_button_preferred_2"/>

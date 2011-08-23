@@ -12,7 +12,7 @@ import hum.client.model.UserProxy;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.HeadingElement;
 import com.google.gwt.dom.client.ImageElement;
-import com.google.gwt.dom.client.SpanElement;
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -52,9 +52,6 @@ public class Profile extends Composite implements MeEventHandler {
     ImageElement avatar;
 
     @UiField
-    SpanElement signOutWrapper;
-
-    @UiField
     Anchor signOut;
 
     private boolean initialized = false;
@@ -79,7 +76,12 @@ public class Profile extends Composite implements MeEventHandler {
         if (hasUser) {
             InfoProxy info = user.getInfo().get(0);
             userName.setInnerText("Welcome, " + info.getDisplayName() + "!");
-            avatar.setSrc(info.getPhoto());
+            if (info.getPhoto() == null) {
+                avatar.getStyle().setDisplay(Style.Display.NONE);
+            } else {
+                avatar.getStyle().setDisplay(Style.Display.BLOCK);
+                avatar.setSrc(info.getPhoto());
+            }
             $(this).fadeIn(1000);
         } else {
             $(this).fadeOut(1000);
