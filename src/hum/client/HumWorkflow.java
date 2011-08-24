@@ -115,8 +115,8 @@ public class HumWorkflow implements GonnaShareEventHandler {
         ).fire();
     }
 
-    public void showMeLastWeek() {
-        factory.humRequest().lastWeek().with(driver.getPaths()).to(
+    public void showMeLastDecade() {
+        factory.humRequest().lastDecade().with(driver.getPaths()).to(
                 new Receiver<List<HumProxy>>() {
                     @Override
                     public void onSuccess(List<HumProxy> response) {

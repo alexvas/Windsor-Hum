@@ -31,7 +31,7 @@ public interface ReqFactory extends RequestFactory {
 
         Request<List<HumProxy>> yesterday();
 
-        Request<List<HumProxy>> lastWeek();
+        Request<List<HumProxy>> lastDecade();
     }
 
     @Service(value = UserService.class, locator = InjectingServiceLocator.class)

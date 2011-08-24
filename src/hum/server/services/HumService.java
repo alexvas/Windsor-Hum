@@ -15,7 +15,7 @@ public interface HumService {
 
     List<Hum> yesterday();
 
-    List<Hum> lastWeek();
+    List<Hum> lastDecade();
 
     Iterable<Hum> all();
 }

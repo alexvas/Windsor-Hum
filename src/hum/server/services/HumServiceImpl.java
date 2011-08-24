@@ -63,9 +63,9 @@ public class HumServiceImpl extends DAOBase implements HumService {
     }
 
     @Override
-    public List<Hum> lastWeek() {
+    public List<Hum> lastDecade() {
         Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DAY_OF_YEAR, -7);
+        cal.add(Calendar.DAY_OF_YEAR, -10);
         return toList(query().filter("start > ", cal.getTime()).order("-start"));
     }
 
