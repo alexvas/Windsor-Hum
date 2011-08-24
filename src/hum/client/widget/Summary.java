@@ -96,7 +96,7 @@ public class Summary extends Composite implements StartedEventHandler,
 
     @Override
     public void dispatch(StartedEvent meEvent) {
-        setStarted(meEvent.started);
+        setStarted(meEvent.local);
     }
 
     private void setStarted(Date started) {

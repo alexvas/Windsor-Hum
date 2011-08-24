@@ -1,6 +1,7 @@
 package hum.client.widget;
 
 import hum.client.ModeHolder;
+import static hum.client.TimeHelper.TIME_HELPER;
 import static hum.client.Utils.UTILS;
 import hum.client.events.StartedEvent;
 
@@ -73,7 +74,7 @@ public class StartedEditor extends Composite implements LeafValueEditor<Date> {
         }
     };
 
-    private Date current = null;
+    private Date local = null;
 
     public void init() {
         if (initialized) {
@@ -117,47 +118,47 @@ public class StartedEditor extends Composite implements LeafValueEditor<Date> {
     }
 
     private void fireStarted() {
-        current = startedDate.getValue();
-        if (current == null) {
-            current = new Date();
+        Date local = startedDate.getValue();
+        if (local == null) {
+            local = new Date();
         }
         if (startedTime.getMinutes() == null) {
-            current.setHours(0);
-            current.setMinutes(0);
+            local.setHours(0);
+            local.setMinutes(0);
         } else {
-            current.setHours(startedTime.getHour());
-            current.setMinutes(startedTime.getMinute());
+            local.setHours(startedTime.getHour());
+            local.setMinutes(startedTime.getMinute());
         }
-        current.setSeconds(0);
-        fireStarted(current);
+        local.setSeconds(0);
+        fireStarted(local);
     }
 
     private void fireStarted2() {
-        current = startedDate.getValue();
-        if (current == null) {
-            current = new Date();
+        Date local = startedDate.getValue();
+        if (local == null) {
+            local = new Date();
         }
-        current.setHours(
+        local.setHours(
                 hours.getSelectedIndex() < 0
                         ? 0
                         : Integer.valueOf(hours.getValue(hours.getSelectedIndex()))
         );
-        current.setMinutes(
+        local.setMinutes(
                 minutes.getSelectedIndex() < 0
                         ? 0
                         : Integer.valueOf(minutes.getValue(minutes.getSelectedIndex()))
         );
         if (ampm.getSelectedIndex() > 0) {
-            current.setHours(current.getHours() + 12);
+            local.setHours(local.getHours() + 12);
         }
-        current.setSeconds(0);
-        fireStarted(current);
+        local.setSeconds(0);
+        fireStarted(local);
     }
 
     private void fireStarted3() {
-        current = startedDate.getValue();
-        if (current == null) {
-            current = new Date();
+        Date local = startedDate.getValue();
+        if (local == null) {
+            local = new Date();
         }
         Date fromTextBox;
         try {
@@ -166,10 +167,10 @@ public class StartedEditor extends Composite implements LeafValueEditor<Date> {
             return;
         }
 
-        current.setHours(fromTextBox.getHours());
-        current.setMinutes(fromTextBox.getMinutes());
-        current.setSeconds(0);
-        fireStarted(current);
+        local.setHours(fromTextBox.getHours());
+        local.setMinutes(fromTextBox.getMinutes());
+        local.setSeconds(0);
+        fireStarted(local);
     }
 
     @SuppressWarnings({"UnusedParameters"})
@@ -178,29 +179,30 @@ public class StartedEditor extends Composite implements LeafValueEditor<Date> {
         fireStarted(new Date());
     }
 
-    private void fireStarted(Date date) {
-        bus.fireEvent(new StartedEvent(date));
+    private void fireStarted(Date local) {
+        Date utc = TIME_HELPER.toGmt(local);
+        bus.fireEvent(new StartedEvent(utc));
         modeHolder.userEvent();
-        setValue(date);
+        setValue(utc);
     }
 
     @Override
-    public void setValue(Date value) {
-        current = value;
-        startedDate.setValue(value);
-        if (value == null) {
+    public void setValue(Date utc) {
+        local = TIME_HELPER.fromGmt(utc);
+        startedDate.setValue(local);
+        if (local == null) {
             startedTime.clear();
             hours.setSelectedIndex(-1);
             minutes.setSelectedIndex(-1);
             ampm.setSelectedIndex(-1);
             textTime.setValue(null);
         } else {
-            int h = value.getHours();
-            int m = value.getMinutes();
+            int h = local.getHours();
+            int m = local.getMinutes();
             startedTime.setTime(null, h, m);
             setHoursDropbox(h);
             setMinutesDropbox(m);
-            textTime.setValue(dtf.format(value));
+            textTime.setValue(dtf.format(local));
         }
     }
 
@@ -239,7 +241,7 @@ public class StartedEditor extends Composite implements LeafValueEditor<Date> {
 
     @Override
     public Date getValue() {
-        return current;
+        return TIME_HELPER.toGmt(local);
     }
 
     private String twoDigitFormat(int i) {
@@ -247,5 +249,4 @@ public class StartedEditor extends Composite implements LeafValueEditor<Date> {
                 ? "0" + i
                 : "" + i;
     }
-
 }

@@ -71,7 +71,7 @@ public class Workflow implements Runnable {
             public void onSuccess(UserProxy user) {
                 bus.fireEvent(new MeEvent(user));
                 if (user == null) {
-                    humWorkflow.overviewLastSubmitted();
+                    humWorkflow.showMeLastSubmitted();
                 } else {
                     humWorkflow.editLastHum();
                 }

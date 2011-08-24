@@ -1,17 +1,15 @@
 package hum.client.widget;
 
+import static com.google.gwt.query.client.GQuery.$;
 import hum.client.LevelHelper;
 import hum.client.ModeHolder;
 import hum.client.events.LevelEvent;
-import hum.client.events.MapsLoadedEvent;
-import hum.client.events.MapsLoadedEventHandler;
 import hum.client.model.HumProxy;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.editor.client.LeafValueEditor;
 import com.google.gwt.query.client.Function;
-import com.google.gwt.query.client.GQuery;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
@@ -22,7 +20,7 @@ import com.google.inject.Singleton;
 import com.google.web.bindery.event.shared.EventBus;
 
 @Singleton
-public class LevelEditor extends Composite implements MapsLoadedEventHandler, LeafValueEditor<HumProxy.Level> {
+public class LevelEditor extends Composite implements LeafValueEditor<HumProxy.Level> {
 
     interface Binder extends UiBinder<Widget, LevelEditor> {
     }
@@ -58,23 +56,17 @@ public class LevelEditor extends Composite implements MapsLoadedEventHandler, Le
         initialized = true;
         initWidget(binder.createAndBindUi(this));
 
-        addClickListener(levelHigh, HumProxy.Level.HIGH);
-        addClickListener(levelMedium, HumProxy.Level.MEDIUM);
-        addClickListener(levelLow, HumProxy.Level.LOW);
-
-        bus.addHandler(MapsLoadedEvent.TYPE, this);
-    }
-
-    @Override
-    public void dispatch(MapsLoadedEvent event) {
-        init();
         setLiIcon(levelHigh, HumProxy.Level.HIGH);
         setLiIcon(levelMedium, HumProxy.Level.MEDIUM);
         setLiIcon(levelLow, HumProxy.Level.LOW);
+
+        addClickListener(levelHigh, HumProxy.Level.HIGH);
+        addClickListener(levelMedium, HumProxy.Level.MEDIUM);
+        addClickListener(levelLow, HumProxy.Level.LOW);
     }
 
     private void addClickListener(RadioButton button, final HumProxy.Level level) {
-        GQuery.$(button).parent("li").click(new Function() {
+        $(button).parent("li").click(new Function() {
             @Override
             public void f() {
                 setValue(level);
@@ -85,8 +77,8 @@ public class LevelEditor extends Composite implements MapsLoadedEventHandler, Le
     }
 
     private void setLiIcon(RadioButton button, HumProxy.Level level) {
-        GQuery.$(button).parent("li")
-                .find("div").get(0).<DivElement>cast().addClassName(levelHelper.style(level));
+        $(button).parent("li").find("div").get(0).<DivElement>cast()
+                .addClassName(levelHelper.style(level));
     }
 
     @Override

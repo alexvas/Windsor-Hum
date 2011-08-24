@@ -38,6 +38,12 @@ public class UserMenu extends Composite implements MeEventHandler {
     @UiField
     MenuItem overview;
 
+    @UiField
+    MenuItem yesterday;
+
+    @UiField
+    MenuItem lastWeek;
+
     @Inject
     private HumWorkflow humWorkflow;
 
@@ -63,7 +69,19 @@ public class UserMenu extends Composite implements MeEventHandler {
         overview.setCommand(new Command() {
             @Override
             public void execute() {
-                humWorkflow.overviewLastSubmitted();
+                humWorkflow.showMeLastSubmitted();
+            }
+        });
+        yesterday.setCommand(new Command() {
+            @Override
+            public void execute() {
+                humWorkflow.showMeYesterday();
+            }
+        });
+        lastWeek.setCommand(new Command() {
+            @Override
+            public void execute() {
+                humWorkflow.showMeLastWeek();
             }
         });
         bus.addHandler(MeEvent.TYPE, this);

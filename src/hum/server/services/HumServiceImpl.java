@@ -4,6 +4,7 @@ import hum.server.CurrentUser;
 import hum.server.model.Hum;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
@@ -28,23 +29,6 @@ public class HumServiceImpl extends DAOBase implements HumService {
     private CurrentUser currentUser;
 
     @Override
-    public List<Hum> mine() {
-        return currentUser.getUserKey() == null
-                ? Collections.<Hum>emptyList()
-                : toList(query().filter("owner", currentUser.getUserKey()).order("-start"));
-    }
-
-    @Override
-    public List<Hum> overview() {
-        return toList(query().order("-start").limit(100));
-    }
-
-    @Override
-    public Iterable<Hum> all() {
-        return query().order("-start");
-    }
-
-    @Override
     public Hum latest() {
         return query().filter("owner", currentUser.getUserKey()).order("-start").get();
     }
@@ -57,6 +41,37 @@ public class HumServiceImpl extends DAOBase implements HumService {
         }
         hum.owner = currentUser.getUserKey();
         return saver.get().save(hum);
+    }
+
+    @Override
+    public List<Hum> mine() {
+        return currentUser.getUserKey() == null
+                ? Collections.<Hum>emptyList()
+                : toList(query().filter("owner", currentUser.getUserKey()).order("-start"));
+    }
+
+    @Override
+    public List<Hum> overview() {
+        return toList(query().order("-start").limit(100));
+    }
+
+    @Override
+    public List<Hum> yesterday() {
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DAY_OF_YEAR, -1);
+        return toList(query().filter("start > ", cal.getTime()).order("-start"));
+    }
+
+    @Override
+    public List<Hum> lastWeek() {
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DAY_OF_YEAR, -7);
+        return toList(query().filter("start > ", cal.getTime()).order("-start"));
+    }
+
+    @Override
+    public Iterable<Hum> all() {
+        return query().order("-start");
     }
 
     private List<Hum> toList(Query<Hum> query) {

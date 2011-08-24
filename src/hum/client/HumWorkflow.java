@@ -91,8 +91,32 @@ public class HumWorkflow implements GonnaShareEventHandler {
         factory.humRequest().latest().with(driver.getPaths()).to(latestReceiver).fire();
     }
 
-    public void overviewLastSubmitted() {
+    public void showMeLastSubmitted() {
         factory.humRequest().overview().with(driver.getPaths()).to(
+                new Receiver<List<HumProxy>>() {
+                    @Override
+                    public void onSuccess(List<HumProxy> response) {
+                        bus.fireEvent(new OverviewEvent(response));
+                        modeHolder.showList();
+                    }
+                }
+        ).fire();
+    }
+
+    public void showMeYesterday() {
+        factory.humRequest().yesterday().with(driver.getPaths()).to(
+                new Receiver<List<HumProxy>>() {
+                    @Override
+                    public void onSuccess(List<HumProxy> response) {
+                        bus.fireEvent(new OverviewEvent(response));
+                        modeHolder.showList();
+                    }
+                }
+        ).fire();
+    }
+
+    public void showMeLastWeek() {
+        factory.humRequest().lastWeek().with(driver.getPaths()).to(
                 new Receiver<List<HumProxy>>() {
                     @Override
                     public void onSuccess(List<HumProxy> response) {
@@ -125,7 +149,6 @@ public class HumWorkflow implements GonnaShareEventHandler {
         RequestContext requestContext = driver.flush();
 
         HumProxy hum = ((AbstractEditorDelegate<HumProxy, HumEditor>) editor.getDelegate()).getObject();
-
 
         List<ConstraintViolation<HumProxy>> violations = validator.validate(hum);
         if (!violations.isEmpty()) {
