@@ -46,7 +46,7 @@ public class Profile extends Composite implements MeEventHandler {
     private ModeHolder modeHolder;
 
     @UiField
-    HeadingElement userName;
+    HeadingElement welcome;
 
     @UiField
     ImageElement avatar;
@@ -75,7 +75,7 @@ public class Profile extends Composite implements MeEventHandler {
         boolean hasUser = user != null;
         if (hasUser) {
             InfoProxy info = user.getInfo().get(0);
-            userName.setInnerText("Welcome, " + info.getDisplayName() + "!");
+            welcome.setInnerText("Welcome, " + info.getDisplayName() + "!");
             if (info.getPhoto() == null) {
                 avatar.getStyle().setDisplay(Style.Display.NONE);
             } else {

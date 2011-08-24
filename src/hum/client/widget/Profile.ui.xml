@@ -7,33 +7,27 @@
       overflow: hidden;
     }
 
-    .profile h2 {
-      margin-top: 0;
-      display: block;
-      float: right;
-    }
-
-    .profile img {
-      display: block;
-      float: right;
-      margin-left: 20px;
-    }
-
-    .userName {
+    .textual {
       overflow: hidden;
       float: right;
       margin-left: 20px;
     }
 
-    .signOutWrapper {
+    .welcome {
+      margin-top: 0;
+      display: block;
+      float: right;
+    }
+
+    .notYou {
       overflow: hidden;
       float: right;
     }
 
     .avatar {
       height: 72px;
-      display: block;
       float: right;
+      margin-left: 20px;
     }
 
     .addthis {
@@ -50,12 +44,20 @@
       clear: right;
       margin-left: 20px;
     }
+
+    @if user.agent ie6 {
+      .profile, .textual, .welcome, .avatar, .secondLine .addthis, .notYou {
+        position: relative;
+      }
+    }
+
+
   </ui:style>
   <g:HTMLPanel styleName="{style.profile}">
-    <div class="{style.userName}">
-      <h2 ui:field="userName"/>
+    <div class="{style.textual}">
+      <h2 ui:field="welcome" class="{style.welcome}"/>
       <div class="{style.secondLine}">
-        <div class="{style.signOutWrapper}">Not you?
+        <div class="{style.notYou}">Not you?
           <g:Anchor ui:field="signOut" href="javascript:" text="Sign Out"/>
         </div>
         <div class="addthis_toolbox addthis_default_style {style.addthis}">
@@ -68,6 +70,6 @@
         </div>
       </div>
     </div>
-    <img ui:field="avatar" alt="" src="" class="{style.avatar}"/>
+    <img ui:field="avatar" alt=" " src="" class="{style.avatar}"/>
   </g:HTMLPanel>
 </ui:UiBinder>
