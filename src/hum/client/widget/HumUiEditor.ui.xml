@@ -24,6 +24,7 @@
     .hint {
       display: block;
       float: left;
+      clear: left;
     }
   </ui:style>
   <g:StackLayoutPanel unit='PX'>
