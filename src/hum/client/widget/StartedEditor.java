@@ -14,14 +14,12 @@ import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.datepicker.client.DatePicker;
 import com.google.inject.Inject;
@@ -44,9 +42,6 @@ public class StartedEditor extends Composite implements LeafValueEditor<Date> {
 
     private boolean initialized = false;
 
-    @UiField(provided = true)
-    HourMinutePicker startedTime;
-
     @UiField
     DatePicker startedDate;
 
@@ -62,11 +57,6 @@ public class StartedEditor extends Composite implements LeafValueEditor<Date> {
     @UiField
     ListBox ampm;
 
-    @UiField
-    TextBox textTime;
-
-    private DateTimeFormat dtf = DateTimeFormat.getFormat("hh:mm a");
-
     private ChangeHandler onTimeChanged = new ChangeHandler() {
         @Override
         public void onChange(ChangeEvent event) {
@@ -81,7 +71,6 @@ public class StartedEditor extends Composite implements LeafValueEditor<Date> {
             return;
         }
         initialized = true;
-        startedTime = new HourMinutePicker(HourMinutePicker.PickerFormat._12_HOUR, 0, 23, 6);
         initWidget(binder.createAndBindUi(this));
         for (int i = 0; i < 13; ++i) {
             hours.addItem(twoDigitFormat(i));
@@ -97,40 +86,12 @@ public class StartedEditor extends Composite implements LeafValueEditor<Date> {
         startedDate.addValueChangeHandler(new ValueChangeHandler<Date>() {
             @Override
             public void onValueChange(ValueChangeEvent<Date> dateValueChangeEvent) {
-                fireStarted();
-            }
-        });
-        startedTime.addValueChangeHandler(new ValueChangeHandler<Integer>() {
-            @Override
-            public void onValueChange(ValueChangeEvent<Integer> integerValueChangeEvent) {
-                fireStarted();
+                fireStarted2();
             }
         });
         hours.addChangeHandler(onTimeChanged);
         minutes.addChangeHandler(onTimeChanged);
         ampm.addChangeHandler(onTimeChanged);
-        textTime.addChangeHandler(new ChangeHandler() {
-            @Override
-            public void onChange(ChangeEvent event) {
-                fireStarted3();
-            }
-        });
-    }
-
-    private void fireStarted() {
-        Date local = startedDate.getValue();
-        if (local == null) {
-            local = new Date();
-        }
-        if (startedTime.getMinutes() == null) {
-            local.setHours(0);
-            local.setMinutes(0);
-        } else {
-            local.setHours(startedTime.getHour());
-            local.setMinutes(startedTime.getMinute());
-        }
-        local.setSeconds(0);
-        fireStarted(local);
     }
 
     private void fireStarted2() {
@@ -155,24 +116,6 @@ public class StartedEditor extends Composite implements LeafValueEditor<Date> {
         fireStarted(local);
     }
 
-    private void fireStarted3() {
-        Date local = startedDate.getValue();
-        if (local == null) {
-            local = new Date();
-        }
-        Date fromTextBox;
-        try {
-            fromTextBox = dtf.parse(textTime.getText());
-        } catch (IllegalArgumentException e) {
-            return;
-        }
-
-        local.setHours(fromTextBox.getHours());
-        local.setMinutes(fromTextBox.getMinutes());
-        local.setSeconds(0);
-        fireStarted(local);
-    }
-
     @SuppressWarnings({"UnusedParameters"})
     @UiHandler("startedNow")
     void startedNow(ClickEvent startedNow) {
@@ -191,18 +134,14 @@ public class StartedEditor extends Composite implements LeafValueEditor<Date> {
         local = TIME_HELPER.fromGmt(utc);
         startedDate.setValue(local);
         if (local == null) {
-            startedTime.clear();
             hours.setSelectedIndex(-1);
             minutes.setSelectedIndex(-1);
             ampm.setSelectedIndex(-1);
-            textTime.setValue(null);
         } else {
             int h = local.getHours();
             int m = local.getMinutes();
-            startedTime.setTime(null, h, m);
             setHoursDropbox(h);
             setMinutesDropbox(m);
-            textTime.setValue(dtf.format(local));
         }
     }
 

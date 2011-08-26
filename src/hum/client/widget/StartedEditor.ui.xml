@@ -2,29 +2,21 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
              xmlns:g='urn:import:com.google.gwt.user.client.ui'
              xmlns:d='urn:import:com.google.gwt.user.datepicker.client'
-             xmlns:h='urn:import:hum.client.widget' xmlns:RootPanel="urn:import:com.google.gwt.user.client.ui.RootPanel"
     >
   <ui:style>
     .when {
       overflow: hidden;
     }
 
-    .datePicker, .timePicker {
+    .datePicker {
       margin-left: 20px;
-    }
-
-    .timePicker {
-      margin-top: 20px;
-      font-size: larger;
-      display: block;
-      float: left;
     }
 
     .hours, .minutes, .ampm {
       font-size: larger;
     }
 
-    .startedNow, .textTime {
+    .startedNow {
       display: block;
       float: left;
       clear: left;
@@ -43,13 +35,11 @@
   <g:HTMLPanel styleName="{style.when}">
     <p>When did the hum started?</p>
     <d:DatePicker ui:field="startedDate" addStyleNames="{style.datePicker}"/>
-    <h:HourMinutePicker ui:field="startedTime" addStyleNames="{style.timePicker}"/>
     <div class="{style.dropdown}">
       <g:ListBox ui:field="hours" addStyleNames="{style.hours}"/>:<g:ListBox ui:field="minutes"
                                                                              addStyleNames="{style.minutes}"/>&nbsp;
       <g:ListBox ui:field="ampm" addStyleNames="{style.ampm}"/>
     </div>
-    <g:TextBox addStyleNames="{style.textTime}" ui:field="textTime"/>
     <g:Button text="Rumbling Has Just Started" ui:field="startedNow" addStyleNames="{style.startedNow}"/>
   </g:HTMLPanel>
 </ui:UiBinder>

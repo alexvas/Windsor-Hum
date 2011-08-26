@@ -73,7 +73,7 @@ public class Workflow implements Runnable {
                 if (user == null) {
                     humWorkflow.showMeLastSubmitted();
                 } else {
-                    humWorkflow.editLastHum();
+                    humWorkflow.reportNewHum();
                 }
             }
         });
