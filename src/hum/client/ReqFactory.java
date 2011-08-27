@@ -6,6 +6,7 @@ import hum.server.guice.InjectingServiceLocator;
 import hum.server.services.HumService;
 import hum.server.services.UserService;
 
+import java.util.Date;
 import java.util.List;
 
 import com.google.web.bindery.requestfactory.shared.Request;
@@ -29,7 +30,7 @@ public interface ReqFactory extends RequestFactory {
 
         Request<List<HumProxy>> overview();
 
-        Request<List<HumProxy>> yesterday();
+        Request<List<HumProxy>> period(Date from, Date to);
 
         Request<List<HumProxy>> lastDecade();
     }

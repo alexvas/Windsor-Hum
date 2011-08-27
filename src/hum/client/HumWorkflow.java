@@ -13,6 +13,7 @@ import hum.client.model.AddressProxy;
 import hum.client.model.HumProxy;
 import hum.client.model.PointProxy;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -103,8 +104,8 @@ public class HumWorkflow implements GonnaShareEventHandler {
         ).fire();
     }
 
-    public void showMeYesterday() {
-        factory.humRequest().yesterday().with(driver.getPaths()).to(
+    public void showMePeriod(Date from, Date to) {
+        factory.humRequest().period(from, to).with(driver.getPaths()).to(
                 new Receiver<List<HumProxy>>() {
                     @Override
                     public void onSuccess(List<HumProxy> response) {

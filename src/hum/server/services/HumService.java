@@ -2,6 +2,7 @@ package hum.server.services;
 
 import hum.server.model.Hum;
 
+import java.util.Date;
 import java.util.List;
 
 public interface HumService {
@@ -13,7 +14,7 @@ public interface HumService {
 
     List<Hum> overview();
 
-    List<Hum> yesterday();
+    List<Hum> period(Date from, Date to);
 
     List<Hum> lastDecade();
 

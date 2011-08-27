@@ -1,9 +1,12 @@
 package hum.client.widget;
 
 import hum.client.HumWorkflow;
+import static hum.client.TimeHelper.TIME_HELPER;
 import hum.client.events.MeEvent;
 import hum.client.events.MeEventHandler;
 import hum.client.model.UserProxy;
+
+import java.util.Date;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -18,6 +21,8 @@ import com.google.web.bindery.event.shared.EventBus;
 
 @Singleton
 public class UserMenu extends Composite implements MeEventHandler {
+
+    private static final long MILLISECONDS_IN_DAY = 1000 * 3600L * 24;
 
     interface Binder extends UiBinder<Widget, UserMenu> {
     }
@@ -37,6 +42,9 @@ public class UserMenu extends Composite implements MeEventHandler {
 
     @UiField
     MenuItem overview;
+
+    @UiField
+    MenuItem today;
 
     @UiField
     MenuItem yesterday;
@@ -72,10 +80,27 @@ public class UserMenu extends Composite implements MeEventHandler {
                 humWorkflow.showMeLastSubmitted();
             }
         });
-        yesterday.setCommand(new Command() {
+        today.setCommand(new Command() {
+            @SuppressWarnings({"deprecation"})
             @Override
             public void execute() {
-                humWorkflow.showMeYesterday();
+                Date from = new Date();
+                from.setHours(0);
+                from.setMinutes(0);
+                from.setSeconds(0);
+                humWorkflow.showMePeriod(TIME_HELPER.toGmt(from), null);
+            }
+        });
+        yesterday.setCommand(new Command() {
+            @SuppressWarnings({"deprecation"})
+            @Override
+            public void execute() {
+                Date to = new Date();
+                to.setHours(0);
+                to.setMinutes(0);
+                to.setSeconds(0);
+                Date from = new Date(to.getTime() - MILLISECONDS_IN_DAY);
+                humWorkflow.showMePeriod(TIME_HELPER.toGmt(from), TIME_HELPER.toGmt(to));
             }
         });
         lastDecade.setCommand(new Command() {

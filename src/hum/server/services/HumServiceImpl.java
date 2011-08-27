@@ -6,6 +6,7 @@ import hum.server.model.Hum;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -56,10 +57,15 @@ public class HumServiceImpl extends DAOBase implements HumService {
     }
 
     @Override
-    public List<Hum> yesterday() {
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DAY_OF_YEAR, -1);
-        return toList(query().filter("start > ", cal.getTime()).order("-start"));
+    public List<Hum> period(Date from, Date to) {
+        Query<Hum> query = query();
+        if (from != null) {
+            query.filter("start > ", from);
+        }
+        if (to != null) {
+            query.filter("start <= ", to);
+        }
+        return toList(query.order("-start"));
     }
 
     @Override
