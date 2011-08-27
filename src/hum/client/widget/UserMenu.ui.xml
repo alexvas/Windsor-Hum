@@ -17,7 +17,7 @@
       </g:MenuItem>
       <g:MenuItem text="Analyse">
         <g:MenuBar vertical="true" animationEnabled="true">
-          <g:MenuItem ui:field="overview" text="Show Me The Latest Reports"/>
+          <g:MenuItem ui:field="overview" text="Show Me The Latest 100 Reports"/>
           <g:MenuItem ui:field="yesterday" text="Show Me Reports From Yesterday"/>
           <g:MenuItem ui:field="lastDecade" text="Show Me Reports In The Last 10 Days"/>
         </g:MenuBar>
